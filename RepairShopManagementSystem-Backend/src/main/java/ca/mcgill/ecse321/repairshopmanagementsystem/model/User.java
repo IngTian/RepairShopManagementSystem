@@ -65,6 +65,7 @@ public abstract class User {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer getUserId() {
         return this.userId;
     }
