@@ -8,31 +8,31 @@ import java.util.Set;
 public abstract class User {
     private String username;
 
-    private void setUsername(String value) {
+    public void setUsername(String value) {
         this.username = value;
     }
 
-    private String getUsername() {
+    public String getUsername() {
         return this.username;
     }
 
     private String password;
 
-    private void setPassword(String value) {
+    public void setPassword(String value) {
         this.password = value;
     }
 
-    private String getPassword() {
+    public String getPassword() {
         return this.password;
     }
 
     private String name;
 
-    private void setName(String value) {
+    public void setName(String value) {
         this.name = value;
     }
 
-    private String getName() {
+    public String getName() {
         return this.name;
     }
 
@@ -47,26 +47,26 @@ public abstract class User {
         this.schedule = schedules;
     }
 
-    private RepariShopManagementSystem repariShopManagementSystem;
+    private RepairShopManagementSystem repariShopManagementSystem;
 
     @ManyToOne(optional = false)
-    public RepariShopManagementSystem getRepariShopManagementSystem() {
+    public RepairShopManagementSystem getRepariShopManagementSystem() {
         return this.repariShopManagementSystem;
     }
 
-    public void setRepariShopManagementSystem(RepariShopManagementSystem repariShopManagementSystem) {
+    public void setRepariShopManagementSystem(RepairShopManagementSystem repariShopManagementSystem) {
         this.repariShopManagementSystem = repariShopManagementSystem;
     }
 
     private Integer userId;
 
-    private void setUserId(Integer value) {
+    public void setUserId(Integer value) {
         this.userId = value;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer getUserId() {
+    public Integer getUserId() {
         return this.userId;
     }
 }

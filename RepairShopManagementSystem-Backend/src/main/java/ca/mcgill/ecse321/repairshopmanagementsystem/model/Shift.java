@@ -1,53 +1,38 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.model;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.ManyToOne;
 
 @Entity
-public class TimeSlot {
-
-    private int id;
-
-    @Id
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+public class Shift {
     private Date date;
 
-    private void setDate(Date value) {
+    public void setDate(Date value) {
         this.date = value;
     }
 
-    private Date getDate() {
+    public Date getDate() {
         return this.date;
     }
 
     private Time startTime;
 
-    private void setStartTime(Time value) {
+    public void setStartTime(Time value) {
         this.startTime = value;
     }
 
-    private Time getStartTime() {
+    public Time getStartTime() {
         return this.startTime;
     }
 
     private Time endTime;
 
-    private void setEndTime(Time value) {
+    public void setEndTime(Time value) {
         this.endTime = value;
     }
 
-    private Time getEndTime() {
+    public Time getEndTime() {
         return this.endTime;
     }
 
@@ -73,4 +58,26 @@ public class TimeSlot {
         this.schedule = schedule;
     }
 
+    private Assistant assistant;
+
+    @ManyToOne(optional = false)
+    public Assistant getAssistant() {
+        return this.assistant;
+    }
+
+    public void setAssistant(Assistant assistant) {
+        this.assistant = assistant;
+    }
+
+    private Integer shiftId;
+
+    public void setShiftId(Integer value) {
+        this.shiftId = value;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Integer getShiftId() {
+        return this.shiftId;
+    }
 }

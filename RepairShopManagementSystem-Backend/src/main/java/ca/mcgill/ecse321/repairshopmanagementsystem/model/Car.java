@@ -5,47 +5,48 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.util.Set;
 import javax.persistence.ManyToMany;
+import java.sql.Date;
 
 @Entity
 public class Car {
     private String plateNo;
 
-    private void setPlateNo(String value) {
+    public void setPlateNo(String value) {
         this.plateNo = value;
     }
 
     @Id
-    private String getPlateNo() {
+    public String getPlateNo() {
         return this.plateNo;
     }
 
     private String model;
 
-    private void setModel(String value) {
+    public void setModel(String value) {
         this.model = value;
     }
 
-    private String getModel() {
+    public String getModel() {
         return this.model;
     }
 
     private String year;
 
-    private void setYear(String value) {
+    public void setYear(String value) {
         this.year = value;
     }
 
-    private String getYear() {
+    public String getYear() {
         return this.year;
     }
 
     private String manufacturer;
 
-    private void setManufacturer(String value) {
+    public void setManufacturer(String value) {
         this.manufacturer = value;
     }
 
-    private String getManufacturer() {
+    public String getManufacturer() {
         return this.manufacturer;
     }
 
@@ -71,4 +72,13 @@ public class Car {
         this.appointment = appointments;
     }
 
+    private Date nextReminderDate;
+
+    public void setNextReminderDate(Date value) {
+        this.nextReminderDate = value;
+    }
+
+    public Date getNextReminderDate() {
+        return this.nextReminderDate;
+    }
 }

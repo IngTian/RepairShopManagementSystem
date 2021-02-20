@@ -1,16 +1,13 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem;
 
 import ca.mcgill.ecse321.repairshopmanagementsystem.dao.RepairShopManagementSystemRepository;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.Owner;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.RepariShopManagementSystem;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.User;
+import ca.mcgill.ecse321.repairshopmanagementsystem.model.RepairShopManagementSystem;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @SpringBootApplication
 public class RepairShopManagementSystemApplication {
@@ -19,17 +16,20 @@ public class RepairShopManagementSystemApplication {
         SpringApplication.run(RepairShopManagementSystemApplication.class, args);
     }
 
+    /**
+     * An example of how to create an object.
+     *
+     * @param repo
+     * @return
+     */
     @Bean
-    public CommandLineRunner demo(RepairShopManagementSystemRepository repo){
+    public CommandLineRunner demo(RepairShopManagementSystemRepository repo) {
         return (args) -> {
-            RepariShopManagementSystem a = new RepariShopManagementSystem();
-            a.setId(10);
-            Set<User> users = new HashSet<>();
-            Owner b = new Owner();
-            b.setRepariShopManagementSystem(a);
-            users.add(b);
-            a.setUser(users);
-            repo.save(a);
+            RepairShopManagementSystem aSystem = new RepairShopManagementSystem();
+            aSystem.setBusinessAddress("Avenue des Champs-Élysées, Paris");
+            aSystem.setBusinessName("Louis Vuitton");
+            aSystem.setBusinessPhoneNumber("00-12-34-56-78");
+            repo.save(aSystem);
         };
     }
 

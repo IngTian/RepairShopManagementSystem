@@ -1,31 +1,30 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.model;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.Set;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Service {
     private ServiceType serviceType;
 
-    private void setServiceType(ServiceType value) {
+    public void setServiceType(ServiceType value) {
         this.serviceType = value;
     }
 
-    private ServiceType getServiceType() {
+    @OneToOne
+    public ServiceType getServiceType() {
         return this.serviceType;
     }
 
     private Integer serviceId;
 
-    private void setServiceId(Integer value) {
+    public void setServiceId(Integer value) {
         this.serviceId = value;
     }
 
     @Id
-    private Integer getServiceId() {
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Integer getServiceId() {
         return this.serviceId;
     }
 

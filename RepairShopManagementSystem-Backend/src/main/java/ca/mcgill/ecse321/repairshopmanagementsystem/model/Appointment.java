@@ -7,12 +7,13 @@ import java.util.Set;
 public class Appointment {
     private Integer appointmentId;
 
-    private void setAppointmentId(Integer value) {
+    public void setAppointmentId(Integer value) {
         this.appointmentId = value;
     }
 
     @Id
-    private Integer getAppointmentId() {
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Integer getAppointmentId() {
         return this.appointmentId;
     }
 
@@ -38,14 +39,14 @@ public class Appointment {
         this.service = service;
     }
 
-    private TimeSlot timeSlot;
+    private Shift timeSlot;
 
     @OneToOne(optional = false)
-    public TimeSlot getTimeSlot() {
+    public Shift getTimeSlot() {
         return this.timeSlot;
     }
 
-    public void setTimeSlot(TimeSlot timeSlot) {
+    public void setTimeSlot(Shift timeSlot) {
         this.timeSlot = timeSlot;
     }
 
@@ -69,6 +70,17 @@ public class Appointment {
 
     public void setCar(Set<Car> cars) {
         this.car = cars;
+    }
+
+    private Space space;
+
+    @OneToOne
+    public Space getSpace() {
+        return this.space;
+    }
+
+    public void setSpace(Space space) {
+        this.space = space;
     }
 
 }

@@ -7,23 +7,24 @@ import java.util.Set;
 public class Schedule {
     private Integer yearAndWeekNo;
 
-    private void setYearAndWeekNo(Integer value) {
+    public void setYearAndWeekNo(Integer value) {
         this.yearAndWeekNo = value;
     }
 
     @Id
-    private Integer getYearAndWeekNo() {
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Integer getYearAndWeekNo() {
         return this.yearAndWeekNo;
     }
 
-    private Set<TimeSlot> timeSlot;
+    private Set<Shift> timeSlot;
 
     @OneToMany(mappedBy = "schedule", cascade = {CascadeType.ALL})
-    public Set<TimeSlot> getTimeSlot() {
+    public Set<Shift> getTimeSlot() {
         return this.timeSlot;
     }
 
-    public void setTimeSlot(Set<TimeSlot> timeSlots) {
+    public void setTimeSlot(Set<Shift> timeSlots) {
         this.timeSlot = timeSlots;
     }
 
@@ -36,6 +37,17 @@ public class Schedule {
 
     public void setUser(Set<User> users) {
         this.user = users;
+    }
+
+    private RepairShopManagementSystem repariShopManagementSystem;
+
+    @ManyToOne(optional = false)
+    public RepairShopManagementSystem getRepariShopManagementSystem() {
+        return this.repariShopManagementSystem;
+    }
+
+    public void setRepariShopManagementSystem(RepairShopManagementSystem repariShopManagementSystem) {
+        this.repariShopManagementSystem = repariShopManagementSystem;
     }
 
 }

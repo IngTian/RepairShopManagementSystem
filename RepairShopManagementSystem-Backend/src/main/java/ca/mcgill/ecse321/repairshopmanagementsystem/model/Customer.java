@@ -4,37 +4,36 @@ import javax.persistence.Entity;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
 public class Customer extends User {
     private String phoneNo;
 
-    private void setPhoneNo(String value) {
+    public void setPhoneNo(String value) {
         this.phoneNo = value;
     }
 
-    private String getPhoneNo() {
+    public String getPhoneNo() {
         return this.phoneNo;
     }
 
     private String homeAddress;
 
-    private void setHomeAddress(String value) {
+    public void setHomeAddress(String value) {
         this.homeAddress = value;
     }
 
-    private String getHomeAddress() {
+    public String getHomeAddress() {
         return this.homeAddress;
     }
 
     private String email;
 
-    private void setEmail(String value) {
+    public void setEmail(String value) {
         this.email = value;
     }
 
-    private String getEmail() {
+    public String getEmail() {
         return this.email;
     }
 

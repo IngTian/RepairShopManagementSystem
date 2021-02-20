@@ -1,8 +1,7 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.dao;
 
-import ca.mcgill.ecse321.repairshopmanagementsystem.RepairShopManagementSystemApplication;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.RepariShopManagementSystem;
+import ca.mcgill.ecse321.repairshopmanagementsystem.model.RepairShopManagementSystem;
 import org.springframework.data.repository.CrudRepository;
 
-public interface RepairShopManagementSystemRepository extends CrudRepository<RepariShopManagementSystem, Integer> {
+public interface RepairShopManagementSystemRepository extends CrudRepository<RepairShopManagementSystem, Integer> {
 }
