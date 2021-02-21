@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ca.mcgill.ecse321.repairshopmanagementsystem.model.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
-
+import java.sql.*;
 @ExtendWith(SpringExtension.class)
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -48,151 +48,280 @@ public class TestRepairShopManagementPersistence {
     @BeforeEach
     public void clearAll() {
 
-//        appointmentRepository.deleteAll();
-//        assistantRepository.deleteAll();
-//        BillRepository.deleteAll();
-//        CarRepository.deleteAll();
-//        CustomerRepository.deleteAll();
-//        OwnerRepository.deleteAll();
-//        ShiftRepository.deleteAll();
+    	ServiceRepository.deleteAll();
         RepairShopManagementSystemRepository.deleteAll();
-//        ScheduleRepository.deleteAll();
-//        ServiceRepository.deleteAll();
-//
-//        ShiftRepository.deleteAll();
-//        SpaceRepository.deleteAll();
+
 
 
     }
-
+    /**
+     * @author kevinli
+     */
     @Test
-    public void testSpaceRepPer() {
-        Integer id = 1;
-        Space space = new Space();
-        space.setSpaceId(id);
+    public void testSpaceRepistoryPersistenceAndLoad() {
+       //Create and Save repairshopmanagement system
         RepairShopManagementSystem sys = new RepairShopManagementSystem();
-        space.setRepairShopManagementSystem(sys);
         RepairShopManagementSystemRepository.save(sys);
+       //Create and Save Space in the database
+        Integer maxweight=90;
+        Space space = new Space();
+        space.setRepairShopManagementSystem(sys);
+        space.setMaxWeightLoad(90);
         SpaceRepository.save(space);
+        
+        //get the generated id
+        Integer id=space.getSpaceId();
         space = null;
-        space = SpaceRepository.findSpaceByspaceId(id);
+        
+        //find the corresponding space from database table
+        space = SpaceRepository.findSpaceBySpaceId(id);
 
         assertNotNull(space);
         assertEquals(space.getSpaceId(), id);
+        assertEquals(space.getMaxWeightLoad(),maxweight);
     }
+    /**
+     * @author kevinli
+     */
 
     @Test
-    public void testShiftPer() {
-        Integer id = 2;
-        Shift shift = new Shift();
+    public void testShiftRepistoryPersistenceAndLoad() {
+    	
+    	// Save RepairShopManagementSystem.
+    	
         RepairShopManagementSystem sys = new RepairShopManagementSystem();
         RepairShopManagementSystemRepository.save(sys);
 
-        shift.setShiftId(id);
+        // Save Schedule.
         Schedule schedule = new Schedule();
         schedule.setRepairShopManagementSystem(sys);
-        shift.setSchedule(schedule);
         ScheduleRepository.save(schedule);
 
-
+        // Create assistant.
         Assistant assistant = new Assistant();
         assistant.setRepairShopManagementSystem(sys);
         assistantRepository.save(assistant);
+
+        // Create shift.
+        Integer shiftId = 5;
+        Shift shift = new Shift();
+        shift.setShiftId(shiftId);
+        shift.setSchedule(schedule);
         shift.setAssistant(assistant);
-
-
-        Appointment app = new Appointment();
-        shift.setAppointment(app);
-        app.setShift(shift);
-        ;
-        Service s = new Service();
-        s.setAppointment(app);
-        Space space = new Space();
-        space.setRepairShopManagementSystem(sys);
-        SpaceRepository.save(space);
-
-        app.setService(s);
-        Customer cu = new Customer();
-        cu.setRepairShopManagementSystem(sys);
-        CustomerRepository.save(cu);
-        ServiceRepository.save(s);
-
-
-        appointmentRepository.save(app);
         ShiftRepository.save(shift);
+        
         shift = null;
-        shift = ShiftRepository.findSpaceByShiftId(id);
+        
+        //get the corresponding shift from database table
+        shift = ShiftRepository.findShiftByShiftId(shiftId);
+
         assertNotNull(shift);
-        assertEquals(shift.getShiftId(), id);
+        assertEquals(shift.getShiftId(), shiftId);
 
 
     }
-
+    /**
+     * @author Ao Shen
+     */
     @Test
-    public void testServicePer() {
-        Integer id = 3;
-        Shift shift = new Shift();
+    public void testServiceRepistoryPersistenceAndLoad() {
+    	// Save RepairShopManagementSystem.
+    	String serviceName="test";
         RepairShopManagementSystem sys = new RepairShopManagementSystem();
         RepairShopManagementSystemRepository.save(sys);
 
-        shift.setShiftId(id);
+        // Save Schedule.
         Schedule schedule = new Schedule();
         schedule.setRepairShopManagementSystem(sys);
-        shift.setSchedule(schedule);
         ScheduleRepository.save(schedule);
 
-
+        // Create assistant.
         Assistant assistant = new Assistant();
         assistant.setRepairShopManagementSystem(sys);
         assistantRepository.save(assistant);
+
+        // Create shift.
+        Integer shiftId = 5;
+        Shift shift = new Shift();
+        shift.setShiftId(shiftId);
+        shift.setSchedule(schedule);
         shift.setAssistant(assistant);
-
-
-        Appointment app = new Appointment();
-        shift.setAppointment(app);
-        app.setShift(shift);
-        ;
-        Service s = new Service();
-        s.setAppointment(app);
-        Space space = new Space();
-        space.setRepairShopManagementSystem(sys);
-        SpaceRepository.save(space);
-        s.setServiceId(id);
-
-        app.setService(s);
-        Customer cu = new Customer();
-        cu.setRepairShopManagementSystem(sys);
-        CustomerRepository.save(cu);
-        ServiceRepository.save(s);
-
-
-        appointmentRepository.save(app);
         ShiftRepository.save(shift);
-        s = null;
-        s = ServiceRepository.findServiceByserviceId(id);
-        assertNotNull(shift);
-        assertEquals(shift.getShiftId(), id);
-    }
 
+        // Create space.
+        Space testSpace = new Space();
+        testSpace.setRepairShopManagementSystem(sys);
+        SpaceRepository.save(testSpace);
+
+        // Create customer.
+        Customer testCustomer = new Customer();
+        testCustomer.setRepairShopManagementSystem(sys);
+        CustomerRepository.save(testCustomer);
+
+
+        // Create appointment.
+        Integer appointmentId = 100;
+        Appointment testAppointment = new Appointment();
+        
+        // Create service.
+        Service testService = new Service();
+        
+        testAppointment.setAppointmentId(appointmentId);
+        shift.setAppointment(testAppointment);
+        testAppointment.setShift(shift);
+        testService.setAppointment(testAppointment);
+        testAppointment.setCustomer(testCustomer);
+        testAppointment.setSpace(testSpace);
+        appointmentRepository.save(testAppointment);
+        
+        testService.setAppointment(testAppointment);
+        testService.setServiceType("A");
+        testService.setServiceType(serviceName);
+        ServiceRepository.save(testService);
+        Integer  serviceid  = testService.getServiceId();
+        
+        testService = null;
+        testService = ServiceRepository.findServiceByServiceId(serviceid);
+
+        assertNotNull(testService);
+        assertEquals(testService.getServiceId(), serviceid);
+        assertEquals(testService.getServiceType(), serviceName);
+    }
+    /**
+     * @author Ing Tian
+     */
     @Test
-    public void testSchedule() {
-        Integer id = 4;
-        Schedule schedule = new Schedule();
-        schedule.setId(id);
-        RepairShopManagementSystem sys = new RepairShopManagementSystem();
-        RepairShopManagementSystemRepository.save(sys);
-        schedule.setId(id);
-        schedule = null;
+    public void testScheduleRepositoryPersistenceAndLoad() {
+    	//Create and save a system
+    	 RepairShopManagementSystem sys = new RepairShopManagementSystem();
+         RepairShopManagementSystemRepository.save(sys);
+
+         // Save Schedule.
+         Schedule schedule = new Schedule();
+         schedule.setRepairShopManagementSystem(sys);
+         ScheduleRepository.save(schedule);
+        Integer id=schedule.getId();
+         schedule = null;
+        
         schedule = ScheduleRepository.findScheduleById(id);
+        
+       
         assertNotNull(schedule);
         assertEquals(schedule.getId(), id);
 
     }
-
+    /**
+     * @author Ing Tian
+     */
     @Test
-    public void testAppointment() {
+    public void testAppointmentRepositoryPersistenceAndLoad() {
 
         // Save RepairShopManagementSystem.
+        RepairShopManagementSystem sys = new RepairShopManagementSystem();
+        RepairShopManagementSystemRepository.save(sys);
+
+        // Save Schedule.
+        Schedule schedule = new Schedule();
+        schedule.setRepairShopManagementSystem(sys);
+        ScheduleRepository.save(schedule);
+
+        // Create assistant.
+        Assistant assistant = new Assistant();
+        assistant.setRepairShopManagementSystem(sys);
+        assistantRepository.save(assistant);
+
+        // Create shift.
+        Integer shiftId = 5;
+        Shift shift = new Shift();
+        shift.setShiftId(shiftId);
+        shift.setSchedule(schedule);
+        shift.setAssistant(assistant);
+        ShiftRepository.save(shift);
+
+        // Create space.
+        
+        Space testSpace = new Space();
+        testSpace.setRepairShopManagementSystem(sys);
+       
+        SpaceRepository.save(testSpace);
+
+        // Create customer.
+        Customer testCustomer = new Customer();
+        testCustomer.setRepairShopManagementSystem(sys);
+        CustomerRepository.save(testCustomer);
+
+        // Create service.
+        Service testService = new Service();
+
+        // Create appointment.
+        Integer appointmentId = 100;
+        Appointment testAppointment = new Appointment();
+        testAppointment.setAppointmentId(appointmentId);
+        shift.setAppointment(testAppointment);
+        testAppointment.setShift(shift);
+        testService.setAppointment(testAppointment);
+        testAppointment.setService(testService);
+        testAppointment.setCustomer(testCustomer);
+        testAppointment.setSpace(testSpace);
+        appointmentRepository.save(testAppointment);
+
+
+        testAppointment = null;
+        testAppointment = appointmentRepository.findAppointmentByAppointmentId(appointmentId);
+        assertNotNull(testAppointment);
+        assertEquals(testAppointment.getAppointmentId(), appointmentId);
+    }
+    /**
+     * @author Byron Chen
+     */
+    @Test
+    public void testCustomerRepositoryPersistenceAndLoad() {
+        String phoneNo="3321-321";
+        String address="mcgill";
+        Customer customer = new Customer();
+        RepairShopManagementSystem sys = new RepairShopManagementSystem();
+        RepairShopManagementSystemRepository.save(sys);
+
+        customer.setRepairShopManagementSystem(sys);
+        customer.setPhoneNo(phoneNo);
+        customer.setHomeAddress(address);
+        CustomerRepository.save(customer);
+        Integer id=customer.getUserId();
+        customer = null;
+        customer = CustomerRepository.findCustomerByUserId(id);
+        assertNotNull(customer);
+        assertEquals(customer.getUserId(), id);
+        assertEquals(customer.getPhoneNo(), phoneNo);
+        assertEquals(customer.getHomeAddress(), address);
+    }
+    /**
+     * @author Xiang Li
+     */
+    @Test
+    public void testAssistantRepositoryPersistenceAndLoad() {
+       String username="testuser";
+        Assistant assistant = new Assistant();
+        RepairShopManagementSystem sys = new RepairShopManagementSystem();
+        RepairShopManagementSystemRepository.save(sys);
+
+        assistant.setRepairShopManagementSystem(sys);
+        assistant.setName(username);
+        assistantRepository.save(assistant);
+        Integer id=assistant.getUserId();
+
+        assistant = null;
+        assistant = assistantRepository.findAssistantByUserId(id);
+        assertNotNull(assistant);
+        assertEquals(assistant.getUserId(), id);
+        assertEquals(assistant.getName(), username);
+    }
+    /**
+     * @author Xiang Li
+     */
+    @Test
+    public void testBillRepositoryPersistenceAndLoad() {
+    	Integer price=10000;
+    	// Save RepairShopManagementSystem.
         RepairShopManagementSystem sys = new RepairShopManagementSystem();
         RepairShopManagementSystemRepository.save(sys);
 
@@ -238,143 +367,75 @@ public class TestRepairShopManagementPersistence {
         testAppointment.setCustomer(testCustomer);
         testAppointment.setSpace(testSpace);
         appointmentRepository.save(testAppointment);
-
-
-        testAppointment = null;
-        testAppointment = appointmentRepository.findAppointmentByAppointmentId(appointmentId);
-        assertNotNull(testAppointment);
-        assertEquals(testAppointment.getAppointmentId(), appointmentId);
-    }
-
-    @Test
-    public void testCusPer() {
-        Integer id = 1;
-        Customer customer = new Customer();
-        RepairShopManagementSystem sys = new RepairShopManagementSystem();
-        RepairShopManagementSystemRepository.save(sys);
-
-        customer.setRepairShopManagementSystem(sys);
-        CustomerRepository.save(customer);
-
-        customer = null;
-        customer = CustomerRepository.findCustomerByUserId(id);
-        assertNotNull(customer);
-        assertEquals(customer.getUserId(), id);
-    }
-
-    @Test
-    public void testAssPer() {
-        Integer id = 1;
-        Assistant assistant = new Assistant();
-        RepairShopManagementSystem sys = new RepairShopManagementSystem();
-        RepairShopManagementSystemRepository.save(sys);
-
-        assistant.setRepairShopManagementSystem(sys);
-        assistantRepository.save(assistant);
-
-        assistant = null;
-        assistant = assistantRepository.findAssistantByUserId(id);
-        assertNotNull(assistant);
-        assertEquals(assistant.getUserId(), id);
-    }
-
-    @Test
-    public void testBill() {
-        Integer billNum = 1;
-        Integer price = 100;
-
-        Integer id = 2;
-        Shift shift = new Shift();
-        RepairShopManagementSystem sys = new RepairShopManagementSystem();
-        RepairShopManagementSystemRepository.save(sys);
-
-        shift.setShiftId(id);
-        Schedule schedule = new Schedule();
-        schedule.setRepairShopManagementSystem(sys);
-        shift.setSchedule(schedule);
-        ScheduleRepository.save(schedule);
-
-
-        Assistant assistant = new Assistant();
-        assistant.setRepairShopManagementSystem(sys);
-        assistantRepository.save(assistant);
-        shift.setAssistant(assistant);
-
-
-        Appointment app = new Appointment();
-        shift.setAppointment(app);
-        app.setShift(shift);
-        ;
-        Service s = new Service();
-        s.setAppointment(app);
-        Space space = new Space();
-        space.setRepairShopManagementSystem(sys);
-        SpaceRepository.save(space);
-
-        app.setService(s);
-        Customer cu = new Customer();
-        cu.setRepairShopManagementSystem(sys);
-        CustomerRepository.save(cu);
-        ServiceRepository.save(s);
-
-
-        appointmentRepository.save(app);
-
-
+        
+        //Create Bill
+        Integer BillId ;
         Bill bill = new Bill();
+        bill.setAppointment(testAppointment);
         bill.setPrice(price);
-        bill.setBillNo(billNum);
         bill.setIsPaid(true);
-        bill.setAppointment(app);
-
         BillRepository.save(bill);
-        bill = BillRepository.findBybillNo(billNum);
+        BillId=bill.getBillNo();
+        
+        
+        bill = null;
+        bill = BillRepository.findBillByBillNo(BillId);
         assertNotNull(bill);
-        assertEquals(price, bill.getPrice());
-        assertEquals(billNum, bill.getBillNo());
-        assertEquals(true, bill.getIsPaid());
-        assertEquals(app, bill.getAppointment());
+        assertEquals(bill.getBillNo(), BillId);
+        assertEquals(bill.getPrice(), price);
     }
-
+    /**
+     * @author Xiang Li
+     */
     @Test
-    public void testOwnerPer() {
+    public void testOwnerRepositoryPersistenceAndLoad() {
+    	String userName="testuser";
         Owner owner = new Owner();
-        Integer id = 8;
-        owner.setUserId(id);
+        //Create and Save a system in the database table
         RepairShopManagementSystem sys = new RepairShopManagementSystem();
         RepairShopManagementSystemRepository.save(sys);
+        //Create and save an owner in the system
         owner.setRepairShopManagementSystem(sys);
-        owner.setName("Testname");
+        owner.setName(userName);
         OwnerRepository.save(owner);
+        Integer id=owner.getUserId();
         owner = null;
+        
+        
         owner = OwnerRepository.findOwnerByUserId(id);
         assertNotNull(owner);
         assertEquals(owner.getUserId(), id);
-        assertEquals(owner.getName(), "Testname");
+        assertEquals(owner.getName(), userName);
 
     }
-
+    /**
+     * @author Ao Shen
+     */
     @Test
-    public void testCar() {
+    public void testCarRepositoryPersistenceAndLoad() {
+         String model="test";
+    	 Customer customer = new Customer();
+    	 //Create and Save a  RepairShopManagementSystem in the database
+         RepairShopManagementSystem sys = new RepairShopManagementSystem();
+         RepairShopManagementSystemRepository.save(sys);
 
-        Customer customer = new Customer();
+          //Create and save a customer
+         customer.setRepairShopManagementSystem(sys);
+         CustomerRepository.save(customer);
+         
+         //Create and save a car
         Car A = new Car();
         String test = "testcar";
         A.setPlateNo(test);
-        RepairShopManagementSystem sys = new RepairShopManagementSystem();
-        RepairShopManagementSystemRepository.save(sys);
-        customer.setRepairShopManagementSystem(sys);
-
-
-        A.setCustomer(customer);
-
-        CustomerRepository.save(customer);
-        CarRepository.save(A);
-
+       A.setCustomer(customer);
+       A.setModel(model);
+       CarRepository.save(A);
+        //find the corresponding car
         A = CarRepository.findCarByPlateNo(test);
 
         assertNotNull(A);
         assertEquals(test, A.getPlateNo());
+        assertEquals(model, A.getModel());
 
 
     }

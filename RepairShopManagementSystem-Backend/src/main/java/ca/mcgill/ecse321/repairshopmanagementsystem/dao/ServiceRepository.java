@@ -4,5 +4,5 @@ import ca.mcgill.ecse321.repairshopmanagementsystem.model.Service;
 import org.springframework.data.repository.CrudRepository;
 
 public interface ServiceRepository extends CrudRepository<Service, Integer> {
-	Service findServiceByserviceId(Integer ID);
+	Service findServiceByServiceId(Integer ID);
 }
