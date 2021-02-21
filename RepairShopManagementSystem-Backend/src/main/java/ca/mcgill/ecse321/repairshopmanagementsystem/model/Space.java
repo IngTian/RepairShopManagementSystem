@@ -1,31 +1,30 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class Space {
     private Integer spaceId;
 
-    public void setSpaceId(Integer value) {
-        this.spaceId = value;
-    }
-
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getSpaceId() {
         return this.spaceId;
     }
 
-    private RepairShopManagementSystem repariShopManagementSystem;
-
-    @ManyToOne(optional = false)
-    public RepairShopManagementSystem getRepariShopManagementSystem() {
-        return this.repariShopManagementSystem;
+    public void setSpaceId(Integer value) {
+        this.spaceId = value;
     }
 
-    public void setRepariShopManagementSystem(RepairShopManagementSystem repariShopManagementSystem) {
-        this.repariShopManagementSystem = repariShopManagementSystem;
+    private RepairShopManagementSystem repairShopManagementSystem;
+
+    @ManyToOne(optional = false)
+    public RepairShopManagementSystem getRepairShopManagementSystem() {
+        return this.repairShopManagementSystem;
+    }
+
+    public void setRepairShopManagementSystem(RepairShopManagementSystem repariShopManagementSystem) {
+        this.repairShopManagementSystem = repariShopManagementSystem;
     }
 
     private Integer maxWeightLoad;

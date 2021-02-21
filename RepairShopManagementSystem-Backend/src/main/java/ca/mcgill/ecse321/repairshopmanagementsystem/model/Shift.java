@@ -38,7 +38,7 @@ public class Shift {
 
     private Appointment appointment;
 
-    @OneToOne(mappedBy = "timeSlot")
+    @OneToOne(mappedBy = "shift")
     public Appointment getAppointment() {
         return this.appointment;
     }
@@ -76,7 +76,7 @@ public class Shift {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getShiftId() {
         return this.shiftId;
     }

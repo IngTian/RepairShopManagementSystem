@@ -5,16 +5,16 @@ import java.util.Set;
 
 @Entity
 public class Schedule {
-    private Integer yearAndWeekNo;
+    private Integer id;
 
-    public void setYearAndWeekNo(Integer value) {
-        this.yearAndWeekNo = value;
+    public void setId(Integer value) {
+        this.id = value;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Integer getYearAndWeekNo() {
-        return this.yearAndWeekNo;
+    public Integer getId() {
+        return this.id;
     }
 
     private Set<Shift> timeSlot;
@@ -39,15 +39,15 @@ public class Schedule {
         this.user = users;
     }
 
-    private RepairShopManagementSystem repariShopManagementSystem;
+    private RepairShopManagementSystem repairShopManagementSystem;
 
     @ManyToOne(optional = false)
-    public RepairShopManagementSystem getRepariShopManagementSystem() {
-        return this.repariShopManagementSystem;
+    public RepairShopManagementSystem getRepairShopManagementSystem() {
+        return this.repairShopManagementSystem;
     }
 
-    public void setRepariShopManagementSystem(RepairShopManagementSystem repariShopManagementSystem) {
-        this.repariShopManagementSystem = repariShopManagementSystem;
+    public void setRepairShopManagementSystem(RepairShopManagementSystem repariShopManagementSystem) {
+        this.repairShopManagementSystem = repariShopManagementSystem;
     }
 
 }

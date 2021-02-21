@@ -47,15 +47,15 @@ public abstract class User {
         this.schedule = schedules;
     }
 
-    private RepairShopManagementSystem repariShopManagementSystem;
+    private RepairShopManagementSystem repairShopManagementSystem;
 
     @ManyToOne(optional = false)
-    public RepairShopManagementSystem getRepariShopManagementSystem() {
-        return this.repariShopManagementSystem;
+    public RepairShopManagementSystem getRepairShopManagementSystem() {
+        return this.repairShopManagementSystem;
     }
 
-    public void setRepariShopManagementSystem(RepairShopManagementSystem repariShopManagementSystem) {
-        this.repariShopManagementSystem = repariShopManagementSystem;
+    public void setRepairShopManagementSystem(RepairShopManagementSystem repairShopManagementSystem) {
+        this.repairShopManagementSystem = repairShopManagementSystem;
     }
 
     private Integer userId;

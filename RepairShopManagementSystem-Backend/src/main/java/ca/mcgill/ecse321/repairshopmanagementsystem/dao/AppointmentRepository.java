@@ -4,4 +4,5 @@ import ca.mcgill.ecse321.repairshopmanagementsystem.model.Appointment;
 import org.springframework.data.repository.CrudRepository;
 
 public interface AppointmentRepository extends CrudRepository<Appointment, Integer> {
+	Appointment findAppointmentByAppointmentId(Integer appointmentId);
 }

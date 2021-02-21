@@ -19,7 +19,7 @@ public class RepairShopManagementSystem {
 
     private Set<User> user;
 
-    @OneToMany(mappedBy = "repariShopManagementSystem", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "repairShopManagementSystem", cascade = {CascadeType.ALL})
     public Set<User> getUser() {
         return this.user;
     }
@@ -30,7 +30,7 @@ public class RepairShopManagementSystem {
 
     private Set<Space> space;
 
-    @OneToMany(mappedBy = "repariShopManagementSystem", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "repairShopManagementSystem", cascade = {CascadeType.ALL})
     public Set<Space> getSpace() {
         return this.space;
     }
@@ -41,7 +41,7 @@ public class RepairShopManagementSystem {
 
     private Set<Schedule> schedule;
 
-    @OneToMany(mappedBy = "repariShopManagementSystem", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "repairShopManagementSystem", cascade = {CascadeType.ALL})
     public Set<Schedule> getSchedule() {
         return this.schedule;
     }

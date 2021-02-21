@@ -12,7 +12,7 @@ public class Appointment {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getAppointmentId() {
         return this.appointmentId;
     }
@@ -39,15 +39,16 @@ public class Appointment {
         this.service = service;
     }
 
-    private Shift timeSlot;
+    private Shift shift;
 
-    @OneToOne(optional = false)
-    public Shift getTimeSlot() {
-        return this.timeSlot;
+//    @OneToOne(optional = false, cascade = {CascadeType.ALL})
+    @OneToOne()
+    public Shift getShift() {
+        return this.shift;
     }
 
-    public void setTimeSlot(Shift timeSlot) {
-        this.timeSlot = timeSlot;
+    public void setShift(Shift timeSlot) {
+        this.shift = timeSlot;
     }
 
     private Customer customer;

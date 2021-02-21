@@ -5,14 +5,14 @@ import java.util.Set;
 
 @Entity
 public class Service {
-    private ServiceType serviceType;
+    private String serviceType;
 
-    public void setServiceType(ServiceType value) {
+    public void setServiceType(String value) {
         this.serviceType = value;
     }
 
-    @OneToOne
-    public ServiceType getServiceType() {
+   
+    public String getServiceType() {
         return this.serviceType;
     }
 
