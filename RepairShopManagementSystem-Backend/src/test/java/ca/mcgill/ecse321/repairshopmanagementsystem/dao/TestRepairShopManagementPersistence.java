@@ -14,7 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ca.mcgill.ecse321.repairshopmanagementsystem.model.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import java.sql.*;
+
 @ExtendWith(SpringExtension.class)
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -47,48 +49,54 @@ public class TestRepairShopManagementPersistence {
     @AfterEach
     @BeforeEach
     public void clearAll() {
-
-    	ServiceRepository.deleteAll();
+        /*
+        Due to our domain model design, every class is
+        either directly or indirectly composited to the
+        "RepairShopManagementSystem." Therefore,
+        deleting clear this single table would recursively
+        deleting all entries in the database.
+         */
         RepairShopManagementSystemRepository.deleteAll();
-
-
-
     }
+
     /**
      * @author kevinli
      */
     @Test
-    public void testSpaceRepistoryPersistenceAndLoad() {
-       //Create and Save repairshopmanagement system
+    public void testSpaceRepositoryPersistenceAndLoad() {
+
+        // Create and Save RepairShopManagementSystem system.
         RepairShopManagementSystem sys = new RepairShopManagementSystem();
         RepairShopManagementSystemRepository.save(sys);
-       //Create and Save Space in the database
-        Integer maxweight=90;
+
+        //Create and Save Space in the database
+        Integer maxWeight = 90;
         Space space = new Space();
         space.setRepairShopManagementSystem(sys);
         space.setMaxWeightLoad(90);
         SpaceRepository.save(space);
-        
+
         //get the generated id
-        Integer id=space.getSpaceId();
+        Integer id = space.getSpaceId();
         space = null;
-        
+
         //find the corresponding space from database table
         space = SpaceRepository.findSpaceBySpaceId(id);
 
         assertNotNull(space);
         assertEquals(space.getSpaceId(), id);
-        assertEquals(space.getMaxWeightLoad(),maxweight);
+        assertEquals(space.getMaxWeightLoad(), maxWeight);
     }
+
     /**
      * @author kevinli
      */
 
     @Test
-    public void testShiftRepistoryPersistenceAndLoad() {
-    	
-    	// Save RepairShopManagementSystem.
-    	
+    public void testShiftRepositoryPersistenceAndLoad() {
+
+        // Save RepairShopManagementSystem.
+
         RepairShopManagementSystem sys = new RepairShopManagementSystem();
         RepairShopManagementSystemRepository.save(sys);
 
@@ -109,9 +117,9 @@ public class TestRepairShopManagementPersistence {
         shift.setSchedule(schedule);
         shift.setAssistant(assistant);
         ShiftRepository.save(shift);
-        
+
         shift = null;
-        
+
         //get the corresponding shift from database table
         shift = ShiftRepository.findShiftByShiftId(shiftId);
 
@@ -120,13 +128,14 @@ public class TestRepairShopManagementPersistence {
 
 
     }
+
     /**
      * @author Ao Shen
      */
     @Test
-    public void testServiceRepistoryPersistenceAndLoad() {
-    	// Save RepairShopManagementSystem.
-    	String serviceName="test";
+    public void testServiceRepositoryPersistenceAndLoad() {
+        // Save RepairShopManagementSystem.
+        String serviceName = "test";
         RepairShopManagementSystem sys = new RepairShopManagementSystem();
         RepairShopManagementSystemRepository.save(sys);
 
@@ -162,10 +171,10 @@ public class TestRepairShopManagementPersistence {
         // Create appointment.
         Integer appointmentId = 100;
         Appointment testAppointment = new Appointment();
-        
+
         // Create service.
         Service testService = new Service();
-        
+
         testAppointment.setAppointmentId(appointmentId);
         shift.setAppointment(testAppointment);
         testAppointment.setShift(shift);
@@ -173,13 +182,13 @@ public class TestRepairShopManagementPersistence {
         testAppointment.setCustomer(testCustomer);
         testAppointment.setSpace(testSpace);
         appointmentRepository.save(testAppointment);
-        
+
         testService.setAppointment(testAppointment);
         testService.setServiceType("A");
         testService.setServiceType(serviceName);
         ServiceRepository.save(testService);
-        Integer  serviceid  = testService.getServiceId();
-        
+        Integer serviceid = testService.getServiceId();
+
         testService = null;
         testService = ServiceRepository.findServiceByServiceId(serviceid);
 
@@ -187,29 +196,31 @@ public class TestRepairShopManagementPersistence {
         assertEquals(testService.getServiceId(), serviceid);
         assertEquals(testService.getServiceType(), serviceName);
     }
+
     /**
      * @author Ing Tian
      */
     @Test
     public void testScheduleRepositoryPersistenceAndLoad() {
-    	//Create and save a system
-    	 RepairShopManagementSystem sys = new RepairShopManagementSystem();
-         RepairShopManagementSystemRepository.save(sys);
+        //Create and save a system
+        RepairShopManagementSystem sys = new RepairShopManagementSystem();
+        RepairShopManagementSystemRepository.save(sys);
 
-         // Save Schedule.
-         Schedule schedule = new Schedule();
-         schedule.setRepairShopManagementSystem(sys);
-         ScheduleRepository.save(schedule);
-        Integer id=schedule.getId();
-         schedule = null;
-        
+        // Save Schedule.
+        Schedule schedule = new Schedule();
+        schedule.setRepairShopManagementSystem(sys);
+        ScheduleRepository.save(schedule);
+        Integer id = schedule.getId();
+        schedule = null;
+
         schedule = ScheduleRepository.findScheduleById(id);
-        
-       
+
+
         assertNotNull(schedule);
         assertEquals(schedule.getId(), id);
 
     }
+
     /**
      * @author Ing Tian
      */
@@ -239,10 +250,10 @@ public class TestRepairShopManagementPersistence {
         ShiftRepository.save(shift);
 
         // Create space.
-        
+
         Space testSpace = new Space();
         testSpace.setRepairShopManagementSystem(sys);
-       
+
         SpaceRepository.save(testSpace);
 
         // Create customer.
@@ -271,13 +282,14 @@ public class TestRepairShopManagementPersistence {
         assertNotNull(testAppointment);
         assertEquals(testAppointment.getAppointmentId(), appointmentId);
     }
+
     /**
      * @author Byron Chen
      */
     @Test
     public void testCustomerRepositoryPersistenceAndLoad() {
-        String phoneNo="3321-321";
-        String address="mcgill";
+        String phoneNo = "3321-321";
+        String address = "mcgill";
         Customer customer = new Customer();
         RepairShopManagementSystem sys = new RepairShopManagementSystem();
         RepairShopManagementSystemRepository.save(sys);
@@ -286,7 +298,7 @@ public class TestRepairShopManagementPersistence {
         customer.setPhoneNo(phoneNo);
         customer.setHomeAddress(address);
         CustomerRepository.save(customer);
-        Integer id=customer.getUserId();
+        Integer id = customer.getUserId();
         customer = null;
         customer = CustomerRepository.findCustomerByUserId(id);
         assertNotNull(customer);
@@ -294,12 +306,13 @@ public class TestRepairShopManagementPersistence {
         assertEquals(customer.getPhoneNo(), phoneNo);
         assertEquals(customer.getHomeAddress(), address);
     }
+
     /**
      * @author Xiang Li
      */
     @Test
     public void testAssistantRepositoryPersistenceAndLoad() {
-       String username="testuser";
+        String username = "testuser";
         Assistant assistant = new Assistant();
         RepairShopManagementSystem sys = new RepairShopManagementSystem();
         RepairShopManagementSystemRepository.save(sys);
@@ -307,7 +320,7 @@ public class TestRepairShopManagementPersistence {
         assistant.setRepairShopManagementSystem(sys);
         assistant.setName(username);
         assistantRepository.save(assistant);
-        Integer id=assistant.getUserId();
+        Integer id = assistant.getUserId();
 
         assistant = null;
         assistant = assistantRepository.findAssistantByUserId(id);
@@ -315,13 +328,14 @@ public class TestRepairShopManagementPersistence {
         assertEquals(assistant.getUserId(), id);
         assertEquals(assistant.getName(), username);
     }
+
     /**
      * @author Xiang Li
      */
     @Test
     public void testBillRepositoryPersistenceAndLoad() {
-    	Integer price=10000;
-    	// Save RepairShopManagementSystem.
+        Integer price = 10000;
+        // Save RepairShopManagementSystem.
         RepairShopManagementSystem sys = new RepairShopManagementSystem();
         RepairShopManagementSystemRepository.save(sys);
 
@@ -367,29 +381,30 @@ public class TestRepairShopManagementPersistence {
         testAppointment.setCustomer(testCustomer);
         testAppointment.setSpace(testSpace);
         appointmentRepository.save(testAppointment);
-        
+
         //Create Bill
-        Integer BillId ;
+        Integer BillId;
         Bill bill = new Bill();
         bill.setAppointment(testAppointment);
         bill.setPrice(price);
         bill.setIsPaid(true);
         BillRepository.save(bill);
-        BillId=bill.getBillNo();
-        
-        
+        BillId = bill.getBillNo();
+
+
         bill = null;
         bill = BillRepository.findBillByBillNo(BillId);
         assertNotNull(bill);
         assertEquals(bill.getBillNo(), BillId);
         assertEquals(bill.getPrice(), price);
     }
+
     /**
      * @author Xiang Li
      */
     @Test
     public void testOwnerRepositoryPersistenceAndLoad() {
-    	String userName="testuser";
+        String userName = "testuser";
         Owner owner = new Owner();
         //Create and Save a system in the database table
         RepairShopManagementSystem sys = new RepairShopManagementSystem();
@@ -398,38 +413,39 @@ public class TestRepairShopManagementPersistence {
         owner.setRepairShopManagementSystem(sys);
         owner.setName(userName);
         OwnerRepository.save(owner);
-        Integer id=owner.getUserId();
+        Integer id = owner.getUserId();
         owner = null;
-        
-        
+
+
         owner = OwnerRepository.findOwnerByUserId(id);
         assertNotNull(owner);
         assertEquals(owner.getUserId(), id);
         assertEquals(owner.getName(), userName);
 
     }
+
     /**
      * @author Ao Shen
      */
     @Test
     public void testCarRepositoryPersistenceAndLoad() {
-         String model="test";
-    	 Customer customer = new Customer();
-    	 //Create and Save a  RepairShopManagementSystem in the database
-         RepairShopManagementSystem sys = new RepairShopManagementSystem();
-         RepairShopManagementSystemRepository.save(sys);
+        String model = "test";
+        Customer customer = new Customer();
+        //Create and Save a  RepairShopManagementSystem in the database
+        RepairShopManagementSystem sys = new RepairShopManagementSystem();
+        RepairShopManagementSystemRepository.save(sys);
 
-          //Create and save a customer
-         customer.setRepairShopManagementSystem(sys);
-         CustomerRepository.save(customer);
-         
-         //Create and save a car
+        //Create and save a customer
+        customer.setRepairShopManagementSystem(sys);
+        CustomerRepository.save(customer);
+
+        //Create and save a car
         Car A = new Car();
         String test = "testcar";
         A.setPlateNo(test);
-       A.setCustomer(customer);
-       A.setModel(model);
-       CarRepository.save(A);
+        A.setCustomer(customer);
+        A.setModel(model);
+        CarRepository.save(A);
         //find the corresponding car
         A = CarRepository.findCarByPlateNo(test);
 
