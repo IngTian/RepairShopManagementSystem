@@ -76,7 +76,6 @@ public class Shift {
     }
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getShiftId() {
         return this.shiftId;
     }

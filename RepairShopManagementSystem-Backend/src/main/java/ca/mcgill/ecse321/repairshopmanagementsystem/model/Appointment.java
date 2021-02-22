@@ -12,7 +12,6 @@ public class Appointment {
     }
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getAppointmentId() {
         return this.appointmentId;
     }
@@ -41,7 +40,6 @@ public class Appointment {
 
     private Shift shift;
 
-//    @OneToOne(optional = false, cascade = {CascadeType.ALL})
     @OneToOne()
     public Shift getShift() {
         return this.shift;
