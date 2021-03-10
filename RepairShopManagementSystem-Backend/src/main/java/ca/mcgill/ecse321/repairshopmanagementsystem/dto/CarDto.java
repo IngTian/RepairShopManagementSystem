@@ -1,7 +1,5 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.dto;
 
-import com.sun.deploy.net.MessageHeader;
-
 import java.util.*;
 import java.sql.Date;
 
