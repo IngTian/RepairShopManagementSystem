@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.repairshopmanagementsystem.service;
 
 import ca.mcgill.ecse321.repairshopmanagementsystem.dao.*;
 import ca.mcgill.ecse321.repairshopmanagementsystem.model.*;
+import ca.mcgill.ecse321.repairshopmanagementsystem.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,24 @@ public class AccountService {
     private CarRepository carRepository;
 
     @Transactional
-    public Owner createOwner(String username, String password, String name, RepairShopManagementSystem system) {
+    public Owner createOwner(String username, String password, String name, RepairShopManagementSystem system) throws IllegalArgumentException {
+
+        // Check for null or empty inputs.
+        if (username == null || username.equals(""))
+            throw new IllegalArgumentException("Username cannot be empty!");
+        if (password == null || password.equals(""))
+            throw new IllegalArgumentException("Password cannot be empty.");
+        if (name == null || name.equals(""))
+            throw new IllegalArgumentException("Name cannot be empty.");
+
+        // Check for formats.
+        if (!Util.isUsernameCorrect(username))
+            throw new IllegalArgumentException("Username must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+        if (!Util.isPasswordCorrect(password))
+            throw new IllegalArgumentException("Password must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+
         Owner newOwner = new Owner();
         newOwner.setName(name);
         newOwner.setUsername(username);
@@ -47,6 +65,22 @@ public class AccountService {
 
     @Transactional
     public User updateUserInformation(User user, String username, String password, String name) {
+        // Check for null or empty inputs.
+        if (username == null || username.equals(""))
+            throw new IllegalArgumentException("New username cannot be empty.");
+        if (password == null || password.equals(""))
+            throw new IllegalArgumentException("New password cannot be empty.");
+        if (name == null || name.equals(""))
+            throw new IllegalArgumentException("New name cannot be empty.");
+
+        // Check for formats.
+        if (!Util.isUsernameCorrect(username))
+            throw new IllegalArgumentException("Username must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+        if (!Util.isPasswordCorrect(password))
+            throw new IllegalArgumentException("Password must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+
         user.setName(name);
         user.setUsername(username);
         user.setPassword(password);
@@ -62,6 +96,22 @@ public class AccountService {
 
     @Transactional
     public Assistant createAssistant(String username, String password, String name, RepairShopManagementSystem system) {
+        // Check for null or empty inputs.
+        if (username == null || username.equals(""))
+            throw new IllegalArgumentException("Username cannot be empty!");
+        if (password == null || password.equals(""))
+            throw new IllegalArgumentException("Password cannot be empty.");
+        if (name == null || name.equals(""))
+            throw new IllegalArgumentException("Name cannot be empty.");
+
+        // Check for formats.
+        if (!Util.isUsernameCorrect(username))
+            throw new IllegalArgumentException("Username must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+        if (!Util.isPasswordCorrect(password))
+            throw new IllegalArgumentException("Password must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+
         Assistant assistant = new Assistant();
         assistant.setUsername(username);
         assistant.setPassword(password);
@@ -84,6 +134,32 @@ public class AccountService {
 
     @Transactional
     public Customer createCustomer(String username, String password, String name, RepairShopManagementSystem system, String phoneNo, String address, String email) {
+        // Check for null or empty inputs.
+        if (username == null || username.equals(""))
+            throw new IllegalArgumentException("Username cannot be empty!");
+        if (password == null || password.equals(""))
+            throw new IllegalArgumentException("Password cannot be empty.");
+        if (name == null || name.equals(""))
+            throw new IllegalArgumentException("Name cannot be empty.");
+        if (phoneNo == null || phoneNo.equals(""))
+            throw new IllegalArgumentException("Phone NO cannot be empty.");
+        if (address == null || address.equals(""))
+            throw new IllegalArgumentException("Address cannot be empty.");
+        if (email == null || email.equals(""))
+            throw new IllegalArgumentException("Email cannot be empty.");
+
+        // Check for formats.
+        if (!Util.isUsernameCorrect(username))
+            throw new IllegalArgumentException("Username must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+        if (!Util.isPasswordCorrect(password))
+            throw new IllegalArgumentException("Password must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+        if (!Util.isPhoneNoCorrect(phoneNo))
+            throw new IllegalArgumentException("Phone NO must be a 10-digit number.");
+        if (!Util.isEmailAddressCorrect(email))
+            throw new IllegalArgumentException("Email must be of the form part_1@part_2.part_3.");
+
         Customer customer = new Customer();
         customer.setUsername(username);
         customer.setPassword(password);
@@ -104,6 +180,8 @@ public class AccountService {
 
     @Transactional
     public Customer addACarToCustomer(Customer customer, Car aCar) {
+        String plateNo = aCar.getPlateNo(), year = aCar.getYear(), model = aCar.getModel(), manufacturer = aCar.getManufacturer();
+
         Set<Car> cars = customer.getCar();
         cars.add(aCar);
         customerRepository.save(customer);
@@ -111,30 +189,57 @@ public class AccountService {
     }
 
     @Transactional
-    public List<Customer> findAllCustomers() {
+    public List<Customer> getAllCustomers() {
         return toList(customerRepository.findAll());
     }
 
+    /**
+     * @author Byron Chen
+     */
     @Transactional
-    public Customer updateCustomer(Customer customer, String email, String address, String phoneNo) {
-        customer.setEmail(email);
-        customer.setHomeAddress(address);
-        customer.setPhoneNo(phoneNo);
-        customerRepository.save(customer);
-        return customer;
+    public Car updateCar(Car car, String plateNo, String model, String year, String manufacturer, Customer customer) {
+
+        String error = "";
+
+        if (plateNo == null || plateNo.trim().length() == 0) {
+            error = error + "New plate number cannot be empty! ";
+        }
+        else if (!Util.isPlateNoCorrect(plateNo)) {
+            error = error + "New plate number illegal! ";
+        }
+
+        if (model == null || model.trim().length() == 0) {
+            error = error + "New model cannot be empty! ";
+        }
+
+        if (year == null || year.trim().length() == 0) {
+            error = error + "New year cannot be empty! ";
+        }
+
+        else if (!Util.isCarYearCorrect(year)) {
+            error = error + "New year illegal! ";
+        }
+
+        if (manufacturer == null || manufacturer.trim().length() == 0) {
+            error = error + "New manufacturer cannot be empty! ";
+        }
+
+        if (customer == null) {
+            error = error + "New customer cannot be empty! ";
+        }
+
+        if (error.length() > 0) {
+            throw new IllegalArgumentException(error);
+        }
+        car.setCustomer(customer);
+        car.setModel(model);
+        car.setManufacturer(manufacturer);
+        car.setPlateNo(plateNo);
+        car.setYear(year);
+        carRepository.save(car);
+        return car;
     }
 
-    @Transactional
-    public Car createCar(String plateNo, String model, String year, String manufacturer, Customer customer) {
-        Car aCar = new Car();
-        aCar.setCustomer(customer);
-        aCar.setModel(model);
-        aCar.setManufacturer(manufacturer);
-        aCar.setPlateNo(plateNo);
-        aCar.setYear(year);
-        carRepository.save(aCar);
-        return aCar;
-    }
 
     @Transactional
     public Car getCar(String plateNo) {
@@ -153,4 +258,67 @@ public class AccountService {
         }
         return resultList;
     }
+
+    /**
+     * @author Ao Shen
+     */
+    @Transactional
+    public Customer updateCustomer(Customer customer, String email, String address, String phoneNo) {
+        if (phoneNo == null || phoneNo.equals(""))
+            throw new IllegalArgumentException("New phoneNo cannot be empty.");
+        if (address == null || address.equals(""))
+            throw new IllegalArgumentException("New address cannot be empty.");
+        if (email == null || email.equals(""))
+            throw new IllegalArgumentException("New email cannot be empty.");
+
+        // Check for formats.
+        if (!Util.isPhoneNoCorrect(phoneNo))
+            throw new IllegalArgumentException("Invalid PhoneNo.");
+        if (!Util.isAddressCorrect(address))
+            throw new IllegalArgumentException("Invalid Address.");
+        if (!Util.isEmailAddressCorrect(email))
+            throw new IllegalArgumentException("Invalid Email address.");
+        customer.setEmail(email);
+        customer.setHomeAddress(address);
+        customer.setPhoneNo(phoneNo);
+        customerRepository.save(customer);
+        return customer;
+    }
+
+    /**
+     * @author Ao Shen
+     */
+    @Transactional
+    public Car createCar(String plateNo, String model, String year, String manufacturer, Customer customer) {
+        // Check for null or empty inputs.
+        if (plateNo == null || plateNo.equals(""))
+            throw new IllegalArgumentException("PlateNo cannot be empty!");
+        if (model == null || model.equals(""))
+            throw new IllegalArgumentException("Model cannot be empty!");
+        if (year == null || year.equals(""))
+            throw new IllegalArgumentException("Year cannot be empty!");
+        if (manufacturer == null || manufacturer.equals(""))
+            throw new IllegalArgumentException("Manufacturer cannot be empty!");
+        if (customer == null)
+            throw new IllegalArgumentException("Customer cannot be empty!");
+
+
+        // Check for formats.
+        if (!Util.isPlateNoCorrect(plateNo))
+            throw new IllegalArgumentException("Invalid plate number.");
+        if (!Util.isCarYearCorrect(year))
+            throw new IllegalArgumentException("Invalid year.");
+
+        Car aCar = new Car();
+        aCar.setCustomer(customer);
+        aCar.setModel(model);
+        aCar.setManufacturer(manufacturer);
+        aCar.setPlateNo(plateNo);
+        aCar.setYear(year);
+        carRepository.save(aCar);
+        return aCar;
+    }
+
+
 }
+
