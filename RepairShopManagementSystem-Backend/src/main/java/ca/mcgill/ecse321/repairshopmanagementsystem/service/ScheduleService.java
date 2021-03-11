@@ -7,8 +7,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import ca.mcgill.ecse321.repairshopmanagementsystem.dao.*;
 import ca.mcgill.ecse321.repairshopmanagementsystem.model.*;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class ScheduleService {
 
     @Autowired
@@ -63,8 +64,7 @@ public class ScheduleService {
 
     @Transactional
     public List<Schedule> findAllSchedules(String username) {
-
-        return scheduleRepository.findSchedulesbyUsername(username);
+        return toList(scheduleRepository.findAll());
     }
 
     @Transactional
