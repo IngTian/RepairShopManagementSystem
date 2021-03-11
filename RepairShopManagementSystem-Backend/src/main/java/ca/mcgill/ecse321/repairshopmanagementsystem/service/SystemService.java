@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.util.*;
+
 @Service
 public class SystemService {
 
@@ -24,8 +26,21 @@ public class SystemService {
     }
 
     @Transactional
+    public List<RepairShopManagementSystem> getAllSystems() {
+        return toList(systemRepository.findAll());
+    }
+
+    @Transactional
     public RepairShopManagementSystem getSystem(String businessName, String phoneNo, String address) {
         return systemRepository.findRepairShopManagementSystemByBusinessNameAndBusinessAddressAndBusinessPhoneNumber(businessName, address, phoneNo);
+    }
+
+    private <T> List<T> toList(Iterable<T> iterable) {
+        List<T> resultList = new ArrayList<T>();
+        for (T t : iterable) {
+            resultList.add(t);
+        }
+        return resultList;
     }
 
 }

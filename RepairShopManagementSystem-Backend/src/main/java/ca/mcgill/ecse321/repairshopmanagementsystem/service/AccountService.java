@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.repairshopmanagementsystem.service;
 
 import ca.mcgill.ecse321.repairshopmanagementsystem.dao.*;
 import ca.mcgill.ecse321.repairshopmanagementsystem.model.*;
+import ca.mcgill.ecse321.repairshopmanagementsystem.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,24 @@ public class AccountService {
     private CarRepository carRepository;
 
     @Transactional
-    public Owner createOwner(String username, String password, String name, RepairShopManagementSystem system) {
+    public Owner createOwner(String username, String password, String name, RepairShopManagementSystem system) throws IllegalArgumentException {
+
+        // Check for null or empty inputs.
+        if (username == null || username.equals(""))
+            throw new IllegalArgumentException("Username cannot be empty!");
+        if (password == null || password.equals(""))
+            throw new IllegalArgumentException("Password cannot be empty.");
+        if (name == null || name.equals(""))
+            throw new IllegalArgumentException("Name cannot be empty.");
+
+        // Check for formats.
+        if (!Util.isUsernameCorrect(username))
+            throw new IllegalArgumentException("Username must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+        if (!Util.isPasswordCorrect(password))
+            throw new IllegalArgumentException("Password must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+
         Owner newOwner = new Owner();
         newOwner.setName(name);
         newOwner.setUsername(username);
@@ -47,6 +65,22 @@ public class AccountService {
 
     @Transactional
     public User updateUserInformation(User user, String username, String password, String name) {
+        // Check for null or empty inputs.
+        if (username == null || username.equals(""))
+            throw new IllegalArgumentException("New username cannot be empty.");
+        if (password == null || password.equals(""))
+            throw new IllegalArgumentException("New password cannot be empty.");
+        if (name == null || name.equals(""))
+            throw new IllegalArgumentException("New name cannot be empty.");
+
+        // Check for formats.
+        if (!Util.isUsernameCorrect(username))
+            throw new IllegalArgumentException("Username must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+        if (!Util.isPasswordCorrect(password))
+            throw new IllegalArgumentException("Password must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+
         user.setName(name);
         user.setUsername(username);
         user.setPassword(password);
@@ -62,6 +96,22 @@ public class AccountService {
 
     @Transactional
     public Assistant createAssistant(String username, String password, String name, RepairShopManagementSystem system) {
+        // Check for null or empty inputs.
+        if (username == null || username.equals(""))
+            throw new IllegalArgumentException("Username cannot be empty!");
+        if (password == null || password.equals(""))
+            throw new IllegalArgumentException("Password cannot be empty.");
+        if (name == null || name.equals(""))
+            throw new IllegalArgumentException("Name cannot be empty.");
+
+        // Check for formats.
+        if (!Util.isUsernameCorrect(username))
+            throw new IllegalArgumentException("Username must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+        if (!Util.isPasswordCorrect(password))
+            throw new IllegalArgumentException("Password must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+
         Assistant assistant = new Assistant();
         assistant.setUsername(username);
         assistant.setPassword(password);
@@ -84,6 +134,32 @@ public class AccountService {
 
     @Transactional
     public Customer createCustomer(String username, String password, String name, RepairShopManagementSystem system, String phoneNo, String address, String email) {
+        // Check for null or empty inputs.
+        if (username == null || username.equals(""))
+            throw new IllegalArgumentException("Username cannot be empty!");
+        if (password == null || password.equals(""))
+            throw new IllegalArgumentException("Password cannot be empty.");
+        if (name == null || name.equals(""))
+            throw new IllegalArgumentException("Name cannot be empty.");
+        if (phoneNo == null || phoneNo.equals(""))
+            throw new IllegalArgumentException("Phone NO cannot be empty.");
+        if (address == null || address.equals(""))
+            throw new IllegalArgumentException("Address cannot be empty.");
+        if (email == null || email.equals(""))
+            throw new IllegalArgumentException("Email cannot be empty.");
+
+        // Check for formats.
+        if (!Util.isUsernameCorrect(username))
+            throw new IllegalArgumentException("Username must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+        if (!Util.isPasswordCorrect(password))
+            throw new IllegalArgumentException("Password must be at least 8 characters and at most 16 characters, " +
+                    "containing only lowercase and uppercase English alphabets and numbers.");
+        if (!Util.isPhoneNoCorrect(phoneNo))
+            throw new IllegalArgumentException("Phone NO must be a 10-digit number.");
+        if (!Util.isEmailAddressCorrect(email))
+            throw new IllegalArgumentException("Email must be of the form part_1@part_2.part_3.");
+
         Customer customer = new Customer();
         customer.setUsername(username);
         customer.setPassword(password);
@@ -104,6 +180,8 @@ public class AccountService {
 
     @Transactional
     public Customer addACarToCustomer(Customer customer, Car aCar) {
+        String plateNo = aCar.getPlateNo(), year = aCar.getYear(), model = aCar.getModel(), manufacturer = aCar.getManufacturer();
+
         Set<Car> cars = customer.getCar();
         cars.add(aCar);
         customerRepository.save(customer);
@@ -111,7 +189,7 @@ public class AccountService {
     }
 
     @Transactional
-    public List<Customer> findAllCustomers() {
+    public List<Customer> getAllCustomers() {
         return toList(customerRepository.findAll());
     }
 
