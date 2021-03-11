@@ -1,110 +1,95 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.service;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import ca.mcgill.ecse321.repairshopmanagementsystem.dao.AssistantRepository;
-import ca.mcgill.ecse321.repairshopmanagementsystem.dao.CustomerRepository;
-import ca.mcgill.ecse321.repairshopmanagementsystem.dao.OwnerRepository;
-import ca.mcgill.ecse321.repairshopmanagementsystem.dao.ScheduleRepository;
-import ca.mcgill.ecse321.repairshopmanagementsystem.dao.ShiftRepository;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.Assistant;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.Customer;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.Owner;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.Schedule;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.Shift;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.User;
-
+import ca.mcgill.ecse321.repairshopmanagementsystem.dao.*;
+import ca.mcgill.ecse321.repairshopmanagementsystem.model.*;
 
 
 public class ScheduleService {
-    
-      @Autowired
-      private ShiftRepository shiftRepository;
-      
-      @Autowired
-      private AssistantRepository assistantRepository;
-      
-      @Autowired
-      private CustomerRepository customerRepository;
-      
-      @Autowired
-      private OwnerRepository ownerRepository;
-      
-      @Autowired
-      private ScheduleRepository scheduleRepository;
-      
-      @Transactional
-      public Set<User> getUsers(Schedule schedule) {
-        Set <User> set1= ownerRepository.findOwnerBySchedule(schedule);
-        Set <User> set2= customerRepository.findCustomerBySchedule(schedule);
-        Set <User> set3= assistantRepository.findAssistantBySchedule(schedule);
-        Set <User> result= new HashSet<User>();
-        if(set1!=null) {
-          result.addAll(set1);
+
+    @Autowired
+    private ShiftRepository shiftRepository;
+
+    @Autowired
+    private AssistantRepository assistantRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private OwnerRepository ownerRepository;
+
+    @Autowired
+    private ScheduleRepository scheduleRepository;
+
+    @Transactional
+    public Set<User> getUsers(Schedule schedule) {
+        Set<User> set1 = ownerRepository.findOwnerBySchedule(schedule);
+        Set<User> set2 = customerRepository.findCustomerBySchedule(schedule);
+        Set<User> set3 = assistantRepository.findAssistantBySchedule(schedule);
+        Set<User> result = new HashSet<User>();
+        if (set1 != null) {
+            result.addAll(set1);
         }
-        if(set2!=null) {
-          result.addAll(set2);
+        if (set2 != null) {
+            result.addAll(set2);
         }
-        if(set3!=null) {
-          result.addAll(set3);
+        if (set3 != null) {
+            result.addAll(set3);
         }
-          return result;
-      }
+        return result;
+    }
 
 
-      @Transactional
-      public Set<Shift> getShifts(Schedule schedule) {
-         return shiftRepository.findShiftsBySchedule(schedule);
-      }
-      
-      @Transactional
-      public List<Schedule> getAllSchedules() {
-          return toList(scheduleRepository.findAll());
-      }
-      
-      @Transactional
-      public Schedule findSchedule(Integer id) {
+    @Transactional
+    public Set<Shift> getShifts(Schedule schedule) {
+        return shiftRepository.findShiftsBySchedule(schedule);
+    }
 
-          return scheduleRepository.findScheduleById(id);
-      }
-      
-      @Transactional
-      public List<Schedule> findAllSchedules(String username) {
+    @Transactional
+    public List<Schedule> getAllSchedules() {
+        return toList(scheduleRepository.findAll());
+    }
 
-          return scheduleRepository.findSchedulesbyUsername(username);
-      }
-      
-      @Transactional
-      public Schedule createSchedule(Set<User> user, Set<Shift> shifts) {
-        
+    @Transactional
+    public Schedule findSchedule(Integer id) {
+
+        return scheduleRepository.findScheduleById(id);
+    }
+
+    @Transactional
+    public List<Schedule> findAllSchedules(String username) {
+
+        return scheduleRepository.findSchedulesbyUsername(username);
+    }
+
+    @Transactional
+    public Schedule createSchedule(Set<User> user, Set<Shift> shifts) {
+
         Schedule schedule = new Schedule();
         schedule.setUser(user);
         schedule.setTimeSlot(shifts);
         scheduleRepository.save(schedule);
-          return schedule;
-      }
-      @Transactional
-      public Schedule updateSchedule(Schedule schedule,Set<User> user, Set<Shift> shifts) {
+        return schedule;
+    }
+
+    @Transactional
+    public Schedule updateSchedule(Schedule schedule, Set<User> user, Set<Shift> shifts) {
         schedule.setUser(user);
         schedule.setTimeSlot(shifts);
         scheduleRepository.save(schedule);
-          return schedule;
-      }
-      
-      private <T> List<T> toList(Iterable<T> iterable) {
-          List<T> resultList = new ArrayList<T>();
-          for (T t : iterable) {
-              resultList.add(t);
-          }
-          return resultList;
-      }
+        return schedule;
+    }
+
+    private <T> List<T> toList(Iterable<T> iterable) {
+        List<T> resultList = new ArrayList<T>();
+        for (T t : iterable) {
+            resultList.add(t);
+        }
+        return resultList;
+    }
 }
