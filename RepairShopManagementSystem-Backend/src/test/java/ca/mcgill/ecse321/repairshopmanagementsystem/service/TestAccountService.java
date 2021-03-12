@@ -983,6 +983,10 @@ public class TestAccountService {
         car.setManufacturer("");
         car.setCustomer(bCustomer);
 
+        bCustomer.setCar(new HashSet<Car>() {{
+            add(car);
+        }});
+
         String error = "";
 
         try {

@@ -12,16 +12,14 @@ public class CustomerDto extends UserDto {
     private String email;
     private Set<CarDto> Cars;
     private Set<AppointmentDto> appointments;
-    private RepairShopManagementSystemDto repairShopManagementSystemDto;
-    private Set<ScheduleDto> schedule;
 
-    public CustomerDto(){
+    public CustomerDto() {
 
     }
 
     public CustomerDto(String username, String password, String name, String phoneNo, String homeAddress, String email,
-                       Set<CarDto> Cars, Set<AppointmentDto> appointments, RepairShopManagementSystemDto repairShopManagementSystemDto, Set<ScheduleDto> schedule) {
-        super(username, password, name, schedule, repairShopManagementSystemDto);
+                       Set<CarDto> Cars, Set<AppointmentDto> appointments, RepairShopManagementSystemDto repairShopManagementSystemDto) {
+        super(username, password, name, repairShopManagementSystemDto);
         this.homeAddress = homeAddress;
         this.email = email;
         this.Cars = Cars;
@@ -29,9 +27,9 @@ public class CustomerDto extends UserDto {
         this.phoneNo = phoneNo;
     }
 
-    public CustomerDto(RepairShopManagementSystemDto repairShopManagementSystemDto, Set<ScheduleDto> schedule, String username, String password, String name, String phoneNo, String homeAddress, String email,
+    public CustomerDto(RepairShopManagementSystemDto repairShopManagementSystemDto, String username, String password, String name, String phoneNo, String homeAddress, String email,
                        Set<CarDto> Cars) {
-        super(username, password, name, schedule, repairShopManagementSystemDto);
+        super(username, password, name, repairShopManagementSystemDto);
         this.phoneNo = phoneNo;
         this.homeAddress = homeAddress;
         this.email = email;
@@ -40,10 +38,10 @@ public class CustomerDto extends UserDto {
 
     }
 
-    public CustomerDto(RepairShopManagementSystemDto repairShopManagementSystemDto, Set<ScheduleDto> schedule, String username, String password, String name, String phoneNo, String homeAddress, String email
+    public CustomerDto(RepairShopManagementSystemDto repairShopManagementSystemDto, String username, String password, String name, String phoneNo, String homeAddress, String email
     ) {
 
-        super(username, password, name, schedule, repairShopManagementSystemDto);
+        super(username, password, name, repairShopManagementSystemDto);
         this.phoneNo = phoneNo;
         this.homeAddress = homeAddress;
         this.email = email;
@@ -82,15 +80,6 @@ public class CustomerDto extends UserDto {
 
     public Set<AppointmentDto> getAppointments() {
         return appointments;
-    }
-
-    public Set<ScheduleDto> getSchedule() {
-        return schedule;
-    }
-
-
-    public RepairShopManagementSystemDto getRepairShopManagementSystemDto() {
-        return repairShopManagementSystemDto;
     }
 
 }

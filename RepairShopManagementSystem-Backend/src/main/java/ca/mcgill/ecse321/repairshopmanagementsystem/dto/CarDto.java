@@ -16,6 +16,13 @@ public class CarDto {
     public CarDto() {
     }
 
+    public CarDto(String plateNo, String model, String manufacturer, String year) {
+        this.year = year;
+        this.plateNo = plateNo;
+        this.model = model;
+        this.manufacturer = manufacturer;
+    }
+
     public CarDto(String plateNo, String model, String manufacturer, CustomerDto customer) {
         Calendar calendar = Calendar.getInstance();
         this.year = Integer.toString(calendar.get(Calendar.YEAR));

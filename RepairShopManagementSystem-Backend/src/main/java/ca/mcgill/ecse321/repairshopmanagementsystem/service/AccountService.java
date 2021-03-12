@@ -168,6 +168,8 @@ public class AccountService {
         customer.setEmail(email);
         customer.setHomeAddress(address);
         customer.setRepairShopManagementSystem(system);
+        customer.setCar(new HashSet<>());
+        customer.setAppointment(new HashSet<>());
         system.getUser().add(customer);
         customerRepository.save(customer);
         return customer;
@@ -228,7 +230,10 @@ public class AccountService {
         if (error.length() > 0) {
             throw new IllegalArgumentException(error);
         }
+
+        car.getCustomer().getCar().remove(car);
         car.setCustomer(customer);
+        car.getCustomer().getCar().add(car);
         car.setModel(model);
         car.setManufacturer(manufacturer);
         car.setPlateNo(plateNo);
@@ -312,6 +317,7 @@ public class AccountService {
         aCar.setManufacturer(manufacturer);
         aCar.setPlateNo(plateNo);
         aCar.setYear(year);
+        customer.getCar().add(aCar);
         carRepository.save(aCar);
         return aCar;
     }
