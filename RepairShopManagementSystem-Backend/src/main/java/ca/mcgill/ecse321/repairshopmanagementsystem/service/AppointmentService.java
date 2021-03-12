@@ -24,7 +24,8 @@ public class AppointmentService {
     private BillRepository billRepository;
     @Autowired
     private ShiftRepository shiftRepository;
-
+    @Autowired
+    private CustomerRepository customerRepository;
     private <T> List<T> toList(Iterable<T> iterable) {
         List<T> resultList = new ArrayList<T>();
         for (T t : iterable) {
@@ -76,8 +77,8 @@ public class AppointmentService {
     }
 
     @Transactional
-    public List<Appointment> findAppointmentsOfCustomer(Customer customer) {
-
+    public List<Appointment> findAppointmentsOfCustomer(String username) {
+       Customer customer= customerRepository.findCustomerByUsername(username);
         return appointmentRepository.findByCustomer(customer);
     }
 

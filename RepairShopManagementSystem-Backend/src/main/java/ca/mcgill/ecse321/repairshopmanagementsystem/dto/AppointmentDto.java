@@ -24,6 +24,15 @@ public class AppointmentDto {
         this.shift = shift;
         this.customer = customer;
     }
+    public AppointmentDto(Integer appointmentId, Set<BillDto> bill, ShiftDto shift, CustomerDto customer, CarDto car, SpaceDto space) {
+        this.appointmentId = appointmentId;
+        this.car = car;
+        this.bill = bill;
+        this.space = space;
+       
+        this.shift = shift;
+        this.customer = customer;
+    }
 
     public Integer getAppointmentId() {
         return appointmentId;
