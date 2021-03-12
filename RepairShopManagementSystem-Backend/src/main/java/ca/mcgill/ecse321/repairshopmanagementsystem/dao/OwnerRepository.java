@@ -12,6 +12,4 @@ public interface OwnerRepository extends CrudRepository<Owner, Integer> {
   Owner findOwnerByUserId(Integer ID);
   
    Owner findOwnerByUsername(String username);
-   
-   Set<User> findOwnerBySchedule(Schedule schedule);
 }

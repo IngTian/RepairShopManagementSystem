@@ -200,7 +200,7 @@ public class TestAppointmentService {
         Time startTime = Time.valueOf(valueTime);
         String valueendTime = "12:00:00";
         Time endTime = Time.valueOf(valueendTime);
-        Schedule schedule = scheduleService.createSchedule(null, null, system);
+        Schedule schedule = scheduleService.createSchedule(null, system);
         Shift shift = appointmentService.createShift(date, startTime, endTime, a, schedule, ass);
         Integer price = 100;
         Bill bill = appointmentService.createBill(price, a, false);
@@ -217,7 +217,7 @@ public class TestAppointmentService {
     }
 
     @Test
-    public void testCreateAppointmentFaileNullService() {
+    public void testCreateAppointmentWithNullService() {
         String error = "";
         Appointment a = null;
         String phno = "4190000000";
@@ -255,7 +255,7 @@ public class TestAppointmentService {
         Time startTime = Time.valueOf(valueTime);
         String valueendTime = "12:00:00";
         Time endTime = Time.valueOf(valueendTime);
-        Schedule schedule = scheduleService.createSchedule(null, null, system);
+        Schedule schedule = scheduleService.createSchedule(null, system);
         Shift shift = appointmentService.createShift(date, startTime, endTime, a, schedule, ass);
         Integer price = 100;
         Bill bill = appointmentService.createBill(price, a, false);
@@ -310,7 +310,7 @@ public class TestAppointmentService {
         Time startTime = Time.valueOf(valueTime);
         String valueendTime = "12:00:00";
         Time endTime = Time.valueOf(valueendTime);
-        Schedule schedule = scheduleService.createSchedule(null, null, system);
+        Schedule schedule = scheduleService.createSchedule(null, system);
         Shift shift = appointmentService.createShift(date, startTime, endTime, a, schedule, ass);
         Integer price = 100;
         Bill bill = appointmentService.createBill(price, a, false);
@@ -386,7 +386,7 @@ public class TestAppointmentService {
         Time startTime = Time.valueOf(valueTime);
         String valueendTime = "12:00:00";
         Time endTime = Time.valueOf(valueendTime);
-        Schedule schedule = scheduleService.createSchedule(null, null, system);
+        Schedule schedule = scheduleService.createSchedule(null, system);
         Shift shift = null;
         Appointment app = new Appointment();
         try {
@@ -416,7 +416,7 @@ public class TestAppointmentService {
         Time startTime = Time.valueOf(valueTime);
         String valueendTime = "12:00:00";
         Time endTime = Time.valueOf(valueendTime);
-        Schedule schedule = scheduleService.createSchedule(null, null, system);
+        Schedule schedule = scheduleService.createSchedule(null, system);
         Shift shift = null;
         Appointment app = new Appointment();
         try {
@@ -446,7 +446,7 @@ public class TestAppointmentService {
         Time startTime = Time.valueOf(valueTime);
         String valueendTime = "10:00:00";
         Time endTime = Time.valueOf(valueendTime);
-        Schedule schedule = scheduleService.createSchedule(null, null, system);
+        Schedule schedule = scheduleService.createSchedule(null, system);
         Shift shift = null;
         Appointment app = new Appointment();
         try {

@@ -1,10 +1,15 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.utils;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.sql.Time;
 import java.util.regex.*;
 import java.util.*;
 
 import ca.mcgill.ecse321.repairshopmanagementsystem.model.*;
+import net.sf.json.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class Util {
 
@@ -192,6 +197,28 @@ public class Util {
                 freeSpace.add(s);
 
         return freeSpace.size() != 0 && freeShifts.size() != 0;
+    }
+
+    /**
+     * Extracts JSON Object or JSON Array from the request body.
+     *
+     * @param input A request.
+     * @return A JSON Object.
+     */
+    public static JSONObject getJSON(HttpServletRequest input) {
+
+        JSONObject res = new JSONObject();
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input.getInputStream()));
+            StringBuffer buffer = new StringBuffer();
+            String cur_line = "";
+            while ((cur_line = reader.readLine()) != null) buffer.append(cur_line);
+            res = JSONObject.fromObject(buffer.toString());
+        } catch (Exception e) {
+            System.out.println("Error in Parsing HTTP Servlet Requests: " + e.toString());
+        }
+        return res;
+
     }
 
 }

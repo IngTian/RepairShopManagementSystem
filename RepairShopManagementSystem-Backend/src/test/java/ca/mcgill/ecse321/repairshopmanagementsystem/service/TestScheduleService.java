@@ -1,6 +1,6 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.service;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -17,24 +17,8 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
-import ca.mcgill.ecse321.repairshopmanagementsystem.dao.AssistantRepository;
-import ca.mcgill.ecse321.repairshopmanagementsystem.dao.CarRepository;
-import ca.mcgill.ecse321.repairshopmanagementsystem.dao.CustomerRepository;
-import ca.mcgill.ecse321.repairshopmanagementsystem.dao.OwnerRepository;
-import ca.mcgill.ecse321.repairshopmanagementsystem.dao.RepairShopManagementSystemRepository;
-import ca.mcgill.ecse321.repairshopmanagementsystem.dao.ScheduleRepository;
-import ca.mcgill.ecse321.repairshopmanagementsystem.dao.ShiftRepository;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.Assistant;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.Car;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.Customer;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.Owner;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.RepairShopManagementSystem;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.Schedule;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.Shift;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.User;
-import ca.mcgill.ecse321.repairshopmanagementsystem.service.AccountService;
-import ca.mcgill.ecse321.repairshopmanagementsystem.service.ScheduleService;
-import ca.mcgill.ecse321.repairshopmanagementsystem.service.SystemService;
+import ca.mcgill.ecse321.repairshopmanagementsystem.dao.*;
+import ca.mcgill.ecse321.repairshopmanagementsystem.model.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -119,6 +103,7 @@ public class TestScheduleService {
         lenient().when(scheduleDao.save(any(Schedule.class))).thenAnswer(returnParameterAsAnswer);
         lenient().when(systemDao.save(any(RepairShopManagementSystem.class))).thenAnswer(returnParameterAsAnswer);
     }
+
     @Test
     public void testCreateSchedule() {
         assertEquals(0, scheduleService.getAllSchedules().size());
@@ -127,14 +112,13 @@ public class TestScheduleService {
         Schedule schedule = new Schedule();
         String error = "";
         try {
-            schedule = scheduleService.createSchedule(null,null, defaultSystem);
+            schedule = scheduleService.createSchedule(null, defaultSystem);
         } catch (Exception e) {
             error = e.getMessage();
         }
 
         assertNotNull(schedule);
-        assertEquals(null, schedule.getUser());
-        assertEquals(null, schedule.getTimeSlot());
+        assertNull(schedule.getTimeSlot());
     }
 
     @Test
@@ -142,21 +126,17 @@ public class TestScheduleService {
         RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
         Schedule schedule = new Schedule();
         String error = "";
-        Set<User> users = new HashSet<User>();
         Set<Shift> shifts = new HashSet<Shift>();
-        User test_user = new Customer();
-        users.add(test_user);
         Shift test_shift = new Shift();
         shifts.add(test_shift);
         try {
-            schedule = scheduleService.createSchedule(null,null, defaultSystem);
-            scheduleService.updateSchedule(schedule, users, shifts);
+            schedule = scheduleService.createSchedule(null, defaultSystem);
+            scheduleService.updateSchedule(schedule, shifts);
         } catch (Exception e) {
             error = e.getMessage();
         }
 
         assertNotNull(schedule);
-        assertEquals(users, schedule.getUser());
         assertEquals(shifts, schedule.getTimeSlot());
     }
 

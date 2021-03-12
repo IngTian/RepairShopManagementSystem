@@ -18,6 +18,7 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.HashSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -109,6 +110,7 @@ public class TestAccountService {
                 customer.setPassword(TEST_USER_PASSWORD);
                 customer.setName(TEST_USER_NAME);
                 customer.setUserId(TEST_USER_ID);
+                customer.setCar(new HashSet<>());
                 return customer;
             } else {
                 return null;
@@ -123,6 +125,9 @@ public class TestAccountService {
                 system.setBusinessName(TEST_SYSTEM_NAME);
                 system.setBusinessAddress(TEST_SYSTEM_ADDRESS);
                 system.setBusinessPhoneNumber(TEST_SYSTEM_PHONE_NO);
+                system.setUser(new HashSet<>());
+                system.setSchedule(new HashSet<>());
+                system.setSpace(new HashSet<>());
                 return system;
             } else {
                 return null;
@@ -137,6 +142,9 @@ public class TestAccountService {
                 system.setBusinessName(TEST_SYSTEM_NAME);
                 system.setBusinessAddress(TEST_SYSTEM_ADDRESS);
                 system.setBusinessPhoneNumber(TEST_SYSTEM_PHONE_NO);
+                system.setUser(new HashSet<>());
+                system.setSchedule(new HashSet<>());
+                system.setSpace(new HashSet<>());
                 return system;
             } else {
                 return null;

@@ -7,4 +7,6 @@ public interface RepairShopManagementSystemRepository extends CrudRepository<Rep
 
     RepairShopManagementSystem findRepairShopManagementSystemByBusinessNameAndBusinessAddressAndBusinessPhoneNumber(String businessName, String businessAddress, String businessPhoneNumber);
 
+    RepairShopManagementSystem findFirstByOrderByIdDesc();
+
 }

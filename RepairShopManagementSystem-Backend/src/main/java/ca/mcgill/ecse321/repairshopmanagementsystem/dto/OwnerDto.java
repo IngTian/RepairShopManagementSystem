@@ -14,6 +14,12 @@ public class OwnerDto extends UserDto {
 
     }
 
+    public OwnerDto(String username, String password, String name) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+    }
+
     public OwnerDto(String username, String password, String name, RepairShopManagementSystemDto system) {
         super(username, password, name, system);
     }

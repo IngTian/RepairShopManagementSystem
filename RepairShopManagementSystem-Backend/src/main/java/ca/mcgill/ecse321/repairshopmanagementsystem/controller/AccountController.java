@@ -31,6 +31,12 @@ public class AccountController {
         return convertToDto(owner);
     }
 
+    @PostMapping(value = "owners/create_to_most_recent_system")
+    public OwnerDto createOwnerToMostRecentSystem(@RequestBody OwnerDto o) {
+        Owner owner = accountService.createOwner(o.getUsername(), o.getPassword(), o.getName(), systemService.getMostRecentSystem());
+        return convertToDto(owner);
+    }
+
     private OwnerDto convertToDto(Owner owner) {
         return new OwnerDto(owner.getUsername(), owner.getName(), owner.getPassword(), convertToDto(owner.getRepairShopManagementSystem()));
     }

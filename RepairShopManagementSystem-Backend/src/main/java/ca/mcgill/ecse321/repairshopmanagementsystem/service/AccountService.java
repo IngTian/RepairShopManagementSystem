@@ -48,7 +48,8 @@ public class AccountService {
         newOwner.setUsername(username);
         newOwner.setPassword(password);
         newOwner.setRepairShopManagementSystem(system);
-        newOwner.setSchedule(system.getSchedule());
+//        newOwner.setSchedule(system.getSchedule());
+        system.getUser().add(newOwner);
         ownerRepository.save(newOwner);
         return newOwner;
     }
@@ -117,7 +118,7 @@ public class AccountService {
         assistant.setPassword(password);
         assistant.setName(name);
         assistant.setRepairShopManagementSystem(system);
-        assistant.setSchedule(system.getSchedule());
+//        assistant.setSchedule(system.getSchedule());
         assistantRepository.save(assistant);
         return assistant;
     }
@@ -168,7 +169,7 @@ public class AccountService {
         customer.setEmail(email);
         customer.setHomeAddress(address);
         customer.setRepairShopManagementSystem(system);
-        customer.setSchedule(system.getSchedule());
+//        customer.setSchedule(system.getSchedule());
         customerRepository.save(customer);
         return customer;
     }
@@ -203,8 +204,7 @@ public class AccountService {
 
         if (plateNo == null || plateNo.trim().length() == 0) {
             error = error + "New plate number cannot be empty! ";
-        }
-        else if (!Util.isPlateNoCorrect(plateNo)) {
+        } else if (!Util.isPlateNoCorrect(plateNo)) {
             error = error + "New plate number illegal! ";
         }
 
@@ -214,9 +214,7 @@ public class AccountService {
 
         if (year == null || year.trim().length() == 0) {
             error = error + "New year cannot be empty! ";
-        }
-
-        else if (!Util.isCarYearCorrect(year)) {
+        } else if (!Util.isCarYearCorrect(year)) {
             error = error + "New year illegal! ";
         }
 

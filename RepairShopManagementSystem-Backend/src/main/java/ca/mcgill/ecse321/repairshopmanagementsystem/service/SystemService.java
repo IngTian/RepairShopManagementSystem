@@ -54,6 +54,11 @@ public class SystemService {
     }
 
     @Transactional
+    public RepairShopManagementSystem getMostRecentSystem() {
+        return systemRepository.findFirstByOrderByIdDesc();
+    }
+
+    @Transactional
     public List<RepairShopManagementSystem> getAllSystems() {
         return toList(systemRepository.findAll());
     }

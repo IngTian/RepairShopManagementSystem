@@ -28,16 +28,16 @@ public class Schedule {
         this.timeSlot = timeSlots;
     }
 
-    private Set<User> user;
-
-    @ManyToMany(mappedBy = "schedule")
-    public Set<User> getUser() {
-        return this.user;
-    }
-
-    public void setUser(Set<User> users) {
-        this.user = users;
-    }
+//    private Set<User> user;
+//
+//    @ManyToMany(mappedBy = "schedule")
+//    public Set<User> getUser() {
+//        return this.user;
+//    }
+//
+//    public void setUser(Set<User> users) {
+//        this.user = users;
+//    }
 
     private RepairShopManagementSystem repairShopManagementSystem;
 

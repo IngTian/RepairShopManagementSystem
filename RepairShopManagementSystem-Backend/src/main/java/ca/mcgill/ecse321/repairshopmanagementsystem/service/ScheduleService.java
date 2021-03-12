@@ -16,35 +16,7 @@ public class ScheduleService {
     private ShiftRepository shiftRepository;
 
     @Autowired
-    private AssistantRepository assistantRepository;
-
-    @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private OwnerRepository ownerRepository;
-
-    @Autowired
     private ScheduleRepository scheduleRepository;
-
-    @Transactional
-    public Set<User> getUsers(Schedule schedule) {
-        Set<User> set1 = ownerRepository.findOwnerBySchedule(schedule);
-        Set<User> set2 = customerRepository.findCustomerBySchedule(schedule);
-        Set<User> set3 = assistantRepository.findAssistantBySchedule(schedule);
-        Set<User> result = new HashSet<User>();
-        if (set1 != null) {
-            result.addAll(set1);
-        }
-        if (set2 != null) {
-            result.addAll(set2);
-        }
-        if (set3 != null) {
-            result.addAll(set3);
-        }
-        return result;
-    }
-
 
     @Transactional
     public Set<Shift> getShifts(Schedule schedule) {
@@ -63,10 +35,9 @@ public class ScheduleService {
     }
 
     @Transactional
-    public Schedule createSchedule(Set<User> user, Set<Shift> shifts,  RepairShopManagementSystem repairShopManagementSystem ) {
+    public Schedule createSchedule(Set<Shift> shifts,  RepairShopManagementSystem repairShopManagementSystem ) {
 
         Schedule schedule = new Schedule();
-        schedule.setUser(user);
         schedule.setTimeSlot(shifts);
         schedule.setRepairShopManagementSystem(repairShopManagementSystem) ;
         scheduleRepository.save(schedule);
@@ -74,8 +45,7 @@ public class ScheduleService {
     }
 
     @Transactional
-    public Schedule updateSchedule(Schedule schedule, Set<User> user, Set<Shift> shifts) {
-        schedule.setUser(user);
+    public Schedule updateSchedule(Schedule schedule, Set<Shift> shifts) {
         schedule.setTimeSlot(shifts);
         scheduleRepository.save(schedule);
         return schedule;
