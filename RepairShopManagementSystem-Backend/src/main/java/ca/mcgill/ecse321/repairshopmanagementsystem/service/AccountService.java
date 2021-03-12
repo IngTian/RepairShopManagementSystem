@@ -193,26 +193,53 @@ public class AccountService {
         return toList(customerRepository.findAll());
     }
 
+    /**
+     * @author Byron Chen
+     */
     @Transactional
-    public Customer updateCustomer(Customer customer, String email, String address, String phoneNo) {
-        customer.setEmail(email);
-        customer.setHomeAddress(address);
-        customer.setPhoneNo(phoneNo);
-        customerRepository.save(customer);
-        return customer;
+    public Car updateCar(Car car, String plateNo, String model, String year, String manufacturer, Customer customer) {
+
+        String error = "";
+
+        if (plateNo == null || plateNo.trim().length() == 0) {
+            error = error + "New plate number cannot be empty! ";
+        }
+        else if (!Util.isPlateNoCorrect(plateNo)) {
+            error = error + "New plate number illegal! ";
+        }
+
+        if (model == null || model.trim().length() == 0) {
+            error = error + "New model cannot be empty! ";
+        }
+
+        if (year == null || year.trim().length() == 0) {
+            error = error + "New year cannot be empty! ";
+        }
+
+        else if (!Util.isCarYearCorrect(year)) {
+            error = error + "New year illegal! ";
+        }
+
+        if (manufacturer == null || manufacturer.trim().length() == 0) {
+            error = error + "New manufacturer cannot be empty! ";
+        }
+
+        if (customer == null) {
+            error = error + "New customer cannot be empty! ";
+        }
+
+        if (error.length() > 0) {
+            throw new IllegalArgumentException(error);
+        }
+        car.setCustomer(customer);
+        car.setModel(model);
+        car.setManufacturer(manufacturer);
+        car.setPlateNo(plateNo);
+        car.setYear(year);
+        carRepository.save(car);
+        return car;
     }
 
-    @Transactional
-    public Car createCar(String plateNo, String model, String year, String manufacturer, Customer customer) {
-        Car aCar = new Car();
-        aCar.setCustomer(customer);
-        aCar.setModel(model);
-        aCar.setManufacturer(manufacturer);
-        aCar.setPlateNo(plateNo);
-        aCar.setYear(year);
-        carRepository.save(aCar);
-        return aCar;
-    }
 
     @Transactional
     public Car getCar(String plateNo) {
@@ -231,4 +258,67 @@ public class AccountService {
         }
         return resultList;
     }
+
+    /**
+     * @author Ao Shen
+     */
+    @Transactional
+    public Customer updateCustomer(Customer customer, String email, String address, String phoneNo) {
+        if (phoneNo == null || phoneNo.equals(""))
+            throw new IllegalArgumentException("New phoneNo cannot be empty.");
+        if (address == null || address.equals(""))
+            throw new IllegalArgumentException("New address cannot be empty.");
+        if (email == null || email.equals(""))
+            throw new IllegalArgumentException("New email cannot be empty.");
+
+        // Check for formats.
+        if (!Util.isPhoneNoCorrect(phoneNo))
+            throw new IllegalArgumentException("Invalid PhoneNo.");
+        if (!Util.isAddressCorrect(address))
+            throw new IllegalArgumentException("Invalid Address.");
+        if (!Util.isEmailAddressCorrect(email))
+            throw new IllegalArgumentException("Invalid Email address.");
+        customer.setEmail(email);
+        customer.setHomeAddress(address);
+        customer.setPhoneNo(phoneNo);
+        customerRepository.save(customer);
+        return customer;
+    }
+
+    /**
+     * @author Ao Shen
+     */
+    @Transactional
+    public Car createCar(String plateNo, String model, String year, String manufacturer, Customer customer) {
+        // Check for null or empty inputs.
+        if (plateNo == null || plateNo.equals(""))
+            throw new IllegalArgumentException("PlateNo cannot be empty!");
+        if (model == null || model.equals(""))
+            throw new IllegalArgumentException("Model cannot be empty!");
+        if (year == null || year.equals(""))
+            throw new IllegalArgumentException("Year cannot be empty!");
+        if (manufacturer == null || manufacturer.equals(""))
+            throw new IllegalArgumentException("Manufacturer cannot be empty!");
+        if (customer == null)
+            throw new IllegalArgumentException("Customer cannot be empty!");
+
+
+        // Check for formats.
+        if (!Util.isPlateNoCorrect(plateNo))
+            throw new IllegalArgumentException("Invalid plate number.");
+        if (!Util.isCarYearCorrect(year))
+            throw new IllegalArgumentException("Invalid year.");
+
+        Car aCar = new Car();
+        aCar.setCustomer(customer);
+        aCar.setModel(model);
+        aCar.setManufacturer(manufacturer);
+        aCar.setPlateNo(plateNo);
+        aCar.setYear(year);
+        carRepository.save(aCar);
+        return aCar;
+    }
+
+
 }
+

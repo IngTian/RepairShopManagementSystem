@@ -68,7 +68,7 @@ public class TestAccountService {
     private static final String TEST_CAR_MODEL = "S650";
     private static final String TEST_CAR_MANUFACTURER = "Mercedes Benz";
     private static final String TEST_CAR_YEAR = "2021";
-
+    private static final String TEST_CAR_NEXT_REMINDER_DATE = "2020-09-09";
 
     @BeforeEach
     public void setMockOutput() {
@@ -954,9 +954,466 @@ public class TestAccountService {
     ------------------------Test: Add a Car to Customer-------------------------
     ----------------------------------------------------------------------------
      */
+
+    /**
+     * Case1: the updated info that can pass
+     *
+     * @author Byron Chen
+     */
+
     @Test
     public void testUpdateCar() {
+        assertEquals(0, accountService.getCars().size());
+
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Customer aCustomer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, TEST_CUSTOMER_PHONE_NO, TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_EMAIL);
+        Customer bCustomer = new Customer();
+
+        Car car = new Car();
+        car.setPlateNo("");
+        car.setModel("");
+        car.setYear("");
+        car.setManufacturer("");
+        car.setCustomer(bCustomer);
+
+        String error = "";
+
+        try {
+            accountService.updateCar(car, TEST_CAR_PLATE_NO, TEST_CAR_MODEL, TEST_CAR_YEAR, TEST_CAR_MANUFACTURER, aCustomer);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+
+        assertNotNull(car);
+        assertEquals(TEST_CAR_PLATE_NO, car.getPlateNo());
+        assertEquals(TEST_CAR_MODEL, car.getModel());
+        assertEquals(TEST_CAR_YEAR, car.getYear());
+        assertEquals(TEST_CAR_MANUFACTURER, car.getManufacturer());
+        assertEquals(aCustomer, car.getCustomer());
+    }
+
+    /**
+     * Case2: the updated info that are all empty
+     *
+     * @author Byron Chen
+     */
+    @Test
+    public void testUpdateCarEmpty() {
+        assertEquals(0, accountService.getCars().size());
+
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Customer aCustomer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, TEST_CUSTOMER_PHONE_NO, TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_EMAIL);
+        Customer bCustomer = null;
+
+        Car car = new Car();
+        car.setPlateNo(TEST_CAR_PLATE_NO);
+        car.setModel(TEST_CAR_MODEL);
+        car.setYear(TEST_CAR_YEAR);
+        car.setManufacturer(TEST_CAR_MANUFACTURER);
+        car.setCustomer(aCustomer);
+
+        String error = "";
+
+        try {
+            accountService.updateCar(car, "", "", "", "", bCustomer);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+
+        assertNotNull(car);
+        assertEquals(TEST_CAR_PLATE_NO, car.getPlateNo());
+        assertEquals(TEST_CAR_MODEL, car.getModel());
+        assertEquals(TEST_CAR_YEAR, car.getYear());
+        assertEquals(TEST_CAR_MANUFACTURER, car.getManufacturer());
+        assertEquals(aCustomer, car.getCustomer());
+
+        assertEquals("New plate number cannot be empty! New model cannot be empty! New year cannot be empty! " +
+                "New manufacturer cannot be empty! New customer cannot be empty! ", error);
+
+    }
+
+    /**
+     * Case3: the updated info that are all good except plate num
+     *
+     * @author Byron Chen
+     */
+    @Test
+    public void testUpdateCarWithBadPlateNum() {
+        assertEquals(0, accountService.getCars().size());
+
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Customer aCustomer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, TEST_CUSTOMER_PHONE_NO, TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_EMAIL);
+        Customer bCustomer = new Customer();
+
+        Car car = new Car();
+        car.setPlateNo(TEST_CAR_PLATE_NO);
+        car.setModel("");
+        car.setYear("");
+        car.setManufacturer("");
+        car.setCustomer(bCustomer);
+
+        String error = "";
+
+        try {
+            accountService.updateCar(car, "GHJSHD1", TEST_CAR_MODEL, TEST_CAR_YEAR, TEST_CAR_MANUFACTURER, aCustomer);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+
+        assertNotNull(car);
+        assertEquals(TEST_CAR_PLATE_NO, car.getPlateNo());
+        assertEquals("", car.getModel());
+        assertEquals("", car.getYear());
+        assertEquals("", car.getManufacturer());
+        assertEquals(bCustomer, car.getCustomer());
+
+        assertEquals("New plate number illegal! ", error);
+
+    }
+
+    /**
+     * Case4: the updated info that are all good except year
+     *
+     * @author Byron Chen
+     */
+    @Test
+    public void testUpdateCarWithBadYear() {
+        assertEquals(0, accountService.getCars().size());
+
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Customer aCustomer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, TEST_CUSTOMER_PHONE_NO, TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_EMAIL);
+        Customer bCustomer = new Customer();
+
+        Car car = new Car();
+        car.setPlateNo("");
+        car.setModel("");
+        car.setYear(TEST_CAR_YEAR);
+        car.setManufacturer("");
+        car.setCustomer(bCustomer);
+
+        String error = "";
+
+        try {
+            accountService.updateCar(car, TEST_CAR_PLATE_NO, TEST_CAR_MODEL, "19120", TEST_CAR_MANUFACTURER, aCustomer);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+
+        assertNotNull(car);
+        assertEquals("", car.getPlateNo());
+        assertEquals("", car.getModel());
+        assertEquals(TEST_CAR_YEAR, car.getYear());
+        assertEquals("", car.getManufacturer());
+        assertEquals(bCustomer, car.getCustomer());
+
+        assertEquals("New year illegal! ", error);
+
+    }
+
+        /*
+    ----------------------------------------------------------------------------
+    ------------------------Test: Add a Car to Customer-------------------------
+    ----------------------------------------------------------------------------
+     */
+
+    /**
+     * @author Ao Shen
+     */
+    @Test
+    public void testCreateCar() {
+        assertEquals(0, accountService.getAllOwners().size());
+
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Car car = null;
+        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, TEST_CUSTOMER_PHONE_NO, TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_EMAIL);
+
+        try {
+            car = accountService.createCar(TEST_CAR_PLATE_NO, TEST_CAR_MODEL, TEST_CAR_YEAR, TEST_CAR_MANUFACTURER, customer);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+
+        assertNotNull(car);
+        assertEquals(TEST_CAR_PLATE_NO, car.getPlateNo());
+        assertEquals(TEST_CAR_MODEL, car.getModel());
+        assertEquals(TEST_CAR_YEAR, car.getYear());
+        assertEquals(TEST_CAR_MANUFACTURER, car.getManufacturer());
+        assertEquals(customer, car.getCustomer());
 
 
     }
+
+    /**
+     * @author Ao Shen
+     */
+    @Test
+    public void testCreateCarWithEmptyPlateNo() {
+        assertEquals(0, accountService.getAllOwners().size());
+
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Car car = null;
+        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, TEST_CUSTOMER_PHONE_NO, TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_EMAIL);
+        String error = "";
+        try {
+            car = accountService.createCar("", TEST_CAR_MODEL, TEST_CAR_YEAR, TEST_CAR_MANUFACTURER, customer);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+        assertNull(car);
+        assertEquals("PlateNo cannot be empty!", error);
+
+    }
+
+    /**
+     * @author Ao Shen
+     */
+    @Test
+    public void testCreateCarWithEmptyModel() {
+        assertEquals(0, accountService.getAllOwners().size());
+
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Car car = null;
+        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, TEST_CUSTOMER_PHONE_NO, TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_EMAIL);
+        String error = "";
+        try {
+            car = accountService.createCar(TEST_CAR_PLATE_NO, "", TEST_CAR_YEAR, TEST_CAR_MANUFACTURER, customer);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+        assertNull(car);
+        assertEquals("Model cannot be empty!", error);
+
+    }
+
+    /**
+     * @author Ao Shen
+     */
+    @Test
+    public void testCreateCarWithEmptyYear() {
+        assertEquals(0, accountService.getAllOwners().size());
+
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Car car = null;
+        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, TEST_CUSTOMER_PHONE_NO, TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_EMAIL);
+        String error = "";
+        try {
+            car = accountService.createCar(TEST_CAR_PLATE_NO, TEST_CAR_MODEL, "", TEST_CAR_MANUFACTURER, customer);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+        assertNull(car);
+        assertEquals("Year cannot be empty!", error);
+
+    }
+
+    /**
+     * @author Ao Shen
+     */
+    @Test
+    public void testCreateCarWithEmptyManufacturer() {
+        assertEquals(0, accountService.getAllOwners().size());
+
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Car car = null;
+        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, TEST_CUSTOMER_PHONE_NO, TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_EMAIL);
+        String error = "";
+        try {
+            car = accountService.createCar(TEST_CAR_PLATE_NO, TEST_CAR_MODEL, TEST_CAR_YEAR, "", customer);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+        assertNull(car);
+        assertEquals("Manufacturer cannot be empty!", error);
+
+    }
+
+    /**
+     * @author Ao Shen
+     */
+    @Test
+    public void testCreateCarWithNoCustomer() {
+        assertEquals(0, accountService.getAllOwners().size());
+
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Car car = null;
+        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, TEST_CUSTOMER_PHONE_NO, TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_EMAIL);
+        String error = "";
+        try {
+            car = accountService.createCar(TEST_CAR_PLATE_NO, TEST_CAR_MODEL, TEST_CAR_YEAR, TEST_CAR_MANUFACTURER, null);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+        assertNull(car);
+        assertEquals("Customer cannot be empty!", error);
+
+    }
+
+
+    /**
+     * @author Ao Shen
+     */
+    @Test
+    public void testCreateCarWithInvalidYear() {
+        assertEquals(0, accountService.getAllOwners().size());
+
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Car car = null;
+        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, TEST_CUSTOMER_PHONE_NO, TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_EMAIL);
+        String error = "";
+        try {
+            car = accountService.createCar(TEST_CAR_PLATE_NO, TEST_CAR_MODEL, "40000", TEST_CAR_MANUFACTURER, customer);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+        assertNull(car);
+        assertEquals("Invalid year.", error);
+
+    }
+
+
+    /**
+     * @author Ao Shen
+     */
+    @Test
+    public void testCreateCarWithInvalidPlateNo() {
+        assertEquals(0, accountService.getAllOwners().size());
+
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Car car = null;
+        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, TEST_CUSTOMER_PHONE_NO, TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_EMAIL);
+        String error = "";
+        try {
+            car = accountService.createCar("ASDASD", TEST_CAR_MODEL, TEST_CAR_YEAR, TEST_CAR_MANUFACTURER, customer);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+        assertNull(car);
+        assertEquals("Invalid plate number.", error);
+
+    }
+
+    /*
+    ----------------------------------------------------------------------------
+    --------------------------Test: Update Customer Info----------------------------
+    ----------------------------------------------------------------------------
+     */
+
+    /**
+     * @author Ao Shen
+     */
+
+    @Test
+    public void testUpdateCustomerInfo() {
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, "1002003111", "4444 Sunshine Street, Palm Beach, Florida", "someonenew@123.com");
+        String error = "";
+        try {
+            accountService.updateCustomer(customer, TEST_CUSTOMER_EMAIL, TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_PHONE_NO);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+
+        assertNotNull(customer);
+        assertEquals(error, "");
+        assertEquals(TEST_CUSTOMER_EMAIL, customer.getEmail());
+        assertEquals(TEST_CUSTOMER_ADDRESS, customer.getHomeAddress());
+        assertEquals(TEST_CUSTOMER_PHONE_NO, customer.getPhoneNo());
+    }
+
+    @Test
+    public void testUpdateCustomerInfoWithEmptyEmail() {
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, "1002003111", "4444 Sunshine Street, Palm Beach, Florida", "someonenew@123.com");
+        String error = "";
+
+        try {
+            accountService.updateCustomer(customer, "", TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_PHONE_NO);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+
+        assertNotNull(customer);
+        assertEquals(error, "New email cannot be empty.");
+    }
+
+    @Test
+    public void testUpdateCustomerInfoInfoWithEmptyAddress() {
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, "1002003111", "4444 Sunshine Street, Palm Beach, Florida", "someonenew@123.com");
+        String error = "";
+
+        try {
+            accountService.updateCustomer(customer, TEST_CUSTOMER_EMAIL, "", TEST_CUSTOMER_PHONE_NO);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+
+        assertNotNull(customer);
+        assertEquals(error, "New address cannot be empty.");
+    }
+
+    @Test
+    public void testUpdateCustomerInfofoWithEmptyPhoneNo() {
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, "1002003111", "4444 Sunshine Street, Palm Beach, Florida", "someonenew@123.com");
+        String error = "";
+
+        try {
+            accountService.updateCustomer(customer, TEST_CUSTOMER_EMAIL, TEST_CUSTOMER_ADDRESS, "");
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+
+        assertNotNull(customer);
+        assertEquals(error, "New phoneNo cannot be empty.");
+    }
+
+    @Test
+    public void testUpdateCustomerInfoWithInvalidPhoneNo() {
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, "1002003111", "4444 Sunshine Street, Palm Beach, Florida", "someonenew@123.com");
+        String error = "";
+
+        try {
+            accountService.updateCustomer(customer, TEST_CUSTOMER_EMAIL, TEST_CUSTOMER_ADDRESS, "1");
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+
+        assertNotNull(customer);
+        assertEquals(error, "Invalid PhoneNo.");
+    }
+
+    @Test
+    public void testUpdateCustomerInfoWithInvalidAddress() {
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, "1002003111", "4444 Sunshine Street, Palm Beach, Florida", "someonenew@123.com");
+        String error = "";
+
+        try {
+            accountService.updateCustomer(customer, TEST_CUSTOMER_EMAIL, "!", TEST_CUSTOMER_PHONE_NO);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+
+        assertNotNull(customer);
+        assertEquals(error, "Invalid Address.");
+    }
+
+    @Test
+    public void testUpdateCustomerInfoWithInvalidEmail() {
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, "1002003111", "4444 Sunshine Street, Palm Beach, Florida", "someonenew@123.com");
+        String error = "";
+
+        try {
+            accountService.updateCustomer(customer, "123", TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_PHONE_NO);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+
+        assertNotNull(customer);
+        assertEquals(error, "Invalid Email address.");
+    }
 }
+

@@ -18,6 +18,48 @@ public class Util {
 
     private static final Pattern PHONE_NO_PATTERN = Pattern.compile("^\\d{10}");
 
+    private static final Pattern ADDRESS_PATTERN = Pattern.compile("(^[a-zA-Z0-9.,\\s]+)");
+
+    private static final Pattern BUSINESS_NAME_PATTERN = Pattern.compile("(^[a-zA-Z0-9\\s]+)");
+
+    private static final Pattern CAR_YEAR = Pattern.compile("(^[0-9]{4})");
+
+    /**
+     * Returns whether an address is valid.
+     *
+     * @param year A year that the car is produced
+     * @return True for valid, false otherwise.
+     * @author Ao Shen
+     */
+    public static boolean isCarYearCorrect(String year) {
+        Matcher matcher = CAR_YEAR.matcher(year);
+        return matcher.matches();
+    }
+
+    /**
+     * Returns whether an address is valid.
+     *
+     * @param businessName A business name.
+     * @return True for valid, false otherwise.
+     * @author Byron Chen
+     */
+    public static boolean isBusinessNameCorrect(String businessName) {
+        Matcher matcher = BUSINESS_NAME_PATTERN.matcher(businessName);
+        return matcher.matches();
+    }
+
+    /**
+     * Returns whether an address is valid.
+     *
+     * @param address An Address.
+     * @return True for valid, false otherwise.
+     * @author Byron Chen
+     */
+    public static boolean isAddressCorrect(String address) {
+        Matcher matcher = ADDRESS_PATTERN.matcher(address);
+        return matcher.matches();
+    }
+
     /**
      * Returns whether an email address is valid.
      *
@@ -153,3 +195,5 @@ public class Util {
     }
 
 }
+
+

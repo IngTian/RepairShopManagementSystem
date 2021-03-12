@@ -63,16 +63,12 @@ public class ScheduleService {
     }
 
     @Transactional
-    public List<Schedule> findAllSchedules(String username) {
-        return toList(scheduleRepository.findAll());
-    }
-
-    @Transactional
-    public Schedule createSchedule(Set<User> user, Set<Shift> shifts) {
+    public Schedule createSchedule(Set<User> user, Set<Shift> shifts,  RepairShopManagementSystem repairShopManagementSystem ) {
 
         Schedule schedule = new Schedule();
         schedule.setUser(user);
         schedule.setTimeSlot(shifts);
+        schedule.setRepairShopManagementSystem(repairShopManagementSystem) ;
         scheduleRepository.save(schedule);
         return schedule;
     }
