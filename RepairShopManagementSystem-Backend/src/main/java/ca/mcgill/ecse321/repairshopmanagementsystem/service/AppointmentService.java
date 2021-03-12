@@ -29,6 +29,8 @@ public class AppointmentService {
 	private CustomerRepository customerRepository;
 	@Autowired
 	private CarRepository carRepository;
+	@Autowired
+	private AssistantRepository assistantRepository;
 
 	private <T> List<T> toList(Iterable<T> iterable) {
 		List<T> resultList = new ArrayList<T>();
@@ -77,14 +79,40 @@ public class AppointmentService {
 	@Transactional
 	public Appointment makeAppointment(String serviceType, String username, String plateNo, Date startDate,
 			Time startTime, Time endTime, Integer scheduleID, Integer weight) {
-	//在这个办法里因为model限制无法知道具体的bill和service相连的assistant，所以在这里全部设为null
-		//然后由店主或者assistant去把这些缺少的东西加上去
+
+		List<Assistant> assistants = toList(assistantRepository.findAll());
+		Assistant ass = null;
+		for (Assistant a : assistants) {
+			
+			if (a.getShift().size() == 0) {
+				ass = a;
+				break;
+			} else {
+				for (Shift s : a.getShift()) {
+                       if(s.getDate().equals(startDate)) {
+                    	   if(s.getStartTime().compareTo(startTime)<0 &&s.getEndTime().compareTo(endTime)<=0 ) {
+                    		   ass=a;
+                    		   break;
+                    	   }
+                    	   else if(s.getStartTime().compareTo(endTime)>=0 ) {
+                    		   ass=a;
+                    		   break;
+                    	   }
+                       }
+				}
+
+			}
+		}
+		if(ass==null) throw new IllegalArgumentException("Dont have available assistant");
 		
+		// 在这个办法里因为model限制无法知道具体的bill和service相连的assistant，所以在这里全部设为null
+		// 然后由店主或者assistant去把这些缺少的东西加上去
+
 		Appointment app = null;
 		Customer customer = customerRepository.findCustomerByUsername(username);
 		ca.mcgill.ecse321.repairshopmanagementsystem.model.Service service = new ca.mcgill.ecse321.repairshopmanagementsystem.model.Service();
-       service.setServiceType(serviceType);
-       
+		service.setServiceType(serviceType);
+
 		Schedule schedule = scheduleRepository.findScheduleById(scheduleID);
 		Set<Shift> shifts = shiftRepository.findShiftsBySchedule(schedule);
 
@@ -140,12 +168,16 @@ public class AppointmentService {
 		}
 		if (enoughWeight.size() == 0)
 			throw new IllegalArgumentException("no available space at this time");
-
+         Set<Assistant> assistantSet=new HashSet<>();
+         assistantSet.add(ass);
+         service.setAssistant( assistantSet);
+         selected.setAssistant(ass);
 		app.setCustomer(customer);
 		app.setService(service);
 		app.setCar(carset);
 		app.setShift(selected);
 		app.setSpace(enoughWeight.get(0));
+		app.setAppointmentId(customer.getUserId() + service.hashCode() * carset.hashCode());
 		service.setAppointment(app);
 		customer.getAppointment().add(app);
 		selected.setAppointment(app);
@@ -160,30 +192,36 @@ public class AppointmentService {
 	}
 
 	@Transactional
-	public Appointment findAppointment(Customer customer, Shift shift) {
+	public Bill addABillToAppointment(Integer id, Integer price) {
+		// base on the model, its impossible to set the bill automatique when customer
+		// make an appointment, there fore we have no choice but to set it to become
+		// that once an appointment is maid, owner(or assistant) will update the bill
+		// for the appointment
 
-		return appointmentRepository.findAppointmentByCustomerAndShift(customer, shift);
+		if (price == null || price <= 0)
+			throw new IllegalArgumentException("Invalid price Input");
+		Bill result = new Bill();
+		result.setIsPaid(false);
+		result.setPrice(price);
+
+		Appointment appointment = appointmentRepository.findAppointmentByAppointmentId(id);
+		result.setAppointment(appointment);
+		if (appointment.getBill() == null) {
+			Set<Bill> bills = new HashSet<>();
+			bills.add(result);
+			appointment.setBill(bills);
+		} else {
+			appointment.getBill().add(result);
+		}
+		appointmentRepository.save(appointment);
+		billRepository.save(result);
+		return result;
 	}
 
 	@Transactional
 	public List<Appointment> findAppointmentsOfCustomer(String username) {
 		Customer customer = customerRepository.findCustomerByUsername(username);
 		return appointmentRepository.findByCustomer(customer);
-	}
-
-	@Transactional
-	public Appointment updateAppointment(ca.mcgill.ecse321.repairshopmanagementsystem.model.Service service,
-			Customer customer, Shift shift, Shift newShift, Set<Car> newCars, Space space, Set<Bill> Bills) {
-
-		Appointment app = appointmentRepository.findAppointmentByCustomerAndShift(customer, shift);
-		app.setBill(Bills);
-		app.setService(service);
-		app.setCar(newCars);
-		app.setCustomer(customer);
-		app.setShift(newShift);
-		appointmentRepository.save(app);
-
-		return app;
 	}
 
 	@Transactional
@@ -209,8 +247,7 @@ public class AppointmentService {
 			Set<Assistant> assistants, Appointment appointment) {
 		if (assistants == null)
 			throw new IllegalArgumentException("Assistant List cannot be null!");
-		if (assistants.size() == 0)
-			throw new IllegalArgumentException("Assistant List cannot be empty!");
+		
 		if (serviceType == null)
 			throw new IllegalArgumentException("Service type cannot be null!");
 		if (serviceType.length() == 0)
@@ -280,6 +317,10 @@ public class AppointmentService {
 
 	@Transactional
 	public Bill updateBill(Integer appointmentid, Integer price, boolean isPaid, Integer newPrice) {
+		// base on the model, its impossible to set the bill automatique when customer
+		// make an appointment, there fore we have no choice but to set it to become
+		// that once an appointment is maid, owner(or assistant) will update the bill
+		// for the appointment
 		String error = "";
 		if (newPrice <= 0) {
 			error = "invalid newprice";
@@ -378,8 +419,28 @@ public class AppointmentService {
 	}
 
 	@Transactional
-	public Shift getShift(Appointment appointment) {
+	public Shift getShift(Integer ID) {
+		Appointment appointment = appointmentRepository.findAppointmentByAppointmentId(ID);
 		return shiftRepository.findShiftByAppointment(appointment);
+	}
+
+	@Transactional
+	public Space getSpaceOfAppointment(Integer ID) {
+		Appointment appointment = appointmentRepository.findAppointmentByAppointmentId(ID);
+		return appointment.getSpace();
+	}
+
+	@Transactional
+	public Set<Assistant> getAssistantOfAppointment(Integer ID) {
+		Appointment appointment = appointmentRepository.findAppointmentByAppointmentId(ID);
+		return appointment.getService().getAssistant();
+	}
+
+	@Transactional
+	public ca.mcgill.ecse321.repairshopmanagementsystem.model.Service findServiceByAppointment(Integer ID) {
+
+		Appointment appointment = appointmentRepository.findAppointmentByAppointmentId(ID);
+		return appointment.getService();
 	}
 
 	@Transactional

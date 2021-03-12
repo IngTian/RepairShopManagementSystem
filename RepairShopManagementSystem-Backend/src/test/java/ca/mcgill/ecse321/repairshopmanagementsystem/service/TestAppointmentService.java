@@ -814,21 +814,7 @@ public class TestAppointmentService {
         assertEquals("Assistant List cannot be null!", error);
     }
 
-    @Test
-    public void testCreateServiceAssistantEmpty() {
-        assertEquals(0, appointmentService.getAllServices().size());
-        String serviceType = null;
-        Set<Assistant> assistants = new HashSet<Assistant>();
-        Service service = null;
-        String error = null;
-        try {
-            service = appointmentService.createService(serviceType, assistants, new Appointment());
-        } catch (IllegalArgumentException e) {
-            error = e.getMessage();
-        }
-        assertNull(service);
-        assertEquals("Assistant List cannot be empty!", error);
-    }
+
 
     @Test
     public void testCreateBill() {

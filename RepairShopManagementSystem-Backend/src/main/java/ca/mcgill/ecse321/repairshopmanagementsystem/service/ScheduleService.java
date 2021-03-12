@@ -59,6 +59,10 @@ public class ScheduleService {
         scheduleRepository.save(schedule);
         return schedule;
     }
+    @Transactional
+    public Schedule findScheduleById(Integer id) {
+    	return scheduleRepository.findScheduleById(id);
+    }
 
     private <T> List<T> toList(Iterable<T> iterable) {
         List<T> resultList = new ArrayList<T>();

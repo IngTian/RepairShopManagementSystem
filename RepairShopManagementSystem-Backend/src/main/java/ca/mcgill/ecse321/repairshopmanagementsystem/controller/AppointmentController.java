@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.sql.Date;
+import java.sql.Time;
 import java.util.*;
 
 @RestController
@@ -19,11 +22,51 @@ public class AppointmentController {
 	private AccountService accountService;
 
 	@Autowired
-	private SystemService systemService;
-
-	@Autowired
 	private AppointmentService appointmentService;
+	
+	@Autowired
+	private ScheduleService scheduleService;
+	
+	
+	
+	
+	
 
+	  @PostMapping(value = "/bills/add_to_appointment")
+	  public BillDto addABillToAppointment(@RequestParam Integer id, @RequestParam Integer price) {
+
+	    Bill newBill = appointmentService.addABillToAppointment(id, price);
+	    return convertToDto(newBill);
+	  }
+	  
+	  
+	  
+	  @GetMapping(value="services")
+	  public List<ServiceDto> getAllServices(){
+	    List<Service> service=appointmentService.getAllServices();
+	    return convertToDtoListForService(service);
+	  }
+	  @PostMapping(value="services/getServiceForAppointment")
+	  public ServiceDto getServiceForThisAppointment(@RequestParam String serviceType) {
+	    return convertToDto(appointmentService.getService(serviceType));
+	  }
+
+	  
+	  
+	  private List<ServiceDto> convertToDtoListForService(List<Service>service){
+	    List<ServiceDto> result=new ArrayList<>(); 
+	    for(Service s:service) {
+	      result.add(convertToDto(s));
+	    }
+	    return result;
+	  }
+	
+	/*
+    ----------------------------------------------------------------------------
+    ------------------------------Appointment-----------------------------------
+    ----------------------------------------------------------------------------
+    Author Ao Shen
+    */
 	
 	@GetMapping(value="appointments")
 	
@@ -33,66 +76,90 @@ public class AppointmentController {
 		return convertToDtoListForAppointment(aps);
 	}
 	
+	@PostMapping(value="appointments/find_appointment")
 	
-//	@PostMapping(value="appointments/create")
-//	public AppointmentDto createAppointment(@RequestBody ServiceDto serviceDto,@Request) {
-//		return null;
-//	}
+	public List<AppointmentDto> findAppointment(){
+		
+		List<Appointment> aps=appointmentService.getAllAppointments();
+		return convertToDtoListForAppointment(aps);
+	}
 	
+	@PostMapping(value="appointments/make_appointment")
 	
+	public AppointmentDto makeAppointment(@RequestParam String serviceType,
+			@RequestParam String username,
+			@RequestParam String plateNo,
+			@RequestParam Date startDate,
+			@RequestParam Time startTime,
+			@RequestParam Time endTime,
+			@RequestParam Integer scheduleID,
+			@RequestParam Integer weight){
+		Appointment aps=appointmentService.makeAppointment(serviceType,username,plateNo,startDate,startTime,endTime,scheduleID,weight);
+		return convertToDto(aps);
+	}
 	
+	@PostMapping(value="appointments/find_appointments_of_customer")
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public List<AppointmentDto> findAppointmentsOfCustomer(@RequestParam String username){
+		
+		List<Appointment> aps=appointmentService.findAppointmentsOfCustomer(username);
+		return convertToDtoListForAppointment(aps);
+	}	
+    /*
+    ----------------------------------------------------------------------------
+    ------------------------------------Shift-----------------------------------
+    ----------------------------------------------------------------------------
+    Author Ao Shen
+     */
 
-	
+    @GetMapping(value = "shifts")
+    public List<ShiftDto> getAllShifts() {
+        List<Shift> shiftList = appointmentService.getAllShift();
+        return convertToDtoListForShiftFromList(shiftList);
+    }
+
+    @PostMapping(value = "shifts/create")
+    public ShiftDto createShift(@RequestParam Date startDate, @RequestParam Time startTime, @RequestParam Time endTime,@RequestBody ScheduleDto schedule) {
+        Appointment app=new Appointment();
+        Assistant ass=new Assistant();
+    	Shift shift = appointmentService.createShift(startDate, startTime, endTime,app,scheduleService.findSchedule(schedule.getid()),ass);
+        			
+        return convertToDto(shift);
+    }
+
+    @PostMapping(value = "shifts/get_shift")
+    public ShiftDto getShift(@RequestBody AppointmentDto appointment) {
+        Shift shift = scheduleService.getShiftById(appointment.getShift().getshiftID());
+        return convertToDto(shift);
+    }
+
+    @PostMapping(value = "shifts/update_info")
+    public ShiftDto updateOwnerInfo(@RequestParam Date startDate, @RequestParam Time startTime, @RequestParam Time endTime, @RequestBody Integer appointmentID) {
+    	Shift shift = appointmentService.updateShift(startDate, startTime, endTime, appointmentID );
+    	return convertToDto(shift);
+    }	
+
+    /*
+    ----------------------------------------------------------------------------
+    --------------------------------- Bill -------------------------------------
+    ----------------------------------------------------------------------------
+    Author Byron Chen
+     */
+
+  @GetMapping(value = "/bills")
+  public List<BillDto> getAllBills() {
+    List<Bill> billDtoList = appointmentService.getAllBills();
+    return convertToDtoListForBill(billDtoList);
+  }
+
+  @PostMapping(value = "/bills/updates")
+  public BillDto updateBill(@RequestParam Integer appointmentId, @RequestParam Integer price,
+                   @RequestParam boolean isPaid, @RequestParam Integer newPrice) {
+
+    Bill newBill = appointmentService.updateBill(appointmentId, price, isPaid, newPrice);
+    return convertToDto(newBill);
+  }
+  
 	private AppointmentDto convertToDto(Appointment appointment) {
 		List<Assistant> ass = new ArrayList<>();
 		for (Assistant a : appointment.getService().getAssistant()) {
@@ -228,6 +295,15 @@ public class AppointmentController {
 
 	private CarDto convertToDto(Car c) {
 		return new CarDto(c.getPlateNo(), c.getModel(), c.getManufacturer(), c.getYear());
+	}	
+	
+	private List<ShiftDto> convertToDtoListForShiftFromList(List<Shift> shifts) {
+		List<ShiftDto> result = new ArrayList<>();
+		for (Shift s : shifts) {
+			result.add(convertToDto(s));
+		}
+		return result;
 	}
 
 }
+
