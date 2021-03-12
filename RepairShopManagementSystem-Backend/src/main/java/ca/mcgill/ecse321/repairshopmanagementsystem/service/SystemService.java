@@ -49,6 +49,9 @@ public class SystemService {
         system.setBusinessName(businessName);
         system.setBusinessPhoneNumber(phoneNo);
         system.setBusinessAddress(address);
+        system.setSpace(new HashSet<>());
+        system.setSchedule(new HashSet<>());
+        system.setUser(new HashSet<>());
         systemRepository.save(system);
         return system;
     }

@@ -48,7 +48,6 @@ public class AccountService {
         newOwner.setUsername(username);
         newOwner.setPassword(password);
         newOwner.setRepairShopManagementSystem(system);
-//        newOwner.setSchedule(system.getSchedule());
         system.getUser().add(newOwner);
         ownerRepository.save(newOwner);
         return newOwner;
@@ -118,7 +117,7 @@ public class AccountService {
         assistant.setPassword(password);
         assistant.setName(name);
         assistant.setRepairShopManagementSystem(system);
-//        assistant.setSchedule(system.getSchedule());
+        system.getUser().add(assistant);
         assistantRepository.save(assistant);
         return assistant;
     }
@@ -169,7 +168,7 @@ public class AccountService {
         customer.setEmail(email);
         customer.setHomeAddress(address);
         customer.setRepairShopManagementSystem(system);
-//        customer.setSchedule(system.getSchedule());
+        system.getUser().add(customer);
         customerRepository.save(customer);
         return customer;
     }
