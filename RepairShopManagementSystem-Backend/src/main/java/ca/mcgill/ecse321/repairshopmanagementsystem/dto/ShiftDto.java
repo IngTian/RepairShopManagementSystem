@@ -15,6 +15,12 @@ public class ShiftDto {
     public ShiftDto() {
     }
 
+    public ShiftDto(Date date, Time startTime, Time endTime) {
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
     public ShiftDto(ScheduleDto schedule, Date date, Time startTime, Time endTime, RepairShopManagementSystemDto system, AssistantDto assistant) {
         this.schedule = schedule;
         this.date = date;
