@@ -51,13 +51,24 @@ public class TestScheduleService {
     private static final String TEST_SYSTEM_PHONE_NO = "1002003000";
 
     private static final Integer TEST_SCHEDULE_ID = 123456789;
-    private static final Shift TEST_SHIFT = new Shift();
+    private static final Integer TEST_SHIFT_ID = 111;
 
 
     @BeforeEach
     public void setMockOutput() {
         // findScheduleById
         lenient().when(scheduleDao.findScheduleById(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
+            if (invocation.getArgument(0).equals(TEST_SHIFT_ID)) {
+                Shift shift = new Shift();
+                shift.setShiftId(TEST_SHIFT_ID);
+                return shift;
+            } else {
+                return null;
+            }
+        });
+        
+        // findScheduleById
+        lenient().when(shiftDao.findShiftByShiftId(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
             if (invocation.getArgument(0).equals(TEST_SCHEDULE_ID)) {
                 Schedule schedule = new Schedule();
                 schedule.setId(TEST_SCHEDULE_ID);
@@ -127,18 +138,19 @@ public class TestScheduleService {
         Schedule schedule = new Schedule();
         String error = "";
         Set<Shift> shifts = new HashSet<Shift>();
+        Shift shift = new Shift();
+        shift.setShiftId(111);
         Shift test_shift = new Shift();
+        test_shift.setShiftId(222);
         shifts.add(test_shift);
+        shifts.add(shift);
         try {
-            schedule = scheduleService.createSchedule(null, defaultSystem);
-            scheduleService.updateSchedule(schedule, shifts);
+            schedule = scheduleService.createSchedule(shifts, defaultSystem);
+            scheduleService.updateSchedule(schedule, shift);
         } catch (Exception e) {
             error = e.getMessage();
         }
-
+        shifts.remove(shift);
         assertNotNull(schedule);
         assertEquals(shifts, schedule.getTimeSlot());
-    }
-
-
-}
+    }}

@@ -13,308 +13,394 @@ import java.util.*;
 @Service
 public class AppointmentService {
 
-    @Autowired
-    private AppointmentRepository appointmentRepository;
-    @Autowired
-    private SpaceRepository spaceRepository;
+	@Autowired
+	private AppointmentRepository appointmentRepository;
+	@Autowired
+	private SpaceRepository spaceRepository;
+	@Autowired
+	private ScheduleRepository scheduleRepository;
+	@Autowired
+	private ServiceRepository serviceRepository;
+	@Autowired
+	private BillRepository billRepository;
+	@Autowired
+	private ShiftRepository shiftRepository;
+	@Autowired
+	private CustomerRepository customerRepository;
+	@Autowired
+	private CarRepository carRepository;
 
-    @Autowired
-    private ServiceRepository serviceRepository;
-    @Autowired
-    private BillRepository billRepository;
-    @Autowired
-    private ShiftRepository shiftRepository;
-    @Autowired
-    private CustomerRepository customerRepository;
-    private <T> List<T> toList(Iterable<T> iterable) {
-        List<T> resultList = new ArrayList<T>();
-        for (T t : iterable) {
-            resultList.add(t);
-        }
-        return resultList;
-    }
+	private <T> List<T> toList(Iterable<T> iterable) {
+		List<T> resultList = new ArrayList<T>();
+		for (T t : iterable) {
+			resultList.add(t);
+		}
+		return resultList;
+	}
 
-    @Transactional
-    public Appointment createAppointment(ca.mcgill.ecse321.repairshopmanagementsystem.model.Service service,
-                                         Space space, Customer customer, Set<Car> Cars, Shift shift, Set<Bill> Bills) {
-        if (service == null)
-            throw new IllegalArgumentException("Can not have a null service");
-        if (Cars == null || Cars.size() == 0)
-            throw new IllegalArgumentException("You must have a car for appointment");
-        if (shift == null)
-            throw new IllegalArgumentException("You must have a Time for the appointment");
-        List<Appointment> appointments = toList(appointmentRepository.findAll());
-        for (Appointment a : appointments) {
-            if (a.getSpace().getSpaceId() == space.getSpaceId()) {
-                if (a.getShift().getDate().equals(shift.getDate())) {
-                    if (((a.getShift().getStartTime().compareTo(shift.getStartTime()) < 0)
-                            && a.getShift().getEndTime().compareTo(shift.getStartTime()) > 0)
-                            || ((a.getShift().getStartTime().compareTo(shift.getEndTime()) < 0)
-                            && a.getShift().getEndTime().compareTo(shift.getEndTime()) > 0)) {
-                        throw new IllegalArgumentException("OverLap Space");
-                    }
-                }
-            }
+	@Transactional
+	public Appointment createAppointment(ca.mcgill.ecse321.repairshopmanagementsystem.model.Service service,
+			Space space, Customer customer, Set<Car> Cars, Shift shift, Set<Bill> Bills) {
+		if (service == null)
+			throw new IllegalArgumentException("Can not have a null service");
+		if (Cars == null || Cars.size() == 0)
+			throw new IllegalArgumentException("You must have a car for appointment");
+		if (shift == null)
+			throw new IllegalArgumentException("You must have a Time for the appointment");
+		List<Appointment> appointments = toList(appointmentRepository.findAll());
+		for (Appointment a : appointments) {
+			if (a.getSpace().getSpaceId() == space.getSpaceId()) {
+				if (a.getShift().getDate().equals(shift.getDate())) {
+					if (((a.getShift().getStartTime().compareTo(shift.getStartTime()) < 0)
+							&& a.getShift().getEndTime().compareTo(shift.getStartTime()) > 0)
+							|| ((a.getShift().getStartTime().compareTo(shift.getEndTime()) < 0)
+									&& a.getShift().getEndTime().compareTo(shift.getEndTime()) > 0)) {
+						throw new IllegalArgumentException("OverLap Space");
+					}
+				}
+			}
 
-        }
-        Appointment newAppointment = new Appointment();
-        newAppointment.setBill(Bills);
-        newAppointment.setService(service);
-        newAppointment.setCar(Cars);
-        newAppointment.setCustomer(customer);
-        newAppointment.setShift(shift);
-        newAppointment.setAppointmentId(customer.hashCode() + customer.getPassword().hashCode()
-                + shift.hashCode() * shift.getStartTime().hashCode());
-        appointmentRepository.save(newAppointment);
-        return newAppointment;
+		}
+		Appointment newAppointment = new Appointment();
+		newAppointment.setBill(Bills);
+		newAppointment.setService(service);
+		newAppointment.setCar(Cars);
+		newAppointment.setCustomer(customer);
+		newAppointment.setShift(shift);
+		newAppointment.setAppointmentId(customer.hashCode() + customer.getPassword().hashCode()
+				+ shift.hashCode() * shift.getStartTime().hashCode());
+		appointmentRepository.save(newAppointment);
+		return newAppointment;
 
-    }
+	}
 
-    @Transactional
-    public Appointment findAppointment(Customer customer, Shift shift) {
+	@Transactional
+	public Appointment makeAppointment(String serviceType, String username, String plateNo, Date startDate,
+			Time startTime, Time endTime, Integer scheduleID, Integer weight) {
+	//在这个办法里因为model限制无法知道具体的bill和service相连的assistant，所以在这里全部设为null
+		//然后由店主或者assistant去把这些缺少的东西加上去
+		
+		Appointment app = null;
+		Customer customer = customerRepository.findCustomerByUsername(username);
+		ca.mcgill.ecse321.repairshopmanagementsystem.model.Service service = new ca.mcgill.ecse321.repairshopmanagementsystem.model.Service();
+       service.setServiceType(serviceType);
+       
+		Schedule schedule = scheduleRepository.findScheduleById(scheduleID);
+		Set<Shift> shifts = shiftRepository.findShiftsBySchedule(schedule);
 
-        return appointmentRepository.findAppointmentByCustomerAndShift(customer, shift);
-    }
+		// 在做appointment的时候我们只考虑一辆车的情况，因为考虑多辆车有点奇怪。
+		Car car = carRepository.findCarByPlateNo(plateNo);
+		if (car == null)
+			throw new IllegalArgumentException("you need to have a car to start the appointment");
+		Set<Car> carset = new HashSet<>();
+		carset.add(car);
 
-    @Transactional
-    public List<Appointment> findAppointmentsOfCustomer(String username) {
-       Customer customer= customerRepository.findCustomerByUsername(username);
-        return appointmentRepository.findByCustomer(customer);
-    }
+		Shift selected = null;
+		List<Appointment> apps = toList(appointmentRepository.findAll());
+		List<Space> spaces = toList(spaceRepository.findAll());
 
-    @Transactional
-    public Appointment updateAppointment(ca.mcgill.ecse321.repairshopmanagementsystem.model.Service service,
-                                         Customer customer, Shift shift, Shift newShift, Set<Car> newCars, Space space, Set<Bill> Bills) {
+		// 在系统里寻找maxweightload符合标准的space，没有的话就预约失败
+		List<Space> enoughWeight = new ArrayList<>();
+		for (Space s : spaces) {
+			if (s.getMaxWeightLoad() >= weight) {
+				enoughWeight.add(s);
+			}
+		}
 
-        Appointment app = appointmentRepository.findAppointmentByCustomerAndShift(customer, shift);
-        app.setBill(Bills);
-        app.setService(service);
-        app.setCar(newCars);
-        app.setCustomer(customer);
-        app.setShift(newShift);
-        appointmentRepository.save(app);
+		if (enoughWeight.size() == 0)
+			throw new IllegalArgumentException("no space for you");
 
-        return app;
-    }
+		// 寻找是否又符合标准的shift，没有的话就结束，ps：我知道这样检测不完整，但在这里就不管他了
 
-    @Transactional
-    public Space createSpace(Integer maxWeightLoad, RepairShopManagementSystem RepairShopManagementSystem) {
-        String error = "";
-        if (maxWeightLoad == 0) {
-            error = "invalid maxweight";
-        }
+		for (Shift s : shifts) {
+			if (s.getDate().equals(startDate) && s.getStartTime().compareTo(startTime) < 0
+					&& s.getEndTime().compareTo(endTime) > 0) {
+				selected = s;
+				break;
+			}
+		}
+		if (selected == null)
+			throw new IllegalArgumentException("no available shift");
 
-        error = error.trim();
-        if (error.length() > 0)
-            throw new IllegalArgumentException(error);
-        Space newSpace = new Space();
-        newSpace.setMaxWeightLoad(maxWeightLoad);
-        newSpace.setRepairShopManagementSystem(RepairShopManagementSystem);
-        spaceRepository.save(newSpace);
-        return newSpace;
+		// 遍历每一个appointment，如果他的shift和当前想预定的时间重合并且他用的space符合标准的话，
+		// 从enoughweight这个list里去掉这个space，在最后再检查是都还有可用的space。
+		for (Appointment a : apps) {
+			if (a.getShift().getDate().equals(startDate) && a.getShift().getStartTime().compareTo(startTime) <= 0
+					&& a.getShift().getEndTime().compareTo(startTime) >= 0) {
+				if (enoughWeight.contains(a.getSpace()))
+					enoughWeight.remove(a.getSpace());
 
-    }
+			} else if (a.getShift().getDate().equals(startDate) && a.getShift().getStartTime().compareTo(endTime) <= 0
+					&& a.getShift().getEndTime().compareTo(endTime) >= 0) {
 
-    @Transactional
-    public ca.mcgill.ecse321.repairshopmanagementsystem.model.Service createService(String serviceType,
-                                                                                    Set<Assistant> assistants, Appointment appointment) {
-        if (assistants == null)
-            throw new IllegalArgumentException("Assistant List cannot be null!");
-        if (assistants.size() == 0)
-            throw new IllegalArgumentException("Assistant List cannot be empty!");
-        if (serviceType == null)
-            throw new IllegalArgumentException("Service type cannot be null!");
-        if (serviceType.length() == 0)
-            throw new IllegalArgumentException("Service type cannot be empty!");
-        if (serviceType.charAt(0) == ' ')
-            throw new IllegalArgumentException("Service type cannot be empty!");
-        if (!serviceType.equals("Car Wash") && !serviceType.equals("Maintenance") && !serviceType.equals("Change Tire")
-                && !serviceType.equals("Repair"))
-            throw new IllegalArgumentException("Service type must be Car Wash, Maintenance, Change Tire or Repair!");
-        ca.mcgill.ecse321.repairshopmanagementsystem.model.Service aService = new ca.mcgill.ecse321.repairshopmanagementsystem.model.Service();
-        aService.setServiceType(serviceType);
-        aService.setAssistant(assistants);
-        aService.setAppointment(appointment);
-        serviceRepository.save(aService);
-        return aService;
-    }
+				if (enoughWeight.contains(a.getSpace()))
+					enoughWeight.remove(a.getSpace());
 
-    @Transactional
-    public ca.mcgill.ecse321.repairshopmanagementsystem.model.Service updateService(Integer appointmentID,
-                                                                                    String serviceType, Set<Assistant> assistants) {
+			}
+		}
+		if (enoughWeight.size() == 0)
+			throw new IllegalArgumentException("no available space at this time");
 
-        ca.mcgill.ecse321.repairshopmanagementsystem.model.Service ser = null;
-        if (assistants == null)
-            throw new IllegalArgumentException("Assistant List cannot be null!");
-        if (assistants.size() == 0)
-            throw new IllegalArgumentException("Assistant List cannot be empty!");
-        if (serviceType == null)
-            throw new IllegalArgumentException("Service type cannot be null!");
-        if (serviceType.length() == 0)
-            throw new IllegalArgumentException("Service type cannot be empty!");
-        if (serviceType.charAt(0) == ' ')
-            throw new IllegalArgumentException("Service type cannot be empty!");
-        if (!serviceType.equals("Car Wash") && !serviceType.equals("Maintenance") && !serviceType.equals("Change Tire")
-                && !serviceType.equals("Repair"))
-            throw new IllegalArgumentException("Service type must be Car Wash, Maintenance, Change Tire or Repair!");
+		app.setCustomer(customer);
+		app.setService(service);
+		app.setCar(carset);
+		app.setShift(selected);
+		app.setSpace(enoughWeight.get(0));
+		service.setAppointment(app);
+		customer.getAppointment().add(app);
+		selected.setAppointment(app);
 
-        Appointment appointment = appointmentRepository.findAppointmentByAppointmentId(appointmentID);
+		customer.getAppointment().add(app);
+		customerRepository.save(customer);
+		serviceRepository.save(service);
+		shiftRepository.save(selected);
+		appointmentRepository.save(app);
 
-        ser = appointment.getService();
+		return app;
+	}
 
-        ser.setAssistant(assistants);
-        ser.setServiceType(serviceType);
-        ser.setAppointment(appointment);
+	@Transactional
+	public Appointment findAppointment(Customer customer, Shift shift) {
 
-        appointment.setService(ser);
+		return appointmentRepository.findAppointmentByCustomerAndShift(customer, shift);
+	}
 
-        serviceRepository.save(ser);
-        appointmentRepository.save(appointment);
+	@Transactional
+	public List<Appointment> findAppointmentsOfCustomer(String username) {
+		Customer customer = customerRepository.findCustomerByUsername(username);
+		return appointmentRepository.findByCustomer(customer);
+	}
 
-        return ser;
-    }
+	@Transactional
+	public Appointment updateAppointment(ca.mcgill.ecse321.repairshopmanagementsystem.model.Service service,
+			Customer customer, Shift shift, Shift newShift, Set<Car> newCars, Space space, Set<Bill> Bills) {
 
-    @Transactional
-    public Bill createBill(Integer price, Appointment appointment, boolean isPaid) {
-        if (price == null)
-            throw new IllegalArgumentException("Price cannot be empty!");
-        if (price <= 0)
-            throw new IllegalArgumentException("Price cannot be negative or zero!");
-        Bill newBill = new Bill();
-        newBill.setAppointment(appointment);
-        newBill.setIsPaid(isPaid);
-        newBill.setPrice(price);
-        billRepository.save(newBill);
+		Appointment app = appointmentRepository.findAppointmentByCustomerAndShift(customer, shift);
+		app.setBill(Bills);
+		app.setService(service);
+		app.setCar(newCars);
+		app.setCustomer(customer);
+		app.setShift(newShift);
+		appointmentRepository.save(app);
 
-        return newBill;
-    }
+		return app;
+	}
 
-    @Transactional
-    public Bill updateBill(Integer appointmentid, Integer price, boolean isPaid, Integer newPrice) {
-        String error = "";
-        if (newPrice <= 0) {
-            error = "invalid newprice";
-        }
+	@Transactional
+	public Space createSpace(Integer maxWeightLoad, RepairShopManagementSystem RepairShopManagementSystem) {
+		String error = "";
+		if (maxWeightLoad == 0) {
+			error = "invalid maxweight";
+		}
 
-        error = error.trim();
-        if (error.length() > 0)
-            throw new IllegalArgumentException(error);
+		error = error.trim();
+		if (error.length() > 0)
+			throw new IllegalArgumentException(error);
+		Space newSpace = new Space();
+		newSpace.setMaxWeightLoad(maxWeightLoad);
+		newSpace.setRepairShopManagementSystem(RepairShopManagementSystem);
+		spaceRepository.save(newSpace);
+		return newSpace;
 
-        Appointment appointment = appointmentRepository.findAppointmentByAppointmentId(appointmentid);
-        Bill b = new Bill();
-        b.setIsPaid(isPaid);
-        b.setPrice(newPrice);
-        b.setAppointment(appointment);
-        Set<Bill> TB = appointment.getBill();
+	}
 
-        for (Bill a : TB) {
+	@Transactional
+	public ca.mcgill.ecse321.repairshopmanagementsystem.model.Service createService(String serviceType,
+			Set<Assistant> assistants, Appointment appointment) {
+		if (assistants == null)
+			throw new IllegalArgumentException("Assistant List cannot be null!");
+		if (assistants.size() == 0)
+			throw new IllegalArgumentException("Assistant List cannot be empty!");
+		if (serviceType == null)
+			throw new IllegalArgumentException("Service type cannot be null!");
+		if (serviceType.length() == 0)
+			throw new IllegalArgumentException("Service type cannot be empty!");
+		if (serviceType.charAt(0) == ' ')
+			throw new IllegalArgumentException("Service type cannot be empty!");
+		if (!serviceType.equals("Car Wash") && !serviceType.equals("Maintenance") && !serviceType.equals("Change Tire")
+				&& !serviceType.equals("Repair"))
+			throw new IllegalArgumentException("Service type must be Car Wash, Maintenance, Change Tire or Repair!");
+		ca.mcgill.ecse321.repairshopmanagementsystem.model.Service aService = new ca.mcgill.ecse321.repairshopmanagementsystem.model.Service();
+		aService.setServiceType(serviceType);
+		aService.setAssistant(assistants);
+		aService.setAppointment(appointment);
+		serviceRepository.save(aService);
+		return aService;
+	}
 
-            if (a.getPrice() == price) {
-                TB.remove(a);
-                TB.add(b);
-                break;
-            }
+	@Transactional
+	public ca.mcgill.ecse321.repairshopmanagementsystem.model.Service updateService(Integer appointmentID,
+			String serviceType, Set<Assistant> assistants) {
 
-        }
-        billRepository.save(b);
-        appointment.setBill(TB);
-        appointmentRepository.save(appointment);
+		ca.mcgill.ecse321.repairshopmanagementsystem.model.Service ser = null;
+		if (assistants == null)
+			throw new IllegalArgumentException("Assistant List cannot be null!");
+		if (assistants.size() == 0)
+			throw new IllegalArgumentException("Assistant List cannot be empty!");
+		if (serviceType == null)
+			throw new IllegalArgumentException("Service type cannot be null!");
+		if (serviceType.length() == 0)
+			throw new IllegalArgumentException("Service type cannot be empty!");
+		if (serviceType.charAt(0) == ' ')
+			throw new IllegalArgumentException("Service type cannot be empty!");
+		if (!serviceType.equals("Car Wash") && !serviceType.equals("Maintenance") && !serviceType.equals("Change Tire")
+				&& !serviceType.equals("Repair"))
+			throw new IllegalArgumentException("Service type must be Car Wash, Maintenance, Change Tire or Repair!");
 
-        return b;
-    }
+		Appointment appointment = appointmentRepository.findAppointmentByAppointmentId(appointmentID);
 
-    @Transactional
-    public Bill getBill(Appointment appointment, Integer price) {
-        return billRepository.findBillByAppointmentAndPrice(appointment, price);
-    }
+		ser = appointment.getService();
 
-    @Transactional
-    public List<Appointment> getAllAppointments() {
-        return toList(appointmentRepository.findAll());
-    }
+		ser.setAssistant(assistants);
+		ser.setServiceType(serviceType);
+		ser.setAppointment(appointment);
 
-    @Transactional
-    public List<ca.mcgill.ecse321.repairshopmanagementsystem.model.Service> getAllServices() {
-        return toList(serviceRepository.findAll());
-    }
+		appointment.setService(ser);
 
-    @Transactional
-    public List<Bill> getAllBills() {
-        return toList(billRepository.findAll());
-    }
+		serviceRepository.save(ser);
+		appointmentRepository.save(appointment);
 
-    @Transactional
-    public List<Space> getAllSpace() {
-        return toList(spaceRepository.findAll());
-    }
+		return ser;
+	}
 
-    @Transactional
-    public List<Shift> getAllShift() {
-        return toList(shiftRepository.findAll());
-    }
+	@Transactional
+	public Bill createBill(Integer price, Appointment appointment, boolean isPaid) {
+		if (price == null)
+			throw new IllegalArgumentException("Price cannot be empty!");
+		if (price <= 0)
+			throw new IllegalArgumentException("Price cannot be negative or zero!");
+		Bill newBill = new Bill();
+		newBill.setAppointment(appointment);
+		newBill.setIsPaid(isPaid);
+		newBill.setPrice(price);
+		billRepository.save(newBill);
 
-    @Transactional
-    public ca.mcgill.ecse321.repairshopmanagementsystem.model.Service getService(String serviceType) {
-        return serviceRepository.findServiceByServiceType(serviceType);
-    }
+		return newBill;
+	}
 
-    @Transactional
-    public Shift createShift(Date startDate, Time startTime, Time endTime, Appointment appointment, Schedule schedule,
-                             Assistant assistant) {
+	@Transactional
+	public Bill updateBill(Integer appointmentid, Integer price, boolean isPaid, Integer newPrice) {
+		String error = "";
+		if (newPrice <= 0) {
+			error = "invalid newprice";
+		}
 
+		error = error.trim();
+		if (error.length() > 0)
+			throw new IllegalArgumentException(error);
 
-        if (startDate == null || startTime == null || schedule == null || assistant == null) {
-            throw new IllegalArgumentException("why do you have a null input, out of your mind?");
+		Appointment appointment = appointmentRepository.findAppointmentByAppointmentId(appointmentid);
+		Bill b = new Bill();
+		b.setIsPaid(isPaid);
+		b.setPrice(newPrice);
+		b.setAppointment(appointment);
+		Set<Bill> TB = appointment.getBill();
 
+		for (Bill a : TB) {
 
-        }
-        String error = "";
-        if (startTime.compareTo(endTime) > 0)
-            error = "starttime cant be after endtime";
-        error = error.trim();
-        if (error.length() > 0)
-            throw new IllegalArgumentException(error);
-        Shift newShift = new Shift();
-        newShift.setAppointment(appointment);
-        newShift.setAssistant(assistant);
-        newShift.setDate(startDate);
-        newShift.setStartTime(startTime);
-        newShift.setEndTime(endTime);
-        newShift.setSchedule(schedule);
-        int hash = assistant.hashCode();
-        if (appointment != null)
-            hash = appointment.hashCode();
-        newShift.setShiftId(startDate.hashCode() * endTime.hashCode() + startTime.hashCode() + hash);
-        shiftRepository.save(newShift);
+			if (a.getPrice() == price) {
+				TB.remove(a);
+				TB.add(b);
+				break;
+			}
 
-        return newShift;
-    }
+		}
+		billRepository.save(b);
+		appointment.setBill(TB);
+		appointmentRepository.save(appointment);
 
-    @Transactional
-    public Shift getShift(Appointment appointment) {
-        return shiftRepository.findShiftByAppointment(appointment);
-    }
+		return b;
+	}
 
-    @Transactional
-    public Shift updateShift(Date startDate, Time startTime, Time endTime, Integer appointmentID) {
-        String error = "";
-        if (startTime.compareTo(endTime) > 0)
-            error = "starttime cant be after endtime";
-        error = error.trim();
-        if (error.length() > 0)
-            throw new IllegalArgumentException(error);
+	@Transactional
+	public Bill getBill(Appointment appointment, Integer price) {
+		return billRepository.findBillByAppointmentAndPrice(appointment, price);
+	}
 
-        Appointment appointment = appointmentRepository.findAppointmentByAppointmentId(appointmentID);
-        Shift s = new Shift();
-        s.setDate(startDate);
-        s.setStartTime(startTime);
-        s.setEndTime(endTime);
+	@Transactional
+	public List<Appointment> getAllAppointments() {
+		return toList(appointmentRepository.findAll());
+	}
 
-        appointment.setShift(s);
-        shiftRepository.save(s);
-        appointmentRepository.save(appointment);
-        return appointment.getShift();
+	@Transactional
+	public List<ca.mcgill.ecse321.repairshopmanagementsystem.model.Service> getAllServices() {
+		return toList(serviceRepository.findAll());
+	}
 
-    }
+	@Transactional
+	public List<Bill> getAllBills() {
+		return toList(billRepository.findAll());
+	}
+
+	@Transactional
+	public List<Space> getAllSpace() {
+		return toList(spaceRepository.findAll());
+	}
+
+	@Transactional
+	public List<Shift> getAllShift() {
+		return toList(shiftRepository.findAll());
+	}
+
+	@Transactional
+	public ca.mcgill.ecse321.repairshopmanagementsystem.model.Service getService(String serviceType) {
+		return serviceRepository.findServiceByServiceType(serviceType);
+	}
+
+	@Transactional
+	public Shift createShift(Date startDate, Time startTime, Time endTime, Appointment appointment, Schedule schedule,
+			Assistant assistant) {
+
+		if (startDate == null || startTime == null || schedule == null || assistant == null) {
+			throw new IllegalArgumentException("why do you have a null input, out of your mind?");
+
+		}
+		String error = "";
+		if (startTime.compareTo(endTime) > 0)
+			error = "starttime cant be after endtime";
+		error = error.trim();
+		if (error.length() > 0)
+			throw new IllegalArgumentException(error);
+		Shift newShift = new Shift();
+		newShift.setAppointment(appointment);
+		newShift.setAssistant(assistant);
+		newShift.setDate(startDate);
+		newShift.setStartTime(startTime);
+		newShift.setEndTime(endTime);
+		newShift.setSchedule(schedule);
+		int hash = assistant.hashCode();
+		if (appointment != null)
+			hash = appointment.hashCode();
+		newShift.setShiftId(startDate.hashCode() * endTime.hashCode() + startTime.hashCode() + hash);
+		shiftRepository.save(newShift);
+
+		return newShift;
+	}
+
+	@Transactional
+	public Shift getShift(Appointment appointment) {
+		return shiftRepository.findShiftByAppointment(appointment);
+	}
+
+	@Transactional
+	public Shift updateShift(Date startDate, Time startTime, Time endTime, Integer appointmentID) {
+		String error = "";
+		if (startTime.compareTo(endTime) > 0)
+			error = "starttime cant be after endtime";
+		error = error.trim();
+		if (error.length() > 0)
+			throw new IllegalArgumentException(error);
+
+		Appointment appointment = appointmentRepository.findAppointmentByAppointmentId(appointmentID);
+		Shift s = new Shift();
+		appointment.getShift().setDate(startDate);
+		appointment.getShift().setStartTime(startTime);
+		appointment.getShift().setEndTime(endTime);
+
+		shiftRepository.save(appointment.getShift());
+		appointmentRepository.save(appointment);
+		return appointment.getShift();
+
+	}
 
 }

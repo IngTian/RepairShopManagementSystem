@@ -9,24 +9,25 @@ public class ShiftDto {
     private Date date;
     private Time startTime;
     private Time endTime;
+    private Integer shiftId;
    
     private AssistantDto assistant;
 
     public ShiftDto() {
     }
 
-    public ShiftDto(ScheduleDto schedule, Date date, Time startTime, Time endTime, AssistantDto assistant) {
+    public ShiftDto(ScheduleDto schedule, Date date, Time startTime, Time endTime, AssistantDto assistant,Integer shiftID) {
         this.schedule = schedule;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-       
+       this.shiftId=shiftID;
         this.assistant = assistant;
     }
 
-    public ShiftDto(Date date, Time startTime, Time endTime, AssistantDto assistant, AppointmentDto appointment, ScheduleDto schedule) {
+    public ShiftDto(Date date, Time startTime, Time endTime, AssistantDto assistant, AppointmentDto appointment, ScheduleDto schedule,Integer ShiftID) {
         this.appointment = appointment;
-       
+       this.shiftId=ShiftID;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -59,6 +60,8 @@ public class ShiftDto {
     public AppointmentDto getAppointment() {
         return appointment;
     }
-
+public Integer getshiftID() {
+	return this.shiftId;
+}
 
 }

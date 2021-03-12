@@ -7,28 +7,30 @@ import java.util.Set;
 
 public class ScheduleDto {
     private List<ShiftDto> shifts;
-    
+    private int id;
     private RepairShopManagementSystemDto repairShopManagementSystem;
 
     public ScheduleDto() {
     }
 
-    public ScheduleDto(RepairShopManagementSystemDto system) {
-        
+    public ScheduleDto(int id,RepairShopManagementSystemDto system) {
+        this.id=id;
         this.shifts = new ArrayList<>();
         this.repairShopManagementSystem = system;
     }
 
-    public ScheduleDto(List<ShiftDto> timeSlot, RepairShopManagementSystemDto repairShopManagementSystem) {
+    public ScheduleDto(int id,List<ShiftDto> timeSlot, RepairShopManagementSystemDto repairShopManagementSystem) {
         this.shifts = timeSlot;
-       
+        this.id=id;
         this.repairShopManagementSystem = repairShopManagementSystem;
     }
 
     public List<ShiftDto> getShifts() {
         return this.shifts;
     }
-
+    public int getid() {
+        return this.id;
+    }
    
 
     public RepairShopManagementSystemDto getRepairShopManagementSystem() {
