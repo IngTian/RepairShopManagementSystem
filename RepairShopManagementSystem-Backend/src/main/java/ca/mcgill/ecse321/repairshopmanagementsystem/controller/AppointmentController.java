@@ -72,7 +72,6 @@ public class AppointmentController {
     ----------------------------------------------------------------------------
     ------------------------------------Shift-----------------------------------
     ----------------------------------------------------------------------------
-    Author Ao Shen
      */
 
     @PostMapping(value = "shifts/get_shift")
@@ -99,7 +98,6 @@ public class AppointmentController {
         List<Bill> billDtoList = appointmentService.getAllBills();
         return convertToDtoListForBill(billDtoList);
     }
-
 
 
     @GetMapping(value = "services")

@@ -364,11 +364,6 @@ public class AppointmentService {
     }
 
     @Transactional
-    public List<Appointment> getAllAppointmentsForACustomer(){
-
-    }
-
-    @Transactional
     public List<ca.mcgill.ecse321.repairshopmanagementsystem.model.Service> getAllServices() {
         return toList(serviceRepository.findAll());
     }

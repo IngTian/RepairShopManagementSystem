@@ -5,6 +5,17 @@ import java.util.Set;
 
 @Entity
 public class Schedule {
+
+    public Integer getWeekNo() {
+        return weekNo;
+    }
+
+    public void setWeekNo(Integer yearAndWeekNo) {
+        this.weekNo = yearAndWeekNo;
+    }
+
+    private Integer weekNo;
+
     private Integer id;
 
     public void setId(Integer value) {
@@ -27,17 +38,6 @@ public class Schedule {
     public void setTimeSlot(Set<Shift> timeSlots) {
         this.timeSlot = timeSlots;
     }
-
-//    private Set<User> user;
-//
-//    @ManyToMany(mappedBy = "schedule")
-//    public Set<User> getUser() {
-//        return this.user;
-//    }
-//
-//    public void setUser(Set<User> users) {
-//        this.user = users;
-//    }
 
     private RepairShopManagementSystem repairShopManagementSystem;
 

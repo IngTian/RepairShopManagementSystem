@@ -8,4 +8,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ScheduleRepository extends CrudRepository<Schedule, Integer> {
     Schedule findScheduleById(Integer id);
+
+    Schedule findScheduleByWeekNo(Integer weekNo);
 }

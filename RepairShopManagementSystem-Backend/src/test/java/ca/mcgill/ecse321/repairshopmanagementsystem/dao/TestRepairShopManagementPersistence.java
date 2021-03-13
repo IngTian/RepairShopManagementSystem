@@ -15,8 +15,6 @@ import ca.mcgill.ecse321.repairshopmanagementsystem.model.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.sql.*;
-
 @ExtendWith(SpringExtension.class)
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -103,6 +101,7 @@ public class TestRepairShopManagementPersistence {
         // Save Schedule.
         Schedule schedule = new Schedule();
         schedule.setRepairShopManagementSystem(sys);
+        schedule.setWeekNo(202101);
         ScheduleRepository.save(schedule);
 
         // Create assistant.
@@ -142,6 +141,7 @@ public class TestRepairShopManagementPersistence {
         // Save Schedule.
         Schedule schedule = new Schedule();
         schedule.setRepairShopManagementSystem(sys);
+        schedule.setWeekNo(202101);
         ScheduleRepository.save(schedule);
 
         // Create assistant.
@@ -209,6 +209,7 @@ public class TestRepairShopManagementPersistence {
         // Save Schedule.
         Schedule schedule = new Schedule();
         schedule.setRepairShopManagementSystem(sys);
+        schedule.setWeekNo(201101);
         ScheduleRepository.save(schedule);
         Integer id = schedule.getId();
         schedule = null;
@@ -234,6 +235,7 @@ public class TestRepairShopManagementPersistence {
         // Save Schedule.
         Schedule schedule = new Schedule();
         schedule.setRepairShopManagementSystem(sys);
+        schedule.setWeekNo(202101);
         ScheduleRepository.save(schedule);
 
         // Create assistant.
@@ -342,6 +344,7 @@ public class TestRepairShopManagementPersistence {
         // Save Schedule.
         Schedule schedule = new Schedule();
         schedule.setRepairShopManagementSystem(sys);
+        schedule.setWeekNo(202101);
         ScheduleRepository.save(schedule);
 
         // Create assistant.
