@@ -10,6 +10,10 @@ public class AssistantDto extends UserDto {
         super();
     }
 
+    public AssistantDto(String username, String password, String name){
+        super(username, password, name);
+    }
+
     public AssistantDto(String username, String password, String name, RepairShopManagementSystemDto system) {
         super(username, password, name, system);
         this.services = new HashSet<>();

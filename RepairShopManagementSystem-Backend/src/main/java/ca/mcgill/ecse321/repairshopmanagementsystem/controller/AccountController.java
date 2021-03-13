@@ -83,7 +83,7 @@ public class AccountController {
     }
 
     @PostMapping(value = "customers/update_info")
-    public CustomerDto updateOwnerInfo(@RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newName, @RequestParam String newPhoneNo, @RequestParam String newAddress, @RequestParam String newEmail, @RequestBody CustomerDto o) {
+    public CustomerDto updateCustomerInfo(@RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newName, @RequestParam String newPhoneNo, @RequestParam String newAddress, @RequestParam String newEmail, @RequestBody CustomerDto o) {
         Customer newCustomer = (Customer) accountService.updateUserInformation(accountService.getOwner(o.getUsername()), newUsername, newPassword, newName);
         accountService.updateCustomer(newCustomer, newEmail, newAddress, newPhoneNo);
         return convertToDto(newCustomer);

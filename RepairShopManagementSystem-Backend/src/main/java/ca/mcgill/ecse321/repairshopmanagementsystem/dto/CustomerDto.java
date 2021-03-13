@@ -14,6 +14,13 @@ public class CustomerDto extends UserDto {
         super();
     }
 
+    public CustomerDto(String username, String password, String name, String phoneNo, String homeAddress, String email) {
+        super(username, password, name);
+        this.phoneNo = phoneNo;
+        this.homeAddress = homeAddress;
+        this.email = email;
+    }
+
     public CustomerDto(String username, String password, String name, String phoneNo, String homeAddress, String email,
                        Set<CarDto> Cars, Set<AppointmentDto> appointments, RepairShopManagementSystemDto repairShopManagementSystemDto) {
         super(username, password, name, repairShopManagementSystemDto);
