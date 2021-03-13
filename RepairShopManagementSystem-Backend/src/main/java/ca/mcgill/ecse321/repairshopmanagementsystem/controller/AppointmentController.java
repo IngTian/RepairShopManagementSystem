@@ -4,6 +4,7 @@ import ca.mcgill.ecse321.repairshopmanagementsystem.dto.*;
 import ca.mcgill.ecse321.repairshopmanagementsystem.model.*;
 import ca.mcgill.ecse321.repairshopmanagementsystem.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
@@ -48,17 +49,17 @@ public class AppointmentController {
     public AppointmentDto makeAppointment(@RequestParam String serviceType,
                                           @RequestParam String username,
                                           @RequestParam String plateNo,
-                                          @RequestParam Date startDate,
-                                          @RequestParam Time startTime,
-                                          @RequestParam Time endTime,
+                                          @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
+                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") Time startTime,
+                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") Time endTime,
                                           @RequestParam Integer weight) {
-        Appointment aps = appointmentService.makeAppointment(serviceType, username, plateNo, startDate, startTime, endTime, weight);
+        Appointment aps = appointmentService.makeAppointment(serviceType, username, plateNo, date, startTime, endTime, weight);
         return convertToDto(aps);
     }
 
     @PostMapping(value = "appointments/update_service_type")
-    public AppointmentDto updateServiceType(@RequestParam Appointment appointment, @RequestParam String newServiceType) {
-        return convertToDto(appointmentService.changeServiceType(appointment, newServiceType));
+    public AppointmentDto updateServiceType(@RequestParam Integer appointmentId, @RequestParam String newServiceType) {
+        return convertToDto(appointmentService.changeServiceType(appointmentService.getAppointmentById(appointmentId), newServiceType));
     }
 
     @PostMapping(value = "appointments/delete")

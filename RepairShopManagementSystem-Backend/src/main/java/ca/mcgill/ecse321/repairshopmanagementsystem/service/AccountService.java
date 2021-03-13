@@ -199,15 +199,9 @@ public class AccountService {
      * @author Byron Chen
      */
     @Transactional
-    public Car updateCar(Car car, String plateNo, String model, String year, String manufacturer, Customer customer) {
+    public Car updateCar(Car car, String model, String year, String manufacturer, Customer customer) {
 
         String error = "";
-
-        if (plateNo == null || plateNo.trim().length() == 0) {
-            error = error + "New plate number cannot be empty! ";
-        } else if (!Util.isPlateNoCorrect(plateNo)) {
-            error = error + "New plate number illegal! ";
-        }
 
         if (model == null || model.trim().length() == 0) {
             error = error + "New model cannot be empty! ";
@@ -236,9 +230,8 @@ public class AccountService {
         car.getCustomer().getCar().add(car);
         car.setModel(model);
         car.setManufacturer(manufacturer);
-        car.setPlateNo(plateNo);
         car.setYear(year);
-        carRepository.save(car);
+        customerRepository.save(car.getCustomer());
         return car;
     }
 
@@ -318,7 +311,7 @@ public class AccountService {
         aCar.setPlateNo(plateNo);
         aCar.setYear(year);
         customer.getCar().add(aCar);
-        carRepository.save(aCar);
+        customerRepository.save(customer);
         return aCar;
     }
 

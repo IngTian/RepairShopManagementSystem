@@ -990,7 +990,7 @@ public class TestAccountService {
         String error = "";
 
         try {
-            accountService.updateCar(car, TEST_CAR_PLATE_NO, TEST_CAR_MODEL, TEST_CAR_YEAR, TEST_CAR_MANUFACTURER, aCustomer);
+            accountService.updateCar(car, TEST_CAR_MODEL, TEST_CAR_YEAR, TEST_CAR_MANUFACTURER, aCustomer);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -1026,7 +1026,7 @@ public class TestAccountService {
         String error = "";
 
         try {
-            accountService.updateCar(car, "", "", "", "", bCustomer);
+            accountService.updateCar(car, "", "", "", bCustomer);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -1066,7 +1066,7 @@ public class TestAccountService {
         String error = "";
 
         try {
-            accountService.updateCar(car, "GHJSHD1", TEST_CAR_MODEL, TEST_CAR_YEAR, TEST_CAR_MANUFACTURER, aCustomer);
+            accountService.updateCar(car, TEST_CAR_MODEL, TEST_CAR_YEAR, TEST_CAR_MANUFACTURER, aCustomer);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -1105,7 +1105,7 @@ public class TestAccountService {
         String error = "";
 
         try {
-            accountService.updateCar(car, TEST_CAR_PLATE_NO, TEST_CAR_MODEL, "19120", TEST_CAR_MANUFACTURER, aCustomer);
+            accountService.updateCar(car, TEST_CAR_MODEL, "19120", TEST_CAR_MANUFACTURER, aCustomer);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }

@@ -90,7 +90,7 @@ public class AccountController {
     }
 
     @PostMapping(value = "customers/create_to_most_recent_system")
-    public CustomerDto createCustomerToMostRecentSystem(@RequestBody Customer a) {
+    public CustomerDto createCustomerToMostRecentSystem(@RequestBody CustomerDto a) {
         Customer customer = accountService.createCustomer(a.getUsername(), a.getPassword(), a.getName(), systemService.getMostRecentSystem(), a.getPhoneNo(), a.getHomeAddress(), a.getEmail());
         return convertToDto(customer);
     }
@@ -108,8 +108,8 @@ public class AccountController {
     }
 
     @PostMapping(value = "cars/update")
-    public CarDto updateCarInfo(@RequestParam String newUsername, @RequestParam String newPlateNo, @RequestParam String newModel, @RequestParam String newYear, @RequestParam String newManufacturer, @RequestBody CarDto car) {
-        Car c = accountService.updateCar(accountService.getCar(car.getPlateNo()), newPlateNo, newModel, newYear, newManufacturer, accountService.findCustomer(newUsername));
+    public CarDto updateCarInfo(@RequestParam String newUsername, @RequestParam String newModel, @RequestParam String newYear, @RequestParam String newManufacturer, @RequestBody CarDto car) {
+        Car c = accountService.updateCar(accountService.getCar(car.getPlateNo()), newModel, newYear, newManufacturer, accountService.findCustomer(newUsername));
         return convertToDto(c);
     }
 

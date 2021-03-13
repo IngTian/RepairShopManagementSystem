@@ -6,6 +6,7 @@ import ca.mcgill.ecse321.repairshopmanagementsystem.service.*;
 import ca.mcgill.ecse321.repairshopmanagementsystem.utils.Util;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,7 +71,11 @@ public class ScheduleController {
     }
 
     @PostMapping(value = "shifts/create")
-    public ShiftDto createShift(@RequestParam Date date, @RequestParam Time startTime, @RequestParam Time endTime, @RequestParam String username) {
+    public ShiftDto createShift(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
+                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") Time startTime,
+                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") Time endTime,
+                                @RequestParam String username)
+    {
         Shift newShift = scheduleService.createShift(date, startTime, endTime, accountService.getAssistant(username));
         return convertToDto(newShift);
     }
@@ -82,7 +87,11 @@ public class ScheduleController {
     }
 
     @PostMapping(value = "shifts/change")
-    public ShiftDto changeShift(@RequestParam Date newDate, @RequestParam Time newStartTime, @RequestParam Time newEndTime, @RequestParam Integer shiftId){
+    public ShiftDto changeShift(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date newDate,
+                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") Time newStartTime,
+                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") Time newEndTime,
+                                @RequestParam Integer shiftId)
+    {
         Shift s = scheduleService.changeShift(scheduleService.getShiftById(shiftId), newDate, newStartTime, newEndTime);
         return convertToDto(s);
     }
