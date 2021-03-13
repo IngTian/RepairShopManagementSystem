@@ -9,30 +9,25 @@ public class ShiftDto {
     private Date date;
     private Time startTime;
     private Time endTime;
-    private RepairShopManagementSystemDto system;
+    private Integer shiftId;
+   
     private AssistantDto assistant;
 
     public ShiftDto() {
     }
 
-    public ShiftDto(Date date, Time startTime, Time endTime) {
-        this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
-    }
-
-    public ShiftDto(ScheduleDto schedule, Date date, Time startTime, Time endTime, RepairShopManagementSystemDto system, AssistantDto assistant) {
+    public ShiftDto(ScheduleDto schedule, Date date, Time startTime, Time endTime, AssistantDto assistant,Integer shiftID) {
         this.schedule = schedule;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.system = system;
+       this.shiftId=shiftID;
         this.assistant = assistant;
     }
 
-    public ShiftDto(Date date, Time startTime, Time endTime, AssistantDto assistant, AppointmentDto appointment, ScheduleDto schedule, RepairShopManagementSystemDto system) {
+    public ShiftDto(Date date, Time startTime, Time endTime, AssistantDto assistant, AppointmentDto appointment, ScheduleDto schedule,Integer ShiftID) {
         this.appointment = appointment;
-        this.system = system;
+       this.shiftId=ShiftID;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -60,13 +55,13 @@ public class ShiftDto {
         return schedule;
     }
 
-    public RepairShopManagementSystemDto getRepairShopManagementSystem() {
-        return system;
-    }
+    
 
     public AppointmentDto getAppointment() {
         return appointment;
     }
-
+public Integer getshiftID() {
+	return this.shiftId;
+}
 
 }

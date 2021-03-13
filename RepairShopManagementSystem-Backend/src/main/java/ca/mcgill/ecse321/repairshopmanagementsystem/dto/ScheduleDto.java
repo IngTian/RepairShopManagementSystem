@@ -1,35 +1,37 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.dto;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ScheduleDto {
-    private Set<ShiftDto> shifts;
-    private Set<UserDto> user;
+    private List<ShiftDto> shifts;
+    private int id;
     private RepairShopManagementSystemDto repairShopManagementSystem;
 
     public ScheduleDto() {
     }
 
-    public ScheduleDto(RepairShopManagementSystemDto system) {
-        this.user = new HashSet<>();
-        this.shifts = new HashSet<>();
+    public ScheduleDto(int id,RepairShopManagementSystemDto system) {
+        this.id=id;
+        this.shifts = new ArrayList<>();
         this.repairShopManagementSystem = system;
     }
 
-    public ScheduleDto(Set<ShiftDto> timeSlot, Set<UserDto> user, RepairShopManagementSystemDto repairShopManagementSystem) {
+    public ScheduleDto(int id,List<ShiftDto> timeSlot, RepairShopManagementSystemDto repairShopManagementSystem) {
         this.shifts = timeSlot;
-        this.user = user;
+        this.id=id;
         this.repairShopManagementSystem = repairShopManagementSystem;
     }
 
-    public Set<ShiftDto> getShifts() {
+    public List<ShiftDto> getShifts() {
         return this.shifts;
     }
-
-    public Set<UserDto> getUser() {
-        return user;
+    public int getid() {
+        return this.id;
     }
+   
 
     public RepairShopManagementSystemDto getRepairShopManagementSystem() {
         return this.repairShopManagementSystem;

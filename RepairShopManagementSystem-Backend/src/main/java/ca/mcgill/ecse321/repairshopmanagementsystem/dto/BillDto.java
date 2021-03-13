@@ -23,6 +23,12 @@ public class BillDto {
         this.appointment = appointment;
         this.isPaid = isPaid;
     }
+    public BillDto(Integer billNo, Integer price, Boolean isPaid) {
+        this.billNo = billNo;
+        this.price = price;
+        
+        this.isPaid = isPaid;
+    }
 
     public Integer getBillNo() {
         return billNo;

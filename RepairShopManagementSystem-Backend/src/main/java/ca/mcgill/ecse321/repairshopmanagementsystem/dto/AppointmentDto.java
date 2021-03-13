@@ -1,26 +1,36 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.dto;
 
+import java.util.List;
 import java.util.Set;
 
 public class AppointmentDto {
     private Integer appointmentId;
-    private Set<BillDto> bill;
+    private List<BillDto> bill;
     private ServiceDto service;
     private ShiftDto shift;
     private CustomerDto customer;
-    private CarDto car;
+    private List <CarDto> cars;
     private SpaceDto space;
 
     public AppointmentDto() {
 
     }
 
-    public AppointmentDto(Integer appointmentId, Set<BillDto> bill, ServiceDto service, ShiftDto shift, CustomerDto customer, CarDto car, SpaceDto space) {
+    public AppointmentDto(Integer appointmentId, List<BillDto> bill, ServiceDto service, ShiftDto shift, CustomerDto customer, List<CarDto> car, SpaceDto space) {
         this.appointmentId = appointmentId;
-        this.car = car;
+        this.cars = car;
         this.bill = bill;
         this.space = space;
         this.service = service;
+        this.shift = shift;
+        this.customer = customer;
+    }
+    public AppointmentDto(Integer appointmentId, List<BillDto> bill, ShiftDto shift, CustomerDto customer, List<CarDto> cars, SpaceDto space) {
+        this.appointmentId = appointmentId;
+        this.cars = cars;
+        this.bill = bill;
+        this.space = space;
+       
         this.shift = shift;
         this.customer = customer;
     }
@@ -29,7 +39,7 @@ public class AppointmentDto {
         return appointmentId;
     }
 
-    public Set<BillDto> getBill() {
+    public List<BillDto> getBill() {
         return bill;
     }
 
@@ -45,8 +55,8 @@ public class AppointmentDto {
         return customer;
     }
 
-    public CarDto getCar() {
-        return car;
+    public List<CarDto> getCar() {
+        return cars;
     }
 
     public SpaceDto getSpace() {

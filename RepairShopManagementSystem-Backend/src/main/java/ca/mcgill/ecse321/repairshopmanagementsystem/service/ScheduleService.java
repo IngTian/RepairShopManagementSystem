@@ -30,9 +30,14 @@ public class ScheduleService {
 
     @Transactional
     public Schedule findSchedule(Integer id) {
-
         return scheduleRepository.findScheduleById(id);
     }
+    
+    @Transactional
+    public Shift getShiftById(Integer id) {
+    	return shiftRepository.findShiftByShiftId(id);
+    }
+
 
     @Transactional
     public Schedule createSchedule(Set<Shift> shifts,  RepairShopManagementSystem repairShopManagementSystem ) {
@@ -45,10 +50,18 @@ public class ScheduleService {
     }
 
     @Transactional
-    public Schedule updateSchedule(Schedule schedule, Set<Shift> shifts) {
-        schedule.setTimeSlot(shifts);
+    public Schedule updateSchedule(Schedule schedule, Shift shift) {
+    	if(!schedule.getTimeSlot().remove(shift)) {
+    		Set<Shift> shiftNew = schedule.getTimeSlot();
+    		shiftNew.add(shift);
+    		schedule.setTimeSlot(shiftNew);
+    	}
         scheduleRepository.save(schedule);
         return schedule;
+    }
+    @Transactional
+    public Schedule findScheduleById(Integer id) {
+    	return scheduleRepository.findScheduleById(id);
     }
 
     private <T> List<T> toList(Iterable<T> iterable) {

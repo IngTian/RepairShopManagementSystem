@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RepairShopManagementSystemApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(RepairShopManagementSystemApplication.class, args);
+      
+    	SpringApplication.run(RepairShopManagementSystemApplication.class, args);
     }
 
     @RequestMapping("/")
