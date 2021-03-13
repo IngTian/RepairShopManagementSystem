@@ -23,36 +23,24 @@ public class AppointmentController {
     @Autowired
     private ScheduleService scheduleService;
 
+    @Autowired
+    private SystemService systemService;
+
     /*
     ----------------------------------------------------------------------------
     ------------------------------Appointment-----------------------------------
     ----------------------------------------------------------------------------
     */
 
-    @PostMapping(value = "make_payment")
-    public BillDto makePayment(@RequestParam Integer id, @RequestParam Integer price) {
-        Bill newBill = appointmentService.makePayment(id, price);
-        return convertToDto(newBill);
-    }
-
-    @PostMapping(value = "/bills/updates")
-    public BillDto updateBill(@RequestParam Integer appointmentId, @RequestParam Integer price,
-                              @RequestParam boolean isPaid, @RequestParam Integer newPrice) {
-
-        Bill newBill = appointmentService.updateBill(appointmentId, price, isPaid, newPrice);
-        return convertToDto(newBill);
+    @PostMapping(value = "appointments/find_appointments_of_customer")
+    public List<AppointmentDto> findAppointmentsOfACustomer(@RequestParam String username) {
+        List<Appointment> aps = appointmentService.findAppointmentsOfCustomer(username);
+        return convertToDtoListForAppointment(aps);
     }
 
     @GetMapping(value = "appointments")
     public List<AppointmentDto> getAllAppointments() {
         List<Appointment> aps = appointmentService.getAllAppointments();
-        return convertToDtoListForAppointment(aps);
-    }
-
-    @PostMapping(value = "appointments/find_appointments_of_customer")
-    public List<AppointmentDto> findAppointmentsOfCustomer(@RequestParam String username) {
-
-        List<Appointment> aps = appointmentService.findAppointmentsOfCustomer(username);
         return convertToDtoListForAppointment(aps);
     }
 
@@ -63,35 +51,38 @@ public class AppointmentController {
                                           @RequestParam Date startDate,
                                           @RequestParam Time startTime,
                                           @RequestParam Time endTime,
-                                          @RequestParam Integer scheduleID,
                                           @RequestParam Integer weight) {
-        Appointment aps = appointmentService.makeAppointment(serviceType, username, plateNo, startDate, startTime, endTime, scheduleID, weight);
+        Appointment aps = appointmentService.makeAppointment(serviceType, username, plateNo, startDate, startTime, endTime, weight);
         return convertToDto(aps);
     }
-    /*
-    ----------------------------------------------------------------------------
-    ------------------------------------Shift-----------------------------------
-    ----------------------------------------------------------------------------
-     */
 
-    @PostMapping(value = "shifts/get_shift")
-    public ShiftDto getShift(@RequestBody AppointmentDto appointment) {
-        Shift shift = scheduleService.getShiftById(appointment.getShift().getshiftID());
-        return convertToDto(shift);
+    @PostMapping(value = "appointments/update_service_type")
+    public AppointmentDto updateServiceType(@RequestParam Appointment appointment, @RequestParam String newServiceType) {
+        return convertToDto(appointmentService.changeServiceType(appointment, newServiceType));
     }
 
-    @PostMapping(value = "shifts/update_info")
-    public ShiftDto updateOwnerInfo(@RequestParam Date startDate, @RequestParam Time startTime, @RequestParam Time endTime, @RequestBody Integer appointmentID) {
-        Shift shift = appointmentService.updateShift(startDate, startTime, endTime, appointmentID);
-        return convertToDto(shift);
-    }	
+    @PostMapping(value = "appointments/delete")
+    public AppointmentDto deleteAppointment(@RequestParam Integer id) {
+        return convertToDto(appointmentService.deleteAppointment(appointmentService.getAppointmentById(id)));
+    }
+
+    @PostMapping(value = "appointments/update_appointment_time")
+    public AppointmentDto UpdateAppointmentTime(@RequestParam Integer shiftId, @RequestParam Integer appointmentId) {
+        Appointment aps = appointmentService.UpdateAppointmentTime(shiftId, appointmentId);
+        return convertToDto(aps);
+    }
 
     /*
     ----------------------------------------------------------------------------
-    --------------------------------- Bill -------------------------------------
+    -----------------------------------Bill-------------------------------------
     ----------------------------------------------------------------------------
-    Author Byron Chen
-     */
+    */
+
+    @PostMapping(value = "make_payment")
+    public BillDto makePayment(@RequestParam Integer id) {
+        Bill newBill = appointmentService.makePayment(appointmentService.makePayment(appointmentService.getBillByBillNo(id)));
+        return convertToDto(newBill);
+    }
 
     @GetMapping(value = "/bills")
     public List<BillDto> getAllBills() {
@@ -99,6 +90,11 @@ public class AppointmentController {
         return convertToDtoListForBill(billDtoList);
     }
 
+    /*
+    ----------------------------------------------------------------------------
+    ------------------------------ Service -------------------------------------
+    ----------------------------------------------------------------------------
+     */
 
     @GetMapping(value = "services")
     public List<ServiceDto> getAllServices() {
@@ -106,9 +102,14 @@ public class AppointmentController {
         return convertToDtoListForService(service);
     }
 
-    @PostMapping(value = "services/getServiceForAppointment")
-    public ServiceDto getServiceForThisAppointment(@RequestParam String serviceType) {
-        return convertToDto(appointmentService.getService(serviceType));
+    /*
+    ----------------------------------------------------------------------------
+    -------------------------------- Space -------------------------------------
+    ----------------------------------------------------------------------------
+     */
+    @PostMapping(value = "space/create")
+    public SpaceDto createSpace(@RequestParam Integer weight) {
+        return convertToDto(appointmentService.createSpace(weight, systemService.getMostRecentSystem()));
     }
 
     private List<ServiceDto> convertToDtoListForService(List<Service> service) {

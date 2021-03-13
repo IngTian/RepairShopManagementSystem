@@ -221,6 +221,18 @@ public class Util {
 
     }
 
+    /**
+     * Get the week and year no of a date.
+     * @param date A date.
+     * @return Return the weekNo.
+     */
+    public static int getWeekNo(java.sql.Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR), week = calendar.get(Calendar.WEEK_OF_YEAR);
+        return year * 100 + week;
+    }
+
 }
 
 
