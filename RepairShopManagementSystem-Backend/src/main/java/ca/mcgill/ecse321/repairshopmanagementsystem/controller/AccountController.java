@@ -118,7 +118,7 @@ public class AccountController {
     }
 
     private AssistantDto convertToDto(Assistant a) {
-        return new AssistantDto(a.getUsername(), a.getName(), a.getPassword(), convertToDto(a.getRepairShopManagementSystem()));
+        return new AssistantDto(a.getUsername(), a.getPassword(), a.getName(), convertToDto(a.getRepairShopManagementSystem()));
     }
 
     private CustomerDto convertToDto(Customer a) {
