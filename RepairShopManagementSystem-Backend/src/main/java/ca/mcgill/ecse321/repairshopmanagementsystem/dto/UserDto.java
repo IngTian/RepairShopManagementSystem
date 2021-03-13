@@ -6,8 +6,14 @@ public abstract class UserDto {
     private String name;
     private RepairShopManagementSystemDto system;
 
-    public UserDto() {
+    public UserDto(){
 
+    }
+
+    public UserDto(String username, String password, String name) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
     }
 
     public UserDto(String username, String password, String name, RepairShopManagementSystemDto system) {

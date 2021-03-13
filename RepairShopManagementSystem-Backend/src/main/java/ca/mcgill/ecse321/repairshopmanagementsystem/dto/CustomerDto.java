@@ -4,9 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CustomerDto extends UserDto {
-    private String username;
-    private String password;
-    private String name;
     private String phoneNo;
     private String homeAddress;
     private String email;
@@ -14,7 +11,7 @@ public class CustomerDto extends UserDto {
     private Set<AppointmentDto> appointments;
 
     public CustomerDto() {
-
+        super();
     }
 
     public CustomerDto(String username, String password, String name, String phoneNo, String homeAddress, String email,
@@ -48,18 +45,6 @@ public class CustomerDto extends UserDto {
         this.Cars = new HashSet<>();
         this.appointments = new HashSet<>();
 
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getPhoneNo() {
