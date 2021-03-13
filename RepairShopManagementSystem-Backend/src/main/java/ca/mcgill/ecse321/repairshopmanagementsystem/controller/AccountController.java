@@ -34,12 +34,6 @@ public class AccountController {
         return convertToDtoListForOwner(ownerList);
     }
 
-    @PostMapping(value = "/owners/create")
-    public OwnerDto createOwner(@RequestParam String username, @RequestParam String password, @RequestParam String name, @RequestBody RepairShopManagementSystemDto system) {
-        Owner owner = accountService.createOwner(username, password, name, systemService.getSystem(system.getBusinessName(), system.getBusinessPhoneNumber(), system.getBusinessAddress()));
-        return convertToDto(owner);
-    }
-
     @PostMapping(value = "owners/create_to_most_recent_system")
     public OwnerDto createOwnerToMostRecentSystem(@RequestBody OwnerDto o) {
         Owner owner = accountService.createOwner(o.getUsername(), o.getPassword(), o.getName(), systemService.getMostRecentSystem());
@@ -71,7 +65,7 @@ public class AccountController {
     }
 
     @PostMapping(value = "assistants/update_info")
-    public AssistantDto updateOwnerInfo(@RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newName, @RequestBody AssistantDto o) {
+    public AssistantDto updateAssistantInfo(@RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newName, @RequestBody AssistantDto o) {
         Assistant newAssistant = (Assistant) accountService.updateUserInformation(accountService.getOwner(o.getUsername()), newUsername, newPassword, newName);
         return convertToDto(newAssistant);
     }
@@ -114,7 +108,7 @@ public class AccountController {
     }
 
     @PostMapping(value = "cars/update")
-    public CarDto addCarToCustomer(@RequestParam String newUsername, @RequestParam String newPlateNo, @RequestParam String newModel, @RequestParam String newYear, @RequestParam String newManufacturer, @RequestBody CarDto car) {
+    public CarDto updateCarInfo(@RequestParam String newUsername, @RequestParam String newPlateNo, @RequestParam String newModel, @RequestParam String newYear, @RequestParam String newManufacturer, @RequestBody CarDto car) {
         Car c = accountService.updateCar(accountService.getCar(car.getPlateNo()), newPlateNo, newModel, newYear, newManufacturer, accountService.findCustomer(newUsername));
         return convertToDto(c);
     }

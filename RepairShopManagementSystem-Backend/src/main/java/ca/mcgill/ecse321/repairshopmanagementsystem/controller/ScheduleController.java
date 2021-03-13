@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.*;
 
 @RestController
@@ -44,34 +46,25 @@ public class ScheduleController {
         return convertToDto(schedule);
     }
 
-    @PostMapping(value = "schedule/update_Schedule_info")
-    public ScheduleDto updateSchedule(ScheduleDto scheduleDto, ShiftDto shift) {
-        Schedule schedule = scheduleService.updateSchedule(scheduleService.findSchedule(scheduleDto.getid()),scheduleService.getShiftById(shift.getshiftID()));
-        return convertToDto(schedule);
-    }
-
     /*
     ----------------------------------------------------------------------------
     --------------------------------Shifts-----------------------------------
     ----------------------------------------------------------------------------
      */
 
-    @GetMapping(value = "assistants")
-    public List<AssistantDto> getAllAssistants() {
-        List<Assistant> assistantList = accountService.getAllAssistants();
-        return convertToDtoListForAssistant(assistantList);
+    @GetMapping(value = "shifts")
+    public List<ShiftDto> getAllShifts() {
+        List<Shift> shiftList = appointmentService.getAllShift();
+        return convertToDtoListForShiftFromList(shiftList);
     }
 
-    @PostMapping(value = "assistants/create_to_most_recent_system")
-    public AssistantDto createAssistantToMostRecentSystem(@RequestBody AssistantDto a) {
-        Assistant assistant = accountService.createAssistant(a.getUsername(), a.getPassword(), a.getName(), systemService.getMostRecentSystem());
-        return convertToDto(assistant);
-    }
+    @PostMapping(value = "shifts/create")
+    public ShiftDto createShift(@RequestParam Date startDate, @RequestParam Time startTime, @RequestParam Time endTime, @RequestBody ScheduleDto schedule) {
+        Appointment app = new Appointment();
+        Assistant ass = new Assistant();
+        Shift shift = appointmentService.createShift(startDate, startTime, endTime, app, scheduleService.findSchedule(schedule.getid()), ass);
 
-    @PostMapping(value = "assistants/update_info")
-    public AssistantDto updateOwnerInfo(@RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newName, @RequestBody AssistantDto o) {
-        Assistant newAssistant = (Assistant) accountService.updateUserInformation(accountService.getOwner(o.getUsername()), newUsername, newPassword, newName);
-        return convertToDto(newAssistant);
+        return convertToDto(shift);
     }
 
 
