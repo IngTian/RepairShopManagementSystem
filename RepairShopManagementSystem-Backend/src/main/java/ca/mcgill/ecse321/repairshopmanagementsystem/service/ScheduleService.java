@@ -43,17 +43,6 @@ public class ScheduleService {
         return scheduleRepository.findScheduleById(id);
     }
 
-
-    @Transactional
-    public Schedule createSchedule(Set<Shift> shifts, RepairShopManagementSystem repairShopManagementSystem) {
-
-        Schedule schedule = new Schedule();
-        schedule.setTimeSlot(shifts);
-        schedule.setRepairShopManagementSystem(repairShopManagementSystem);
-        scheduleRepository.save(schedule);
-        return schedule;
-    }
-
     @Transactional
     public Schedule getScheduleByWeekNo(Integer weekNo) {
         return scheduleRepository.findScheduleByWeekNo(weekNo);
@@ -118,7 +107,7 @@ public class ScheduleService {
     }
 
     @Transactional
-    public Shift createShift(java.sql.Date date, Time startTime, Time endTime, Assistant assistant) {
+    public Shift createShift(Date date, Time startTime, Time endTime, Assistant assistant) {
 
         if (assistant == null)
             throw new IllegalArgumentException("Assistant must exist to create a shift!");
@@ -134,7 +123,6 @@ public class ScheduleService {
             schedule = createSchedule(systemRepository.findFirstByOrderByIdDesc(), weekNo);
 
         Shift shift = new Shift();
-        shift.setShiftId(shift.hashCode());
         shift.setAssistant(assistant);
         shift.setDate(date);
         shift.setStartTime(startTime);
@@ -158,7 +146,6 @@ public class ScheduleService {
         if (shift.getAppointment() != null)
             throw new IllegalArgumentException("Cannot delete the shift with an appointment!");
 
-        shift.getAssistant().getShift().remove(shift);
         shiftRepository.delete(shift);
 
         return shift;
@@ -169,22 +156,18 @@ public class ScheduleService {
         if (shift.getAppointment() != null)
             throw new IllegalArgumentException("Cannot change a shift with an appointment!");
 
-        Set<Shift> shiftsInTheTargetSchedule = shiftRepository.findShiftsByAssistant(shift.getAssistant());
-        shiftsInTheTargetSchedule.remove(shift);
-        Shift newShift = new Shift();
-        newShift.setDate(newDate);
-        newShift.setStartTime(startTime);
-        newShift.setEndTime(endTime);
-        if (Util.hasShiftConflicts(shiftsInTheTargetSchedule, newShift))
-            throw new IllegalArgumentException("Change time has conflicts.");
+        deleteShift(shift);
 
-        shift.setStartTime(startTime);
-        shift.setDate(newDate);
-        shift.setEndTime(endTime);
+        Shift s;
+        try {
+            s = createShift(newDate, startTime, endTime, shift.getAssistant());
+        } catch (IllegalArgumentException e) {
+            shift.getAssistant().getShift().add(shift);
+            shiftRepository.save(shift);
+            throw new IllegalArgumentException("Cannot change shift to a conflicting time!");
+        }
 
-        shiftRepository.save(shift);
-
-        return shift;
+        return s;
     }
 
     private <T> List<T> toList(Iterable<T> iterable) {
