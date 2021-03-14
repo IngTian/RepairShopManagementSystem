@@ -3,12 +3,9 @@ package ca.mcgill.ecse321.repairshopmanagementsystem.controller;
 import ca.mcgill.ecse321.repairshopmanagementsystem.dto.*;
 import ca.mcgill.ecse321.repairshopmanagementsystem.model.*;
 import ca.mcgill.ecse321.repairshopmanagementsystem.service.*;
-import ca.mcgill.ecse321.repairshopmanagementsystem.utils.Util;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController
@@ -66,7 +63,7 @@ public class AccountController {
 
     @PostMapping(value = "assistants/update_info")
     public AssistantDto updateAssistantInfo(@RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newName, @RequestBody AssistantDto o) {
-        Assistant newAssistant = (Assistant) accountService.updateUserInformation(accountService.getOwner(o.getUsername()), newUsername, newPassword, newName);
+        Assistant newAssistant = (Assistant) accountService.updateUserInformation(accountService.getAssistant(o.getUsername()), newUsername, newPassword, newName);
         return convertToDto(newAssistant);
     }
 
@@ -84,7 +81,7 @@ public class AccountController {
 
     @PostMapping(value = "customers/update_info")
     public CustomerDto updateCustomerInfo(@RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newName, @RequestParam String newPhoneNo, @RequestParam String newAddress, @RequestParam String newEmail, @RequestBody CustomerDto o) {
-        Customer newCustomer = (Customer) accountService.updateUserInformation(accountService.getOwner(o.getUsername()), newUsername, newPassword, newName);
+        Customer newCustomer = (Customer) accountService.updateUserInformation(accountService.getCustomer(o.getUsername()), newUsername, newPassword, newName);
         accountService.updateCustomer(newCustomer, newEmail, newAddress, newPhoneNo);
         return convertToDto(newCustomer);
     }
@@ -103,13 +100,13 @@ public class AccountController {
 
     @PostMapping(value = "cars/create")
     public CarDto createCarForACustomer(@RequestParam String username, @RequestBody CarDto car) {
-        Car c = accountService.createCar(car.getPlateNo(), car.getModel(), car.getYear(), car.getManufacturer(), accountService.findCustomer(username));
+        Car c = accountService.createCar(car.getPlateNo(), car.getModel(), car.getYear(), car.getManufacturer(), accountService.getCustomer(username));
         return convertToDto(c);
     }
 
     @PostMapping(value = "cars/update")
     public CarDto updateCarInfo(@RequestParam String newUsername, @RequestParam String newModel, @RequestParam String newYear, @RequestParam String newManufacturer, @RequestBody CarDto car) {
-        Car c = accountService.updateCar(accountService.getCar(car.getPlateNo()), newModel, newYear, newManufacturer, accountService.findCustomer(newUsername));
+        Car c = accountService.updateCar(accountService.getCar(car.getPlateNo()), newModel, newYear, newManufacturer, accountService.getCustomer(newUsername));
         return convertToDto(c);
     }
 

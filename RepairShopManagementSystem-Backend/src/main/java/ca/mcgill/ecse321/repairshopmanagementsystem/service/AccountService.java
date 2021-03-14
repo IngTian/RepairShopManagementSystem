@@ -176,7 +176,7 @@ public class AccountService {
     }
 
     @Transactional
-    public Customer findCustomer(String username) {
+    public Customer getCustomer(String username) {
         return customerRepository.findCustomerByUsername(username);
     }
 

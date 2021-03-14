@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping(value = "/appointment")
+@RequestMapping(value = "appointment")
 public class AppointmentController {
     @Autowired
     private AccountService accountService;
@@ -33,41 +35,41 @@ public class AppointmentController {
     ----------------------------------------------------------------------------
     */
 
-    @PostMapping(value = "appointments/find_appointments_of_customer")
+    @PostMapping(value = "find_appointments_of_customer")
     public List<AppointmentDto> findAppointmentsOfACustomer(@RequestParam String username) {
         List<Appointment> aps = appointmentService.findAppointmentsOfCustomer(username);
         return convertToDtoListForAppointment(aps);
     }
 
-    @GetMapping(value = "appointments")
+    @GetMapping(value = "")
     public List<AppointmentDto> getAllAppointments() {
         List<Appointment> aps = appointmentService.getAllAppointments();
         return convertToDtoListForAppointment(aps);
     }
 
-    @PostMapping(value = "appointments/make_appointment")
+    @PostMapping(value = "make_appointment")
     public AppointmentDto makeAppointment(@RequestParam String serviceType,
                                           @RequestParam String username,
                                           @RequestParam String plateNo,
-                                          @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
-                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") Time startTime,
-                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") Time endTime,
+                                          @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime startTime,
+                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime endTime,
                                           @RequestParam Integer weight) {
-        Appointment aps = appointmentService.makeAppointment(serviceType, username, plateNo, date, startTime, endTime, weight);
+        Appointment aps = appointmentService.makeAppointment(serviceType, username, plateNo, Date.valueOf(date), Time.valueOf(startTime), Time.valueOf(endTime), weight);
         return convertToDto(aps);
     }
 
-    @PostMapping(value = "appointments/update_service_type")
+    @PostMapping(value = "update_service_type")
     public AppointmentDto updateServiceType(@RequestParam Integer appointmentId, @RequestParam String newServiceType) {
         return convertToDto(appointmentService.changeServiceType(appointmentService.getAppointmentById(appointmentId), newServiceType));
     }
 
-    @PostMapping(value = "appointments/delete")
+    @PostMapping(value = "delete")
     public AppointmentDto deleteAppointment(@RequestParam Integer id) {
         return convertToDto(appointmentService.deleteAppointment(appointmentService.getAppointmentById(id)));
     }
 
-    @PostMapping(value = "appointments/update_appointment_time")
+    @PostMapping(value = "update_appointment_time")
     public AppointmentDto UpdateAppointmentTime(@RequestParam Integer shiftId, @RequestParam Integer appointmentId) {
         Appointment aps = appointmentService.UpdateAppointmentTime(shiftId, appointmentId);
         return convertToDto(aps);
@@ -85,7 +87,7 @@ public class AppointmentController {
         return convertToDto(newBill);
     }
 
-    @GetMapping(value = "/bills")
+    @GetMapping(value = "bills")
     public List<BillDto> getAllBills() {
         List<Bill> billDtoList = appointmentService.getAllBills();
         return convertToDtoListForBill(billDtoList);
@@ -131,12 +133,14 @@ public class AppointmentController {
         // CustomerDto customer, CarDto car, SpaceDto space
         ServiceDto sto = new ServiceDto(appointment.getService().getServiceType(), convertToDtoListForAssistant(ass));
 
-        List<BillDto> billresult = new ArrayList<>();
+        List<BillDto> billResult = new ArrayList<>();
         for (Bill a : appointment.getBill()) {
             BillDto bill = new BillDto(a.getBillNo(), a.getPrice(), a.getIsPaid());
-            billresult.add(bill);
+            billResult.add(bill);
         }
-        return new AppointmentDto(appointment.getAppointmentId(), billresult, convertToDto(appointment.getShift()),
+
+        Shift shift = appointment.getShift();
+        return new AppointmentDto(appointment.getAppointmentId(), billResult, new ShiftDto(shift.getDate(), shift.getStartTime(), shift.getEndTime()),
                 convertToDto(appointment.getCustomer()), convertDtoListForCar(appointment.getCar()), convertToDto(appointment.getSpace()));
     }
 

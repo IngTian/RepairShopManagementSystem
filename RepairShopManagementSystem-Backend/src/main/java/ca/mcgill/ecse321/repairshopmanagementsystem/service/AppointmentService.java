@@ -77,7 +77,7 @@ public class AppointmentService {
         Car car = carRepository.findCarByPlateNo(plateNo);
         if (car == null)
             throw new IllegalArgumentException("Cannot find the car of the specified plateNo.");
-        if (car.getCustomer() != customer)
+        if (!car.getCustomer().getUsername().equals(customer.getUsername()))
             throw new IllegalArgumentException("This car does not belongs to this customer.");
 
         List<Shift> availableShifts = new ArrayList<>();
@@ -93,7 +93,6 @@ public class AppointmentService {
         Appointment appointment = new Appointment();
         appointment.setSpace(space);
         appointment.setShift(shift);
-        shift.setAppointment(appointment);
 
         // Set a car.
         Set<Car> cars = new HashSet<>();
@@ -118,6 +117,7 @@ public class AppointmentService {
         // Create a new service.
         ca.mcgill.ecse321.repairshopmanagementsystem.model.Service newService = new ca.mcgill.ecse321.repairshopmanagementsystem.model.Service();
         Set<Assistant> assistants = new HashSet<>();
+        assistants.add(shift.getAssistant());
         newService.setAssistant(assistants);
         newService.setAppointment(appointment);
         newService.setServiceType(serviceType);
@@ -125,7 +125,8 @@ public class AppointmentService {
 
         appointment.setAppointmentId(appointment.hashCode());
 
-        appointmentRepository.save(appointment);
+
+        customerRepository.save(customer);
         return appointment;
     }
 

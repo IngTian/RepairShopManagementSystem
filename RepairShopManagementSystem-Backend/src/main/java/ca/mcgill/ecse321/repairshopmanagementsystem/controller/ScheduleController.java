@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping(value = "/users")
+@RequestMapping(value = "schedules")
 public class ScheduleController {
 
     @Autowired
@@ -34,19 +36,19 @@ public class ScheduleController {
     ----------------------------------------------------------------------------
      */
 
-    @GetMapping(value = "schedules")
+    @GetMapping(value = "")
     public List<ScheduleDto> getAllSchedules() {
         List<Schedule> scheduleList = scheduleService.getAllSchedules();
         return convertToDtoListForSchedule(scheduleList);
     }
 
-    @PostMapping(value = "schedules/create")
+    @PostMapping(value = "create")
     public ScheduleDto createSchedule(@RequestParam Integer weekNo) {
         Schedule newSchedule = scheduleService.createSchedule(systemService.getMostRecentSystem(), weekNo);
         return convertToDto(newSchedule);
     }
 
-    @GetMapping(value = "schedule/{weekNo}")
+    @GetMapping(value = "{weekNo}")
     public ScheduleDto getSpecificSchedule(@PathVariable Integer weekNo) {
         Schedule schedule = scheduleService.getScheduleByWeekNo(weekNo);
         return convertToDto(schedule);
@@ -71,12 +73,11 @@ public class ScheduleController {
     }
 
     @PostMapping(value = "shifts/create")
-    public ShiftDto createShift(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
-                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") Time startTime,
-                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") Time endTime,
-                                @RequestParam String username)
-    {
-        Shift newShift = scheduleService.createShift(date, startTime, endTime, accountService.getAssistant(username));
+    public ShiftDto createShift(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime startTime,
+                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime endTime,
+                                @RequestParam String username) {
+        Shift newShift = scheduleService.createShift(Date.valueOf(date), Time.valueOf(startTime), Time.valueOf(endTime), accountService.getAssistant(username));
         return convertToDto(newShift);
     }
 
@@ -87,12 +88,11 @@ public class ScheduleController {
     }
 
     @PostMapping(value = "shifts/change")
-    public ShiftDto changeShift(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date newDate,
-                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") Time newStartTime,
-                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") Time newEndTime,
-                                @RequestParam Integer shiftId)
-    {
-        Shift s = scheduleService.changeShift(scheduleService.getShiftById(shiftId), newDate, newStartTime, newEndTime);
+    public ShiftDto changeShift(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate newDate,
+                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime newStartTime,
+                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime newEndTime,
+                                @RequestParam Integer shiftId) {
+        Shift s = scheduleService.changeShift(scheduleService.getShiftById(shiftId), Date.valueOf(newDate), Time.valueOf(newStartTime), Time.valueOf(newEndTime));
         return convertToDto(s);
     }
 
@@ -103,10 +103,8 @@ public class ScheduleController {
      */
 
     private ShiftDto convertToDto(Shift shift) {
-        ScheduleDto sto = new ScheduleDto(shift.getSchedule().getId(), convertToDto(shift.getSchedule().getRepairShopManagementSystem()));
         return new ShiftDto(shift.getDate(), shift.getStartTime(), shift.getEndTime(),
-                convertToDto(shift.getAssistant()), convertToDto(shift.getAppointment()),
-                sto, shift.getShiftId());
+                convertToDto(shift.getAssistant()));
     }
 
     private AppointmentDto convertToDto(Appointment appointment) {

@@ -1,5 +1,7 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.dto;
 
+import ca.mcgill.ecse321.repairshopmanagementsystem.model.Assistant;
+
 import java.sql.Date;
 import java.sql.Time;
 
@@ -10,24 +12,37 @@ public class ShiftDto {
     private Time startTime;
     private Time endTime;
     private Integer shiftId;
-   
+
     private AssistantDto assistant;
 
     public ShiftDto() {
     }
 
-    public ShiftDto(ScheduleDto schedule, Date date, Time startTime, Time endTime, AssistantDto assistant,Integer shiftID) {
+    public ShiftDto(Date date, Time startTime, Time endTime){
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    public ShiftDto(Date date, Time startTime, Time endTime, AssistantDto assistant){
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.assistant = assistant;
+    }
+
+    public ShiftDto(ScheduleDto schedule, Date date, Time startTime, Time endTime, AssistantDto assistant, Integer shiftID) {
         this.schedule = schedule;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-       this.shiftId=shiftID;
+        this.shiftId = shiftID;
         this.assistant = assistant;
     }
 
-    public ShiftDto(Date date, Time startTime, Time endTime, AssistantDto assistant, AppointmentDto appointment, ScheduleDto schedule,Integer ShiftID) {
+    public ShiftDto(Date date, Time startTime, Time endTime, AssistantDto assistant, AppointmentDto appointment, ScheduleDto schedule, Integer ShiftID) {
         this.appointment = appointment;
-       this.shiftId=ShiftID;
+        this.shiftId = ShiftID;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -55,13 +70,13 @@ public class ShiftDto {
         return schedule;
     }
 
-    
 
     public AppointmentDto getAppointment() {
         return appointment;
     }
-public Integer getshiftID() {
-	return this.shiftId;
-}
+
+    public Integer getShiftID() {
+        return this.shiftId;
+    }
 
 }

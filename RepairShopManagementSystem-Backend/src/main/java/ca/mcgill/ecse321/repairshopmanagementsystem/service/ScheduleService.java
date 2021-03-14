@@ -134,6 +134,7 @@ public class ScheduleService {
             schedule = createSchedule(systemRepository.findFirstByOrderByIdDesc(), weekNo);
 
         Shift shift = new Shift();
+        shift.setShiftId(shift.hashCode());
         shift.setAssistant(assistant);
         shift.setDate(date);
         shift.setStartTime(startTime);
@@ -157,6 +158,7 @@ public class ScheduleService {
         if (shift.getAppointment() != null)
             throw new IllegalArgumentException("Cannot delete the shift with an appointment!");
 
+        shift.getAssistant().getShift().remove(shift);
         shiftRepository.delete(shift);
 
         return shift;
@@ -167,18 +169,22 @@ public class ScheduleService {
         if (shift.getAppointment() != null)
             throw new IllegalArgumentException("Cannot change a shift with an appointment!");
 
-        deleteShift(shift);
+        Set<Shift> shiftsInTheTargetSchedule = shiftRepository.findShiftsByAssistant(shift.getAssistant());
+        shiftsInTheTargetSchedule.remove(shift);
+        Shift newShift = new Shift();
+        newShift.setDate(newDate);
+        newShift.setStartTime(startTime);
+        newShift.setEndTime(endTime);
+        if (Util.hasShiftConflicts(shiftsInTheTargetSchedule, newShift))
+            throw new IllegalArgumentException("Change time has conflicts.");
 
-        Shift s;
-        try {
-            s = createShift(newDate, startTime, endTime, shift.getAssistant());
-        } catch (IllegalArgumentException e) {
-            shift.getAssistant().getShift().add(shift);
-            shiftRepository.save(shift);
-            throw new IllegalArgumentException("Cannot change shift to a conflicting time!");
-        }
+        shift.setStartTime(startTime);
+        shift.setDate(newDate);
+        shift.setEndTime(endTime);
 
-        return s;
+        shiftRepository.save(shift);
+
+        return shift;
     }
 
     private <T> List<T> toList(Iterable<T> iterable) {
