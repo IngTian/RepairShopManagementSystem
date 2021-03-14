@@ -24,6 +24,10 @@ public class AccountService {
     @Autowired
     private CarRepository carRepository;
 
+    /*----------------------------------------------------------------
+    ------------------------------ Owner -----------------------------
+    ----------------------------------------------------------------*/
+
     @Transactional
     public Owner createOwner(String username, String password, String name, RepairShopManagementSystem system) throws IllegalArgumentException {
 
@@ -63,6 +67,9 @@ public class AccountService {
         return toList(ownerRepository.findAll());
     }
 
+    /*----------------------------------------------------------------
+    ------------------------------ User -----------------------------
+    ----------------------------------------------------------------*/
     @Transactional
     public User updateUserInformation(User user, String username, String password, String name) {
         // Check for null or empty inputs.
@@ -93,6 +100,10 @@ public class AccountService {
 
         return user;
     }
+
+    /*----------------------------------------------------------------
+    -------------------------- Assistant -----------------------------
+    ----------------------------------------------------------------*/
 
     @Transactional
     public Assistant createAssistant(String username, String password, String name, RepairShopManagementSystem system) {
@@ -131,6 +142,10 @@ public class AccountService {
     public List<Assistant> getAllAssistants() {
         return toList(assistantRepository.findAll());
     }
+
+    /*----------------------------------------------------------------
+    -------------------------- Customer ------------------------------
+    ----------------------------------------------------------------*/
 
     @Transactional
     public Customer createCustomer(String username, String password, String name, RepairShopManagementSystem system, String phoneNo, String address, String email) {
@@ -196,6 +211,37 @@ public class AccountService {
     }
 
     /**
+     * @author Ao Shen
+     */
+    @Transactional
+    public Customer updateCustomer(Customer customer, String email, String address, String phoneNo) {
+        if (phoneNo == null || phoneNo.equals(""))
+            throw new IllegalArgumentException("New phoneNo cannot be empty.");
+        if (address == null || address.equals(""))
+            throw new IllegalArgumentException("New address cannot be empty.");
+        if (email == null || email.equals(""))
+            throw new IllegalArgumentException("New email cannot be empty.");
+
+        // Check for formats.
+        if (!Util.isPhoneNoCorrect(phoneNo))
+            throw new IllegalArgumentException("Invalid PhoneNo.");
+        if (!Util.isAddressCorrect(address))
+            throw new IllegalArgumentException("Invalid Address.");
+        if (!Util.isEmailAddressCorrect(email))
+            throw new IllegalArgumentException("Invalid Email address.");
+        customer.setEmail(email);
+        customer.setHomeAddress(address);
+        customer.setPhoneNo(phoneNo);
+        customerRepository.save(customer);
+        return customer;
+    }
+
+
+    /*----------------------------------------------------------------
+    ------------------------------- Car ------------------------------
+    ----------------------------------------------------------------*/
+
+    /**
      * @author Byron Chen
      */
     @Transactional
@@ -252,32 +298,6 @@ public class AccountService {
             resultList.add(t);
         }
         return resultList;
-    }
-
-    /**
-     * @author Ao Shen
-     */
-    @Transactional
-    public Customer updateCustomer(Customer customer, String email, String address, String phoneNo) {
-        if (phoneNo == null || phoneNo.equals(""))
-            throw new IllegalArgumentException("New phoneNo cannot be empty.");
-        if (address == null || address.equals(""))
-            throw new IllegalArgumentException("New address cannot be empty.");
-        if (email == null || email.equals(""))
-            throw new IllegalArgumentException("New email cannot be empty.");
-
-        // Check for formats.
-        if (!Util.isPhoneNoCorrect(phoneNo))
-            throw new IllegalArgumentException("Invalid PhoneNo.");
-        if (!Util.isAddressCorrect(address))
-            throw new IllegalArgumentException("Invalid Address.");
-        if (!Util.isEmailAddressCorrect(email))
-            throw new IllegalArgumentException("Invalid Email address.");
-        customer.setEmail(email);
-        customer.setHomeAddress(address);
-        customer.setPhoneNo(phoneNo);
-        customerRepository.save(customer);
-        return customer;
     }
 
     /**
