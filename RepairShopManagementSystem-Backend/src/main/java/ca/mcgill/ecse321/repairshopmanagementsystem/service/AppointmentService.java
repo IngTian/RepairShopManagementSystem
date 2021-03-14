@@ -95,10 +95,10 @@ public class AppointmentService {
         appointment.setShift(shift);
 
         // Set a car.
+        car.getAppointment().add(appointment);
         Set<Car> cars = new HashSet<>();
         cars.add(car);
         appointment.setCar(cars);
-        car.getAppointment().add(appointment);
 
         // Set a customer.
         appointment.setCustomer(customer);
@@ -125,9 +125,24 @@ public class AppointmentService {
 
         appointment.setAppointmentId(appointment.hashCode());
 
+        customer = customerRepository.save(customer);
+        
 
-        customerRepository.save(customer);
+        // Reload the updated appointment.
+        for(Appointment a : customer.getAppointment())
+            if(a.getAppointmentId().equals(appointment.getAppointmentId())){
+                appointment = a;
+                break;
+            }
+
         return appointment;
+    }
+
+    @Transactional
+    public Shift registerAnAppointmentToAShift(Appointment appointment, Shift shift){
+        shift.setAppointment(appointment);
+        shiftRepository.save(shift);
+        return shift;
     }
 
     @Transactional
@@ -193,6 +208,9 @@ public class AppointmentService {
         Date now = new Date(System.currentTimeMillis());
         if (appointment.getShift().getDate().compareTo(now) > 0)
             throw new IllegalArgumentException("This appointment will start in 1 day!");
+        for(Car c : appointment.getCar())
+            c.getAppointment().remove(appointment);
+        appointment.setCar(new HashSet<>());
         appointmentRepository.delete(appointment);
         return appointment;
     }

@@ -56,7 +56,8 @@ public class AppointmentController {
                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime endTime,
                                           @RequestParam Integer weight) {
         Appointment aps = appointmentService.makeAppointment(serviceType, username, plateNo, Date.valueOf(date), Time.valueOf(startTime), Time.valueOf(endTime), weight);
-        return convertToDto(aps);
+        appointmentService.registerAnAppointmentToAShift(aps, aps.getShift());
+        return convertToDto(appointmentService.getAppointmentById(aps.getAppointmentId()));
     }
 
     @PostMapping(value = "update_service_type")
@@ -66,7 +67,8 @@ public class AppointmentController {
 
     @PostMapping(value = "delete")
     public AppointmentDto deleteAppointment(@RequestParam Integer id) {
-        return convertToDto(appointmentService.deleteAppointment(appointmentService.getAppointmentById(id)));
+        Appointment a = appointmentService.deleteAppointment(appointmentService.getAppointmentById(id));
+        return new AppointmentDto(a.getAppointmentId());
     }
 
     @PostMapping(value = "update_appointment_time")
@@ -125,23 +127,49 @@ public class AppointmentController {
 
 
     private AppointmentDto convertToDto(Appointment appointment) {
-        List<Assistant> ass = new ArrayList<>();
-        for (Assistant a : appointment.getService().getAssistant()) {
-            ass.add(a);
-        }
-        // Integer appointmentId, Set<BillDto> bill, ServiceDto service, ShiftDto shift,
-        // CustomerDto customer, CarDto car, SpaceDto space
-        ServiceDto sto = new ServiceDto(appointment.getService().getServiceType(), convertToDtoListForAssistant(ass));
 
-        List<BillDto> billResult = new ArrayList<>();
-        for (Bill a : appointment.getBill()) {
-            BillDto bill = new BillDto(a.getBillNo(), a.getPrice(), a.getIsPaid());
-            billResult.add(bill);
-        }
+        // Convert a list of bill DTOs.
+        List<BillDto> bills = new ArrayList<>();
+        for (Bill b : appointment.getBill())
+            bills.add(new BillDto(b.getBillNo(), b.getPrice(), b.getIsPaid()));
 
-        Shift shift = appointment.getShift();
-        return new AppointmentDto(appointment.getAppointmentId(), billResult, new ShiftDto(shift.getDate(), shift.getStartTime(), shift.getEndTime()),
-                convertToDto(appointment.getCustomer()), convertDtoListForCar(appointment.getCar()), convertToDto(appointment.getSpace()));
+        // Convert a list of assistants.
+        List<AssistantDto> assistants = new ArrayList<>();
+        for (Assistant a : appointment.getService().getAssistant())
+            assistants.add(new AssistantDto(a.getUsername(), a.getPassword(), a.getName()));
+
+        // Convert the service DTO.
+        ServiceDto service = new ServiceDto(appointment.getService().getServiceType(), assistants);
+
+        // Convert the list of cars.
+        List<CarDto> cars = new ArrayList<>();
+        for (Car c : appointment.getCar())
+            cars.add(new CarDto(c.getPlateNo(), c.getModel(), c.getManufacturer(), c.getYear()));
+
+        // Convert the shift.
+        ShiftDto shift = new ShiftDto(appointment.getShift().getDate(), appointment.getShift().getStartTime(), appointment.getShift().getEndTime());
+
+        // Convert the space.
+        SpaceDto space = new SpaceDto(appointment.getSpace().getSpaceId(), appointment.getSpace().getMaxWeightLoad());
+
+        // Convert the customer.
+        CustomerDto customer = new CustomerDto(
+                appointment.getCustomer().getUsername(),
+                appointment.getCustomer().getPassword(),
+                appointment.getCustomer().getName(),
+                appointment.getCustomer().getPhoneNo(),
+                appointment.getCustomer().getHomeAddress(),
+                appointment.getCustomer().getEmail());
+
+        return new AppointmentDto(
+                appointment.getAppointmentId(),
+                bills,
+                service,
+                shift,
+                customer,
+                cars,
+                space
+        );
     }
 
     private List<AppointmentDto> convertToDtoListForAppointment(List<Appointment> appointments) {
@@ -175,10 +203,7 @@ public class AppointmentController {
     }
 
     private ServiceDto convertToDto(Service service) {
-        List<Assistant> ass = new ArrayList<>();
-        for (Assistant a : service.getAssistant()) {
-            ass.add(a);
-        }
+        List<Assistant> ass = new ArrayList<>(service.getAssistant());
         return new ServiceDto(service.getServiceType(), convertToDtoListForAssistant(ass),
                 convertToDto(service.getAppointment()));
 

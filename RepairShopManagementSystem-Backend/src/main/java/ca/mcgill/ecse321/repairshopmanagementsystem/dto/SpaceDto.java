@@ -9,6 +9,11 @@ public class SpaceDto {
     public SpaceDto() {
     }
 
+    public SpaceDto(Integer id, Integer maxWeightLoad){
+        this.id = id;
+        this.maxWeightLoad = maxWeightLoad;
+    }
+
     public SpaceDto(Integer id, Integer maxWeightLoad, RepairShopManagementSystemDto system) {
         this.system = system;
         this.id = id;

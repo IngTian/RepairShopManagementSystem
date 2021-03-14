@@ -16,6 +16,10 @@ public class AppointmentDto {
 
     }
 
+    public AppointmentDto(Integer id){
+        this.appointmentId = id;
+    }
+
     public AppointmentDto(Integer appointmentId, List<BillDto> bill, ServiceDto service, ShiftDto shift, CustomerDto customer, List<CarDto> car, SpaceDto space) {
         this.appointmentId = appointmentId;
         this.cars = car;
