@@ -996,7 +996,7 @@ public class TestAccountService {
         }
 
         assertNotNull(car);
-        assertEquals(TEST_CAR_PLATE_NO, car.getPlateNo());
+        assertEquals("", car.getPlateNo());
         assertEquals(TEST_CAR_MODEL, car.getModel());
         assertEquals(TEST_CAR_YEAR, car.getYear());
         assertEquals(TEST_CAR_MANUFACTURER, car.getManufacturer());
@@ -1038,52 +1038,14 @@ public class TestAccountService {
         assertEquals(TEST_CAR_MANUFACTURER, car.getManufacturer());
         assertEquals(aCustomer, car.getCustomer());
 
-        assertEquals("New plate number cannot be empty! New model cannot be empty! New year cannot be empty! " +
+        assertEquals("New model cannot be empty! New year cannot be empty! " +
                 "New manufacturer cannot be empty! New customer cannot be empty! ", error);
 
     }
 
-    /**
-     * Case3: the updated info that are all good except plate num
-     *
-     * @author Byron Chen
-     */
-    @Test
-    public void testUpdateCarWithBadPlateNum() {
-        assertEquals(0, accountService.getCars().size());
-
-        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
-        Customer aCustomer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, TEST_CUSTOMER_PHONE_NO, TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_EMAIL);
-        Customer bCustomer = new Customer();
-
-        Car car = new Car();
-        car.setPlateNo(TEST_CAR_PLATE_NO);
-        car.setModel("");
-        car.setYear("");
-        car.setManufacturer("");
-        car.setCustomer(bCustomer);
-
-        String error = "";
-
-        try {
-            accountService.updateCar(car, TEST_CAR_MODEL, TEST_CAR_YEAR, TEST_CAR_MANUFACTURER, aCustomer);
-        } catch (IllegalArgumentException e) {
-            error = e.getMessage();
-        }
-
-        assertNotNull(car);
-        assertEquals(TEST_CAR_PLATE_NO, car.getPlateNo());
-        assertEquals("", car.getModel());
-        assertEquals("", car.getYear());
-        assertEquals("", car.getManufacturer());
-        assertEquals(bCustomer, car.getCustomer());
-
-        assertEquals("New plate number illegal! ", error);
-
-    }
 
     /**
-     * Case4: the updated info that are all good except year
+     * Case3: the updated info that are all good except year
      *
      * @author Byron Chen
      */
@@ -1172,7 +1134,6 @@ public class TestAccountService {
         }
         assertNull(car);
         assertEquals("PlateNo cannot be empty!", error);
-
     }
 
     /**
