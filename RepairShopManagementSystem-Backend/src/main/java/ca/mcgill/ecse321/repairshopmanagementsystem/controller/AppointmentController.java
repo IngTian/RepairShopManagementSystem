@@ -70,12 +70,12 @@ public class AppointmentController {
         Appointment a = appointmentService.deleteAppointment(appointmentService.getAppointmentById(id));
         return new AppointmentDto(a.getAppointmentId());
     }
-
-    @PostMapping(value = "update_appointment_time")
-    public AppointmentDto UpdateAppointmentTime(@RequestParam Integer shiftId, @RequestParam Integer appointmentId) {
-        Appointment aps = appointmentService.UpdateAppointmentTime(shiftId, appointmentId);
-        return convertToDto(aps);
-    }
+//
+//    @PostMapping(value = "update_appointment_time")
+//    public AppointmentDto UpdateAppointmentTime(@RequestParam Integer shiftId, @RequestParam Integer appointmentId) {
+//        Appointment aps = appointmentService.updateAppointmentTime(shiftId, appointmentId);
+//        return convertToDto(aps);
+//    }
 
     /*
     ----------------------------------------------------------------------------
