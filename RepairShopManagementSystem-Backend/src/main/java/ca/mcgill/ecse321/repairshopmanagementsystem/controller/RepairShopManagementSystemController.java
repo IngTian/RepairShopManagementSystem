@@ -19,13 +19,13 @@ public class RepairShopManagementSystemController {
     private SystemService systemService;
 
     @PostMapping(value = "create")
-    public RepairShopManagementSystemDto createSystem(@RequestBody RepairShopManagementSystemDto system) {
+    public RepairShopManagementSystemDto createSystem(@RequestBody RepairShopManagementSystemDto system) throws IllegalArgumentException {
         RepairShopManagementSystem s = systemService.createSystem(system.getBusinessName(), system.getBusinessPhoneNumber(), system.getBusinessAddress());
         return convertToDto(s);
     }
 
     @GetMapping(value = "most_recent")
-    public RepairShopManagementSystemDto getMostRecentSystem() {
+    public RepairShopManagementSystemDto getMostRecentSystem() throws IllegalArgumentException {
         return convertToDto(systemService.getMostRecentSystem());
     }
 

@@ -37,19 +37,19 @@ public class ScheduleController {
      */
 
     @GetMapping(value = "")
-    public List<ScheduleDto> getAllSchedules() {
+    public List<ScheduleDto> getAllSchedules() throws IllegalArgumentException {
         List<Schedule> scheduleList = scheduleService.getAllSchedules();
         return convertToDtoListForSchedule(scheduleList);
     }
 
     @PostMapping(value = "create")
-    public ScheduleDto createSchedule(@RequestParam Integer weekNo) {
+    public ScheduleDto createSchedule(@RequestParam Integer weekNo) throws IllegalArgumentException {
         Schedule newSchedule = scheduleService.createSchedule(systemService.getMostRecentSystem(), weekNo);
         return convertToDto(newSchedule);
     }
 
     @GetMapping(value = "{weekNo}")
-    public ScheduleDto getSpecificSchedule(@PathVariable Integer weekNo) {
+    public ScheduleDto getSpecificSchedule(@PathVariable Integer weekNo) throws IllegalArgumentException {
         Schedule schedule = scheduleService.getScheduleByWeekNo(weekNo);
         return convertToDto(schedule);
     }
@@ -61,13 +61,13 @@ public class ScheduleController {
      */
 
     @GetMapping(value = "shifts")
-    public List<ShiftDto> getAllShifts() {
+    public List<ShiftDto> getAllShifts() throws IllegalArgumentException {
         List<Shift> shiftList = scheduleService.getAllShifts();
         return convertToDtoListForShift(shiftList);
     }
 
     @GetMapping(value = "shifts/assistant")
-    public List<ShiftDto> getAllShiftsForAnAssistant(@RequestParam String username) {
+    public List<ShiftDto> getAllShiftsForAnAssistant(@RequestParam String username) throws IllegalArgumentException {
         List<Shift> shifts = scheduleService.getAllShiftsByAssistant(accountService.getAssistant(username));
         return convertToDtoListForShift(shifts);
     }
@@ -76,13 +76,13 @@ public class ScheduleController {
     public ShiftDto createShift(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime startTime,
                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime endTime,
-                                @RequestParam String username) {
+                                @RequestParam String username) throws IllegalArgumentException {
         Shift newShift = scheduleService.createShift(Date.valueOf(date), Time.valueOf(startTime), Time.valueOf(endTime), accountService.getAssistant(username));
         return convertToDto(newShift);
     }
 
     @PostMapping(value = "shifts/delete")
-    public ShiftDto deleteShift(@RequestParam Integer shiftId) {
+    public ShiftDto deleteShift(@RequestParam Integer shiftId) throws IllegalArgumentException {
         Shift s = scheduleService.deleteShift(scheduleService.getShiftById(shiftId));
         return convertToDto(s);
     }
@@ -91,7 +91,7 @@ public class ScheduleController {
     public ShiftDto changeShift(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate newDate,
                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime newStartTime,
                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime newEndTime,
-                                @RequestParam Integer shiftId) {
+                                @RequestParam Integer shiftId) throws IllegalArgumentException {
         Shift s = scheduleService.changeShift(scheduleService.getShiftById(shiftId), Date.valueOf(newDate), Time.valueOf(newStartTime), Time.valueOf(newEndTime));
         return convertToDto(s);
     }

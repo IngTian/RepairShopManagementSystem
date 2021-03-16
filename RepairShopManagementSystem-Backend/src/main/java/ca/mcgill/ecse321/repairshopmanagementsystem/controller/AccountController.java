@@ -26,19 +26,23 @@ public class AccountController {
      */
 
     @GetMapping(value = "owners")
-    public List<OwnerDto> getAllOwners() {
+    public List<OwnerDto> getAllOwners() throws IllegalArgumentException {
         List<Owner> ownerList = accountService.getAllOwners();
         return convertToDtoListForOwner(ownerList);
     }
 
     @PostMapping(value = "owners/create_to_most_recent_system")
-    public OwnerDto createOwnerToMostRecentSystem(@RequestBody OwnerDto o) {
+    public OwnerDto createOwnerToMostRecentSystem(@RequestBody OwnerDto o) throws IllegalArgumentException {
         Owner owner = accountService.createOwner(o.getUsername(), o.getPassword(), o.getName(), systemService.getMostRecentSystem());
         return convertToDto(owner);
     }
 
     @PostMapping(value = "owners/update_info")
-    public OwnerDto updateOwnerInfo(@RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newName, @RequestBody OwnerDto o) {
+    public OwnerDto updateOwnerInfo(
+            @RequestParam String newUsername,
+            @RequestParam String newPassword,
+            @RequestParam String newName,
+            @RequestBody OwnerDto o) throws IllegalArgumentException {
         Owner newOwner = (Owner) accountService.updateUserInformation(accountService.getOwner(o.getUsername()), newUsername, newPassword, newName);
         return convertToDto(newOwner);
     }
@@ -50,19 +54,23 @@ public class AccountController {
      */
 
     @GetMapping(value = "assistants")
-    public List<AssistantDto> getAllAssistants() {
+    public List<AssistantDto> getAllAssistants() throws IllegalArgumentException {
         List<Assistant> assistantList = accountService.getAllAssistants();
         return convertToDtoListForAssistant(assistantList);
     }
 
     @PostMapping(value = "assistants/create_to_most_recent_system")
-    public AssistantDto createAssistantToMostRecentSystem(@RequestBody AssistantDto a) {
+    public AssistantDto createAssistantToMostRecentSystem(@RequestBody AssistantDto a) throws IllegalArgumentException {
         Assistant assistant = accountService.createAssistant(a.getUsername(), a.getPassword(), a.getName(), systemService.getMostRecentSystem());
         return convertToDto(assistant);
     }
 
     @PostMapping(value = "assistants/update_info")
-    public AssistantDto updateAssistantInfo(@RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newName, @RequestBody AssistantDto o) {
+    public AssistantDto updateAssistantInfo(
+            @RequestParam String newUsername,
+            @RequestParam String newPassword,
+            @RequestParam String newName,
+            @RequestBody AssistantDto o) throws IllegalArgumentException {
         Assistant newAssistant = (Assistant) accountService.updateUserInformation(accountService.getAssistant(o.getUsername()), newUsername, newPassword, newName);
         return convertToDto(newAssistant);
     }
@@ -74,20 +82,27 @@ public class AccountController {
      */
 
     @GetMapping(value = "customers")
-    public List<CustomerDto> getAllCustomers() {
+    public List<CustomerDto> getAllCustomers() throws IllegalArgumentException {
         List<Customer> customerList = accountService.getAllCustomers();
         return convertToDtoListForCustomer(customerList);
     }
 
     @PostMapping(value = "customers/update_info")
-    public CustomerDto updateCustomerInfo(@RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newName, @RequestParam String newPhoneNo, @RequestParam String newAddress, @RequestParam String newEmail, @RequestBody CustomerDto o) {
+    public CustomerDto updateCustomerInfo(
+            @RequestParam String newUsername,
+            @RequestParam String newPassword,
+            @RequestParam String newName,
+            @RequestParam String newPhoneNo,
+            @RequestParam String newAddress,
+            @RequestParam String newEmail,
+            @RequestBody CustomerDto o) throws IllegalArgumentException {
         Customer newCustomer = (Customer) accountService.updateUserInformation(accountService.getCustomer(o.getUsername()), newUsername, newPassword, newName);
         accountService.updateCustomer(newCustomer, newEmail, newAddress, newPhoneNo);
         return convertToDto(newCustomer);
     }
 
     @PostMapping(value = "customers/create_to_most_recent_system")
-    public CustomerDto createCustomerToMostRecentSystem(@RequestBody CustomerDto a) {
+    public CustomerDto createCustomerToMostRecentSystem(@RequestBody CustomerDto a) throws IllegalArgumentException {
         Customer customer = accountService.createCustomer(a.getUsername(), a.getPassword(), a.getName(), systemService.getMostRecentSystem(), a.getPhoneNo(), a.getHomeAddress(), a.getEmail());
         return convertToDto(customer);
     }
@@ -99,13 +114,20 @@ public class AccountController {
      */
 
     @PostMapping(value = "cars/create")
-    public CarDto createCarForACustomer(@RequestParam String username, @RequestBody CarDto car) {
+    public CarDto createCarForACustomer(
+            @RequestParam String username,
+            @RequestBody CarDto car) throws IllegalArgumentException {
         Car c = accountService.createCar(car.getPlateNo(), car.getModel(), car.getYear(), car.getManufacturer(), accountService.getCustomer(username));
         return convertToDto(c);
     }
 
     @PostMapping(value = "cars/update")
-    public CarDto updateCarInfo(@RequestParam String newUsername, @RequestParam String newModel, @RequestParam String newYear, @RequestParam String newManufacturer, @RequestBody CarDto car) {
+    public CarDto updateCarInfo(
+            @RequestParam String newUsername,
+            @RequestParam String newModel,
+            @RequestParam String newYear,
+            @RequestParam String newManufacturer,
+            @RequestBody CarDto car) throws IllegalArgumentException {
         Car c = accountService.updateCar(accountService.getCar(car.getPlateNo()), newModel, newYear, newManufacturer, accountService.getCustomer(newUsername));
         return convertToDto(c);
     }

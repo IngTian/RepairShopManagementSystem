@@ -36,13 +36,13 @@ public class AppointmentController {
     */
 
     @PostMapping(value = "find_appointments_of_customer")
-    public List<AppointmentDto> findAppointmentsOfACustomer(@RequestParam String username) {
+    public List<AppointmentDto> findAppointmentsOfACustomer(@RequestParam String username) throws IllegalArgumentException {
         List<Appointment> aps = appointmentService.findAppointmentsOfCustomer(username);
         return convertToDtoListForAppointment(aps);
     }
 
     @GetMapping(value = "")
-    public List<AppointmentDto> getAllAppointments() {
+    public List<AppointmentDto> getAllAppointments() throws IllegalArgumentException {
         List<Appointment> aps = appointmentService.getAllAppointments();
         return convertToDtoListForAppointment(aps);
     }
@@ -54,19 +54,19 @@ public class AppointmentController {
                                           @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime startTime,
                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime endTime,
-                                          @RequestParam Integer weight) {
+                                          @RequestParam Integer weight) throws IllegalArgumentException {
         Appointment aps = appointmentService.makeAppointment(serviceType, username, plateNo, Date.valueOf(date), Time.valueOf(startTime), Time.valueOf(endTime), weight);
         appointmentService.registerAnAppointmentToAShift(aps, aps.getShift());
         return convertToDto(appointmentService.getAppointmentById(aps.getAppointmentId()));
     }
 
     @PostMapping(value = "update_service_type")
-    public AppointmentDto updateServiceType(@RequestParam Integer appointmentId, @RequestParam String newServiceType) {
+    public AppointmentDto updateServiceType(@RequestParam Integer appointmentId, @RequestParam String newServiceType) throws IllegalArgumentException {
         return convertToDto(appointmentService.changeServiceType(appointmentService.getAppointmentById(appointmentId), newServiceType));
     }
 
     @PostMapping(value = "delete")
-    public AppointmentDto deleteAppointment(@RequestParam Integer id) {
+    public AppointmentDto deleteAppointment(@RequestParam Integer id) throws IllegalArgumentException {
         Appointment a = appointmentService.deleteAppointment(appointmentService.getAppointmentById(id));
         return new AppointmentDto(a.getAppointmentId());
     }
@@ -84,13 +84,13 @@ public class AppointmentController {
     */
 
     @PostMapping(value = "make_payment")
-    public BillDto makePayment(@RequestParam Integer id) {
+    public BillDto makePayment(@RequestParam Integer id) throws IllegalArgumentException {
         Bill newBill = appointmentService.makePayment(appointmentService.makePayment(appointmentService.getBillByBillNo(id)));
         return convertToDto(newBill);
     }
 
     @GetMapping(value = "bills")
-    public List<BillDto> getAllBills() {
+    public List<BillDto> getAllBills() throws IllegalArgumentException {
         List<Bill> billDtoList = appointmentService.getAllBills();
         return convertToDtoListForBill(billDtoList);
     }
@@ -102,7 +102,7 @@ public class AppointmentController {
      */
 
     @GetMapping(value = "services")
-    public List<ServiceDto> getAllServices() {
+    public List<ServiceDto> getAllServices() throws IllegalArgumentException {
         List<Service> service = appointmentService.getAllServices();
         return convertToDtoListForService(service);
     }
@@ -113,7 +113,7 @@ public class AppointmentController {
     ----------------------------------------------------------------------------
      */
     @PostMapping(value = "space/create")
-    public SpaceDto createSpace(@RequestParam Integer weight) {
+    public SpaceDto createSpace(@RequestParam Integer weight) throws IllegalArgumentException {
         return convertToDto(appointmentService.createSpace(weight, systemService.getMostRecentSystem()));
     }
 
