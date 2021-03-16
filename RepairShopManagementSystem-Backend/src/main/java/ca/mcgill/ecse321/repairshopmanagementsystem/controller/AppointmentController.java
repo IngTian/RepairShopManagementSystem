@@ -42,7 +42,10 @@ public class AppointmentController {
     }
 
     @GetMapping(value = "")
-    public List<AppointmentDto> getAllAppointments() throws IllegalArgumentException {
+    public List<AppointmentDto> getAllAppointments(@RequestParam String operatorUsername) throws IllegalArgumentException {
+        Customer c = accountService.getCustomer(operatorUsername);
+        if (c != null)
+            throw new IllegalArgumentException("A customer is not allowed to see other customers' appointments.");
         List<Appointment> aps = appointmentService.getAllAppointments();
         return convertToDtoListForAppointment(aps);
     }
@@ -54,14 +57,23 @@ public class AppointmentController {
                                           @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime startTime,
                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime endTime,
-                                          @RequestParam Integer weight) throws IllegalArgumentException {
+                                          @RequestParam Integer weight,
+                                          @RequestParam String operatorUsername) throws IllegalArgumentException {
+        Customer c = accountService.getCustomer(operatorUsername);
+        if (c == null)
+            throw new IllegalArgumentException("Only a customer can make appointments.");
         Appointment aps = appointmentService.makeAppointment(serviceType, username, plateNo, Date.valueOf(date), Time.valueOf(startTime), Time.valueOf(endTime), weight);
         appointmentService.registerAnAppointmentToAShift(aps, aps.getShift());
         return convertToDto(appointmentService.getAppointmentById(aps.getAppointmentId()));
     }
 
     @PostMapping(value = "update_service_type")
-    public AppointmentDto updateServiceType(@RequestParam Integer appointmentId, @RequestParam String newServiceType) throws IllegalArgumentException {
+    public AppointmentDto updateServiceType(@RequestParam Integer appointmentId,
+                                            @RequestParam String newServiceType,
+                                            @RequestParam String operatorUsername) throws IllegalArgumentException {
+        Customer c = accountService.getCustomer(operatorUsername);
+        if (c == null)
+            throw new IllegalArgumentException("Only a customer can change appointments.");
         return convertToDto(appointmentService.changeServiceType(appointmentService.getAppointmentById(appointmentId), newServiceType));
     }
 
@@ -90,7 +102,10 @@ public class AppointmentController {
     }
 
     @GetMapping(value = "bills")
-    public List<BillDto> getAllBills() throws IllegalArgumentException {
+    public List<BillDto> getAllBills(@RequestParam String operatorUsername) throws IllegalArgumentException {
+        Customer c = accountService.getCustomer(operatorUsername);
+        if (c != null)
+            throw new IllegalArgumentException("A customer is not allowed to see all the bills in the system.");
         List<Bill> billDtoList = appointmentService.getAllBills();
         return convertToDtoListForBill(billDtoList);
     }
@@ -102,7 +117,10 @@ public class AppointmentController {
      */
 
     @GetMapping(value = "services")
-    public List<ServiceDto> getAllServices() throws IllegalArgumentException {
+    public List<ServiceDto> getAllServices(@RequestParam String operatorUsername) throws IllegalArgumentException {
+        Customer c = accountService.getCustomer(operatorUsername);
+        if (c != null)
+            throw new IllegalArgumentException("A customer is not allowed to see the entire service history in the system.");
         List<Service> service = appointmentService.getAllServices();
         return convertToDtoListForService(service);
     }
@@ -113,7 +131,10 @@ public class AppointmentController {
     ----------------------------------------------------------------------------
      */
     @PostMapping(value = "space/create")
-    public SpaceDto createSpace(@RequestParam Integer weight) throws IllegalArgumentException {
+    public SpaceDto createSpace(@RequestParam Integer weight, @RequestParam String operatorUsername) throws IllegalArgumentException {
+        Customer c = accountService.getCustomer(operatorUsername);
+        if (c != null)
+            throw new IllegalArgumentException("A customer is not allowed create spaces.");
         return convertToDto(appointmentService.createSpace(weight, systemService.getMostRecentSystem()));
     }
 

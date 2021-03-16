@@ -43,7 +43,11 @@ public class ScheduleController {
     }
 
     @PostMapping(value = "create")
-    public ScheduleDto createSchedule(@RequestParam Integer weekNo) throws IllegalArgumentException {
+    public ScheduleDto createSchedule(@RequestParam Integer weekNo, @RequestParam String operatorUsername) throws IllegalArgumentException {
+        Customer c = accountService.getCustomer(operatorUsername);
+        if (c != null)
+            throw new IllegalArgumentException("A customer is not allowed to create schedules.");
+
         Schedule newSchedule = scheduleService.createSchedule(systemService.getMostRecentSystem(), weekNo);
         return convertToDto(newSchedule);
     }
@@ -67,7 +71,10 @@ public class ScheduleController {
     }
 
     @GetMapping(value = "shifts/assistant")
-    public List<ShiftDto> getAllShiftsForAnAssistant(@RequestParam String username) throws IllegalArgumentException {
+    public List<ShiftDto> getAllShiftsForAnAssistant(@RequestParam String username, @RequestParam String operatorUsername) throws IllegalArgumentException {
+        Customer c = accountService.getCustomer(operatorUsername);
+        if (c != null)
+            throw new IllegalArgumentException("A customer is not allowed to get all shifts for an assistant.");
         List<Shift> shifts = scheduleService.getAllShiftsByAssistant(accountService.getAssistant(username));
         return convertToDtoListForShift(shifts);
     }
@@ -76,13 +83,20 @@ public class ScheduleController {
     public ShiftDto createShift(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime startTime,
                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime endTime,
-                                @RequestParam String username) throws IllegalArgumentException {
+                                @RequestParam String username,
+                                @RequestParam String operatorUsername) throws IllegalArgumentException {
+        Customer c = accountService.getCustomer(operatorUsername);
+        if (c != null)
+            throw new IllegalArgumentException("A customer is not allowed to create shifts.");
         Shift newShift = scheduleService.createShift(Date.valueOf(date), Time.valueOf(startTime), Time.valueOf(endTime), accountService.getAssistant(username));
         return convertToDto(newShift);
     }
 
     @PostMapping(value = "shifts/delete")
-    public ShiftDto deleteShift(@RequestParam Integer shiftId) throws IllegalArgumentException {
+    public ShiftDto deleteShift(@RequestParam Integer shiftId, @RequestParam String operatorUsername) throws IllegalArgumentException {
+        Customer c = accountService.getCustomer(operatorUsername);
+        if (c != null)
+            throw new IllegalArgumentException("A customer is not allowed to delete shifts.");
         Shift s = scheduleService.deleteShift(scheduleService.getShiftById(shiftId));
         return convertToDto(s);
     }
@@ -91,7 +105,11 @@ public class ScheduleController {
     public ShiftDto changeShift(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate newDate,
                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime newStartTime,
                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime newEndTime,
-                                @RequestParam Integer shiftId) throws IllegalArgumentException {
+                                @RequestParam Integer shiftId,
+                                @RequestParam String operatorUsername) throws IllegalArgumentException {
+        Customer c = accountService.getCustomer(operatorUsername);
+        if (c != null)
+            throw new IllegalArgumentException("A customer is not allowed to change assistants' shifts.");
         Shift s = scheduleService.changeShift(scheduleService.getShiftById(shiftId), Date.valueOf(newDate), Time.valueOf(newStartTime), Time.valueOf(newEndTime));
         return convertToDto(s);
     }
