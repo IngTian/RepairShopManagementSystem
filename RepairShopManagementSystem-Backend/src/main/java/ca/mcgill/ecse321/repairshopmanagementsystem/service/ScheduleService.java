@@ -15,166 +15,250 @@ import org.springframework.stereotype.Service;
 @Service
 public class ScheduleService {
 
-    @Autowired
-    private ShiftRepository shiftRepository;
+	@Autowired
+	private ShiftRepository shiftRepository;
 
-    @Autowired
-    private ScheduleRepository scheduleRepository;
+	@Autowired
+	private ScheduleRepository scheduleRepository;
 
-    @Autowired
-    private RepairShopManagementSystemRepository systemRepository;
+	@Autowired
+	private RepairShopManagementSystemRepository systemRepository;
 
-    @Autowired
-    private AssistantRepository assistantRepository;
+	@Autowired
+	private AssistantRepository assistantRepository;
 
-    /*
-    ----------------------------------------------------------------------------
-    ----------------------------------Schedules---------------------------------
-    ----------------------------------------------------------------------------
-     */
+	/*
+	 * ----------------------------------------------------------------------------
+	 * ----------------------------------Schedules---------------------------------
+	 * ----------------------------------------------------------------------------
+	 */
+	/**
+	 * get all schedules in the system
+	 * 
+	 * @return
+	 */
+	@Transactional
+	public List<Schedule> getAllSchedules() {
+		return toList(scheduleRepository.findAll());
+	}
 
-    @Transactional
-    public List<Schedule> getAllSchedules() {
-        return toList(scheduleRepository.findAll());
-    }
+	/**
+	 * find a specfic schedule
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@Transactional
+	public Schedule findSchedule(Integer id) {
+		return scheduleRepository.findScheduleById(id);
+	}
 
-    @Transactional
-    public Schedule findSchedule(Integer id) {
-        return scheduleRepository.findScheduleById(id);
-    }
+	/**
+	 * find the schedule base on the week number
+	 * 
+	 * @param weekNo
+	 * @return
+	 */
 
-    @Transactional
-    public Schedule getScheduleByWeekNo(Integer weekNo) {
-        return scheduleRepository.findScheduleByWeekNo(weekNo);
-    }
+	@Transactional
+	public Schedule getScheduleByWeekNo(Integer weekNo) {
+		return scheduleRepository.findScheduleByWeekNo(weekNo);
+	}
 
-    @Transactional
-    public Schedule createSchedule(RepairShopManagementSystem system, Integer weekNo) {
-        if (scheduleRepository.findScheduleByWeekNo(weekNo) != null)
-            throw new IllegalArgumentException("Schedule of the specific week No has already been created.");
+	/**
+	 * create a schedule if there doesnt exist a schedule for a specific week
+	 * 
+	 * @param system
+	 * @param weekNo
+	 * @return
+	 */
 
-        Schedule schedule = new Schedule();
-        schedule.setRepairShopManagementSystem(system);
-        schedule.setWeekNo(weekNo);
-        schedule.setTimeSlot(new HashSet<>());
-        scheduleRepository.save(schedule);
-        return schedule;
-    }
+	@Transactional
+	public Schedule createSchedule(RepairShopManagementSystem system, Integer weekNo) {
+		if (scheduleRepository.findScheduleByWeekNo(weekNo) != null)
+			throw new IllegalArgumentException("Schedule of the specific week No has already been created.");
 
-    @Transactional
-    public Schedule updateSchedule(Schedule schedule, Shift shift) {
-        if (!schedule.getTimeSlot().remove(shift)) {
-            Set<Shift> shiftNew = schedule.getTimeSlot();
-            shiftNew.add(shift);
-            schedule.setTimeSlot(shiftNew);
-        }
-        scheduleRepository.save(schedule);
-        return schedule;
-    }
+		Schedule schedule = new Schedule();
+		schedule.setRepairShopManagementSystem(system);
+		schedule.setWeekNo(weekNo);
+		schedule.setTimeSlot(new HashSet<>());
+		scheduleRepository.save(schedule);
+		return schedule;
+	}
 
-    @Transactional
-    public Schedule findScheduleById(Integer id) {
-        return scheduleRepository.findScheduleById(id);
-    }
+	/**
+	 * update a schedule(add or remove a shift)
+	 * 
+	 * @param schedule
+	 * @param shift
+	 * @return
+	 */
+	@Transactional
+	public Schedule updateSchedule(Schedule schedule, Shift shift) {
+		if (!schedule.getTimeSlot().remove(shift)) {
+			Set<Shift> shiftNew = schedule.getTimeSlot();
+			shiftNew.add(shift);
+			schedule.setTimeSlot(shiftNew);
+		}
+		scheduleRepository.save(schedule);
+		return schedule;
+	}
 
-    /*
-    ----------------------------------------------------------------------------
-    -----------------------------------Shifts-----------------------------------
-    ----------------------------------------------------------------------------
-     */
+	/**
+	 * find a schedule by its id
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@Transactional
+	public Schedule findScheduleById(Integer id) {
+		return scheduleRepository.findScheduleById(id);
+	}
 
-    @Transactional
-    public Set<Shift> getShiftsBySchedule(Schedule schedule) {
-        return shiftRepository.findShiftsBySchedule(schedule);
-    }
+	/*
+	 * ----------------------------------------------------------------------------
+	 * -----------------------------------Shifts-----------------------------------
+	 * ----------------------------------------------------------------------------
+	 */
+	/**
+	 * find all the shift stored in the schedule
+	 * 
+	 * @param schedule
+	 * @return
+	 */
+	@Transactional
+	public Set<Shift> getShiftsBySchedule(Schedule schedule) {
+		return shiftRepository.findShiftsBySchedule(schedule);
+	}
 
-    @Transactional
-    public Shift getShiftById(Integer id) {
-        return shiftRepository.findShiftByShiftId(id);
-    }
+	/**
+	 * get the shift by his id
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@Transactional
+	public Shift getShiftById(Integer id) {
+		return shiftRepository.findShiftByShiftId(id);
+	}
 
-    @Transactional
-    public List<Shift> getAllShifts() {
-        return toList(shiftRepository.findAll());
-    }
+	/**
+	 * get all the shifts in the system
+	 * 
+	 * @return
+	 */
+	@Transactional
+	public List<Shift> getAllShifts() {
+		return toList(shiftRepository.findAll());
+	}
 
-    @Transactional
-    public List<Shift> getAllShiftsByAssistant(Assistant assistant) {
-        if (assistant == null)
-            throw new IllegalArgumentException("Assistant specified of the ID does not exist.");
+	/**
+	 * get all the shifts of an assistant
+	 * 
+	 * @param assistant
+	 * @return
+	 */
+	@Transactional
+	public List<Shift> getAllShiftsByAssistant(Assistant assistant) {
+		if (assistant == null)
+			throw new IllegalArgumentException("Assistant specified of the ID does not exist.");
 
-        return toList(shiftRepository.findShiftsByAssistant(assistant));
-    }
+		return toList(shiftRepository.findShiftsByAssistant(assistant));
+	}
 
-    @Transactional
-    public Shift createShift(Date date, Time startTime, Time endTime, Assistant assistant) {
+	/**
+	 * create a shift for an assistant
+	 * 
+	 * @param date
+	 * @param startTime
+	 * @param endTime
+	 * @param assistant
+	 * @return
+	 */
+	@Transactional
+	public Shift createShift(Date date, Time startTime, Time endTime, Assistant assistant) {
 
-        if (assistant == null)
-            throw new IllegalArgumentException("Assistant must exist to create a shift!");
+		if (assistant == null)
+			throw new IllegalArgumentException("Assistant must exist to create a shift!");
 
-        // Get the correct week no.
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR), week = calendar.get(Calendar.WEEK_OF_YEAR), weekNo = year * 100 + week;
+		// Get the correct week no.
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		int year = calendar.get(Calendar.YEAR), week = calendar.get(Calendar.WEEK_OF_YEAR), weekNo = year * 100 + week;
 
-        Schedule schedule = scheduleRepository.findScheduleByWeekNo(weekNo);
+		Schedule schedule = scheduleRepository.findScheduleByWeekNo(weekNo);
 
-        if (schedule == null)
-            schedule = createSchedule(systemRepository.findFirstByOrderByIdDesc(), weekNo);
+		if (schedule == null)
+			schedule = createSchedule(systemRepository.findFirstByOrderByIdDesc(), weekNo);
 
-        Shift shift = new Shift();
-        shift.setAssistant(assistant);
-        shift.setDate(date);
-        shift.setStartTime(startTime);
-        shift.setEndTime(endTime);
-        shift.setSchedule(schedule);
-        schedule.getTimeSlot().add(shift);
+		Shift shift = new Shift();
+		shift.setAssistant(assistant);
+		shift.setDate(date);
+		shift.setStartTime(startTime);
+		shift.setEndTime(endTime);
+		shift.setSchedule(schedule);
+		schedule.getTimeSlot().add(shift);
 
-        Set<Shift> shifts = shiftRepository.findShiftsByAssistant(assistant);
-        if (Util.hasShiftConflicts(shifts, shift))
-            throw new IllegalArgumentException("New shift has conflicts with existing shifts.");
+		Set<Shift> shifts = shiftRepository.findShiftsByAssistant(assistant);
+		if (Util.hasShiftConflicts(shifts, shift))
+			throw new IllegalArgumentException("New shift has conflicts with existing shifts.");
 
-        assistant.getShift().add(shift);
+		assistant.getShift().add(shift);
 
-        shiftRepository.save(shift);
+		shiftRepository.save(shift);
 
-        return shift;
-    }
+		return shift;
+	}
 
-    @Transactional
-    public Shift deleteShift(Shift shift) {
-        if (shift.getAppointment() != null)
-            throw new IllegalArgumentException("Cannot delete the shift with an appointment!");
+	/**
+	 * delete a certain shift
+	 * 
+	 * @param shift
+	 * @return
+	 */
+	@Transactional
+	public Shift deleteShift(Shift shift) {
+		if (shift.getAppointment() != null)
+			throw new IllegalArgumentException("Cannot delete the shift with an appointment!");
 
-        shiftRepository.delete(shift);
+		shiftRepository.delete(shift);
 
-        return shift;
-    }
+		return shift;
+	}
 
-    @Transactional
-    public Shift changeShift(Shift shift, Date newDate, Time startTime, Time endTime) {
-        if (shift.getAppointment() != null)
-            throw new IllegalArgumentException("Cannot change a shift with an appointment!");
+	/**
+	 * change the time and date of a shift
+	 * 
+	 * @param shift
+	 * @param newDate
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	@Transactional
+	public Shift changeShift(Shift shift, Date newDate, Time startTime, Time endTime) {
+		if (shift.getAppointment() != null)
+			throw new IllegalArgumentException("Cannot change a shift with an appointment!");
 
-        deleteShift(shift);
+		deleteShift(shift);
 
-        Shift s;
-        try {
-            s = createShift(newDate, startTime, endTime, shift.getAssistant());
-        } catch (IllegalArgumentException e) {
-            shift.getAssistant().getShift().add(shift);
-            shiftRepository.save(shift);
-            throw new IllegalArgumentException("Cannot change shift to a conflicting time!");
-        }
+		Shift s;
+		try {
+			s = createShift(newDate, startTime, endTime, shift.getAssistant());
+		} catch (IllegalArgumentException e) {
+			shift.getAssistant().getShift().add(shift);
+			shiftRepository.save(shift);
+			throw new IllegalArgumentException("Cannot change shift to a conflicting time!");
+		}
 
-        return s;
-    }
+		return s;
+	}
 
-    private <T> List<T> toList(Iterable<T> iterable) {
-        List<T> resultList = new ArrayList<T>();
-        for (T t : iterable) {
-            resultList.add(t);
-        }
-        return resultList;
-    }
+	private <T> List<T> toList(Iterable<T> iterable) {
+		List<T> resultList = new ArrayList<T>();
+		for (T t : iterable) {
+			resultList.add(t);
+		}
+		return resultList;
+	}
 }

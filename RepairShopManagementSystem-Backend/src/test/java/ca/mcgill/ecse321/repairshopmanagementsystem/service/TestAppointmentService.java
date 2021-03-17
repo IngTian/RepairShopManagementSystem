@@ -295,7 +295,8 @@ public class TestAppointmentService {
 	}
 
 	/**
-	 * @author kevinli Test make appointment sucessfully
+	 * @author kevinli 
+	 * Test make appointment sucessfully
 	 */
 
 	@Test
@@ -315,7 +316,10 @@ public class TestAppointmentService {
 		assertNotNull(appointment);
 		assertEquals(appointment.getCustomer().getUsername(), customerName);
 	}
-
+	/**
+	 * @author kevinli 
+	 * Test make appointment unsuccessfully
+	 */
 	@Test
 	public void testMakeAppointmentFailedWithNoShiftAvailable() {
 		String error = "";
@@ -334,7 +338,10 @@ public class TestAppointmentService {
 		assertNull(appointment);
 		assertEquals(error, "The appointment time has conflicts!");
 	}
-
+	/**
+	 * @author kevinli 
+	 * Test make appointment unsuccessfully
+	 */
 	@Test
 	public void testMakeAppointmentFailedWithNoSpaceAvailable() {
 		String error = "";
@@ -353,7 +360,10 @@ public class TestAppointmentService {
 		assertNull(appointment);
 		assertEquals(error, "The appointment time has conflicts!");
 	}
-
+	/**
+	 * @author kevinli 
+	 * Test make appointment unsuccessfully
+	 */
 	@Test
 	public void testMakeAppointmentFailedNotCarOfCustomer() {
 		String error = "";
@@ -372,7 +382,10 @@ public class TestAppointmentService {
 		assertNull(appointment);
 		assertEquals(error, "This car does not belongs to this customer.");
 	}
-
+	/**
+	 * @author kevinli 
+	 * Test make appointment unsuccessfully
+	 */
 	@Test
 	public void testMakeAppointmentFailedCarNotFound() {
 		String error = "";
@@ -391,7 +404,10 @@ public class TestAppointmentService {
 		assertNull(appointment);
 		assertEquals(error, "Cannot find the car of the specified plateNo.");
 	}
-
+	/**
+	 * @author kevinli 
+	 * Test make appointment unsuccessfully
+	 */
 	@Test
 	public void testMakeAppointmentFailedCustomerNotFound() {
 		String error = "";
@@ -410,7 +426,10 @@ public class TestAppointmentService {
 		assertNull(appointment);
 		assertEquals(error, "Cannot find the customer of that username.");
 	}
-
+	/**
+	 * @author kevinli 
+	 * Test make appointment unsuccessfully
+	 */
 	@Test
 	public void testMakeAppointmentFailedScheduleNotFound() {
 		String error = "";
@@ -429,7 +448,10 @@ public class TestAppointmentService {
 		assertNull(appointment);
 		assertEquals(error, "There is no shifts for that date.");
 	}
-
+	/**
+	 * @author kevinli 
+	 * Test register a shift to an appointment successfully
+	 */
 	@Test
 	public void testRegisterAShiftToAppointment() {
 		Appointment testAppointment = new Appointment();
@@ -457,6 +479,10 @@ public class TestAppointmentService {
         assertNotNull(testShift.getAppointment());
        assertEquals(testShift.getAppointment().getCustomer().getName(),customerName);
 	}
+	/**
+	 * @author kevin li
+	 * Test delete an appointment successfully
+	 */
 @Test
 public void testDeleteAppointment() {
 	Appointment appointment=appointmentService.getAppointmentById(appointmentID);
@@ -472,7 +498,10 @@ public void testDeleteAppointment() {
 	
 	
 }
-
+/**
+ * @author kevin Li 
+ * Test delete an appointment unsuccessfully
+ */
 @Test
 public void testDeleteAppointmentFailed() {
 	String error="";
@@ -490,6 +519,10 @@ public void testDeleteAppointmentFailed() {
 	
 	
 }
+/**
+ * test make payment
+ * @author Xiang Li
+ */
 	@Test
 	public void testMakePayment() {
 		Bill bill = new Bill();
@@ -504,7 +537,10 @@ public void testDeleteAppointmentFailed() {
 		assertEquals(bill.getIsPaid(), true);
 
 	}
-
+	/**
+	 * test make payment
+	 * @author Xiang Li
+	 */
 	@Test
 	public void testMakePaymentFailedBillNotExist() {
 		Bill bill = null;
@@ -518,7 +554,10 @@ public void testDeleteAppointmentFailed() {
 		assertEquals(error, "Cannot find the specified bill.");
 
 	}
-
+	/**
+	 * test make payment
+	 * @author Xiang Li
+	 */
 	@Test
 	public void testCreateSpace() {
 		Space space = null;
@@ -532,7 +571,10 @@ public void testDeleteAppointmentFailed() {
 		assertEquals(space.getMaxWeightLoad(), 10);
 
 	}
-
+	/**
+	 * test make payment
+	 * @author Xiang Li
+	 */
 	@Test
 	public void testCreateSpaceInvalidMaxWeight() {
 		Space space = null;
@@ -547,7 +589,10 @@ public void testDeleteAppointmentFailed() {
 		assertEquals(error, "invalid maxweight");
 
 	}
-
+	/**
+	 * test create Bill
+	 * @author Xiang Li
+	 */
 	@Test
 	public void testCreateBill() {
 		assertEquals(0, appointmentService.getAllBills().size());
@@ -562,7 +607,10 @@ public void testDeleteAppointmentFailed() {
 		assertEquals(price, bill.getPrice());
 		assertEquals(false, bill.getIsPaid());
 	}
-
+	/**
+	 * test createBill failed
+	 * @author Xiang Li
+	 */
 	@Test
 	public void testCreateBillPriceNull() {
 		assertEquals(0, appointmentService.getAllBills().size());
@@ -577,7 +625,10 @@ public void testDeleteAppointmentFailed() {
 		assertNull(bill);
 		assertEquals("Price cannot be empty!", error);
 	}
-
+	/**
+	 * test createBill failed
+	 * @author Xiang Li
+	 */
 	@Test
 	public void testCreateBillPriceNotPositive() {
 		assertEquals(0, appointmentService.getAllBills().size());

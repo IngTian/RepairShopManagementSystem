@@ -189,7 +189,12 @@ public class TestScheduleService {
         lenient().when(assistantDao.save(any(Assistant.class))).thenAnswer(returnParameterAsAnswer);
         lenient().when(shiftDao.save(any(Shift.class))).thenAnswer(returnParameterAsAnswer);
     }
-
+//------------------------------------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------------------------------------
+  //---------------------------------------------------Author:Ao Shen----------------------------------------------------
+  //------------------------------------------------------------------------------------------------------------------------
+    
+    
     @Test
     public void testCreateSchedule() {
         assertEquals(0, scheduleService.getAllSchedules().size());
