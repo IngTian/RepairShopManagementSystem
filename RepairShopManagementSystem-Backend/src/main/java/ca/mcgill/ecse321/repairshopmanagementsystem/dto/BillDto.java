@@ -26,7 +26,7 @@ public class BillDto {
     public BillDto(Integer billNo, Integer price, Boolean isPaid) {
         this.billNo = billNo;
         this.price = price;
-        
+
         this.isPaid = isPaid;
     }
 

@@ -1,13 +1,19 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.service;
 
-import ca.mcgill.ecse321.repairshopmanagementsystem.dao.*;
+import ca.mcgill.ecse321.repairshopmanagementsystem.dao.AssistantRepository;
+import ca.mcgill.ecse321.repairshopmanagementsystem.dao.CarRepository;
+import ca.mcgill.ecse321.repairshopmanagementsystem.dao.CustomerRepository;
+import ca.mcgill.ecse321.repairshopmanagementsystem.dao.OwnerRepository;
 import ca.mcgill.ecse321.repairshopmanagementsystem.model.*;
 import ca.mcgill.ecse321.repairshopmanagementsystem.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class AccountService {
@@ -197,8 +203,6 @@ public class AccountService {
 
     @Transactional
     public Customer addACarToCustomer(Customer customer, Car aCar) {
-        String plateNo = aCar.getPlateNo(), year = aCar.getYear(), model = aCar.getModel(), manufacturer = aCar.getManufacturer();
-
         Set<Car> cars = customer.getCar();
         cars.add(aCar);
         customerRepository.save(customer);

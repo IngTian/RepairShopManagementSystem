@@ -1,21 +1,20 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.service;
+
+import ca.mcgill.ecse321.repairshopmanagementsystem.dao.RepairShopManagementSystemRepository;
+import ca.mcgill.ecse321.repairshopmanagementsystem.model.RepairShopManagementSystem;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.lenient;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import ca.mcgill.ecse321.repairshopmanagementsystem.dao.*;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TestSystemService {
@@ -80,6 +79,7 @@ public class TestSystemService {
         assertEquals(TEST_SYSTEM_NAME, system.getBusinessName());
         assertEquals(TEST_SYSTEM_PHONE_NO, system.getBusinessPhoneNumber());
         assertEquals(TEST_SYSTEM_ADDRESS, system.getBusinessAddress());
+        assertEquals(error, "");
     }
 
     /**

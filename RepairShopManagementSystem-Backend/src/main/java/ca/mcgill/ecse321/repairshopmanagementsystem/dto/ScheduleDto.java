@@ -1,9 +1,7 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.dto;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ScheduleDto {
     private List<ShiftDto> shifts;
@@ -28,7 +26,7 @@ public class ScheduleDto {
     public List<ShiftDto> getShifts() {
         return this.shifts;
     }
-    public int getid() {
+    public int getId() {
         return this.id;
     }
    

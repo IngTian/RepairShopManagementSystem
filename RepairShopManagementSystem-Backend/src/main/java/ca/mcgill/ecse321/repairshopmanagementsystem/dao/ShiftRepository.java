@@ -12,8 +12,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface ShiftRepository extends CrudRepository<Shift, Integer> {
     Shift findShiftByShiftId(Integer id);
 
-    Shift findShiftByAppointment(Appointment appointment);
-
     Set<Shift> findShiftsBySchedule(Schedule schedule);
 
     Set<Shift> findShiftsByAssistant(Assistant assistant);

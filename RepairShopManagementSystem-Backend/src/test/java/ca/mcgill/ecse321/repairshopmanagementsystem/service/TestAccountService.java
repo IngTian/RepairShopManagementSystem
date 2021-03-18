@@ -3,29 +3,22 @@ package ca.mcgill.ecse321.repairshopmanagementsystem.service;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import ca.mcgill.ecse321.repairshopmanagementsystem.dao.*;
@@ -68,7 +61,6 @@ public class TestAccountService {
     private static final String TEST_CAR_MODEL = "S650";
     private static final String TEST_CAR_MANUFACTURER = "Mercedes Benz";
     private static final String TEST_CAR_YEAR = "2021";
-    private static final String TEST_CAR_NEXT_REMINDER_DATE = "2020-09-09";
 
     @BeforeEach
     public void setMockOutput() {
@@ -181,11 +173,11 @@ public class TestAccountService {
     --------------------------------Test: Owner---------------------------------
     ----------------------------------------------------------------------------
      */
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * successful case of createOwner
      */
-
     @Test
     public void testCreateOwner() {
         assertEquals(0, accountService.getAllOwners().size());
@@ -203,8 +195,9 @@ public class TestAccountService {
         assertEquals(TEST_USER_PASSWORD, owner.getPassword());
         assertEquals(TEST_USER_USERNAME, owner.getUsername());
     }
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * unsuccessful case of createOwner
      */
     @Test
@@ -223,8 +216,9 @@ public class TestAccountService {
         assertNull(owner);
         assertEquals("Username cannot be empty!", error);
     }
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * unsuccessful case of createOwner
      */
     @Test
@@ -244,8 +238,9 @@ public class TestAccountService {
         assertEquals("Username must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * unsuccessful case of createOwner
      */
     @Test
@@ -265,8 +260,9 @@ public class TestAccountService {
         assertEquals("Username must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * unsuccessful case of createOwner
      */
     @Test
@@ -286,8 +282,9 @@ public class TestAccountService {
         assertEquals("Username must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * unsuccessful case of createOwner
      */
     @Test
@@ -307,8 +304,9 @@ public class TestAccountService {
         assertNull(owner);
         assertEquals("Password cannot be empty.", error);
     }
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * unsuccessful case of createOwner
      */
     @Test
@@ -329,8 +327,9 @@ public class TestAccountService {
         assertEquals("Password must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * unsuccessful case of createOwner
      */
     @Test
@@ -351,11 +350,11 @@ public class TestAccountService {
         assertEquals("Password must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * unsuccessful case of createOwner
      */
-
     @Test
     public void testCreateOwnerWithPasswordContainingIllegalCharacters() {
         assertEquals(0, accountService.getAllOwners().size());
@@ -374,8 +373,9 @@ public class TestAccountService {
         assertEquals("Password must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * unsuccessful case of createOwner
      */
     @Test
@@ -401,8 +401,9 @@ public class TestAccountService {
     --------------------------Test: Update User Info----------------------------
     ----------------------------------------------------------------------------
      */
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * successful case of updateUserInfo
      */
     @Test
@@ -427,8 +428,9 @@ public class TestAccountService {
         assertEquals(TEST_USER_NAME, aUser.getName());
         assertEquals(TEST_USER_PASSWORD, aUser.getPassword());
     }
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * unsuccessful case of updateUserInfo
      */
     @Test
@@ -453,8 +455,9 @@ public class TestAccountService {
         assertEquals("aName", aUser.getName());
         assertEquals("hellohello", aUser.getPassword());
     }
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * unsuccessful case of updateUserInfo
      */
     @Test
@@ -479,8 +482,9 @@ public class TestAccountService {
         assertEquals("aName", aUser.getName());
         assertEquals("hellohello", aUser.getPassword());
     }
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * unsuccessful case of updateUserInfo
      */
     @Test
@@ -505,8 +509,9 @@ public class TestAccountService {
         assertEquals("aName", aUser.getName());
         assertEquals("hellohello", aUser.getPassword());
     }
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * unsuccessful case of updateUserInfo
      */
     @Test
@@ -532,8 +537,9 @@ public class TestAccountService {
         assertEquals("aName", aUser.getName());
         assertEquals("hellohello", aUser.getPassword());
     }
+
     /**
-     * @author Ing Tian
+     * @author Byron Chen
      * unsuccessful case of updateUserInfo
      */
     @Test
@@ -565,6 +571,7 @@ public class TestAccountService {
     --------------------------Test: Create Assistant----------------------------
     ----------------------------------------------------------------------------
      */
+
     /**
      * @author Ing Tian
      * successful case of createAssistant
@@ -586,8 +593,9 @@ public class TestAccountService {
         assertEquals(TEST_USER_PASSWORD, assistant.getPassword());
         assertEquals(TEST_USER_USERNAME, assistant.getUsername());
     }
+
     /**
-     * @author Ao Shen
+     * @author Ing Tian
      * unsuccessful case of createAssistant
      */
     @Test
@@ -606,6 +614,7 @@ public class TestAccountService {
         assertNull(assistant);
         assertEquals("Username cannot be empty!", error);
     }
+
     /**
      * @author Ing Tian
      * unsuccessful case of createAssistant
@@ -627,8 +636,9 @@ public class TestAccountService {
         assertEquals("Username must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
-     * @author Byron Chen
+     * @author Ing Tian
      * unsuccessful case of createAssistant
      */
     @Test
@@ -648,11 +658,11 @@ public class TestAccountService {
         assertEquals("Username must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
      * @author Ing Tian
      * unsuccessful case of createAssistant
      */
-
     @Test
     public void testCreateAssistantWithUsernameContainingIllegalCharacters() {
         assertEquals(0, accountService.getAllAssistants().size());
@@ -670,8 +680,9 @@ public class TestAccountService {
         assertEquals("Username must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
-     * @author Byron Chen
+     * @author Ing Tian
      * unsuccessful case of createAssistant
      */
     @Test
@@ -691,6 +702,7 @@ public class TestAccountService {
         assertNull(assistant);
         assertEquals("Password cannot be empty.", error);
     }
+
     /**
      * @author Ing Tian
      * unsuccessful case of createAssistant
@@ -713,6 +725,7 @@ public class TestAccountService {
         assertEquals("Password must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
      * @author Ing Tian
      * unsuccessful case of createAssistant
@@ -735,6 +748,7 @@ public class TestAccountService {
         assertEquals("Password must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
      * @author Ing Tian
      * unsuccessful case of createAssistant
@@ -757,6 +771,7 @@ public class TestAccountService {
         assertEquals("Password must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
      * @author Ing Tian
      * unsuccessful case of createAssistant
@@ -784,8 +799,9 @@ public class TestAccountService {
     --------------------------Test: Create Customer-----------------------------
     ----------------------------------------------------------------------------
      */
+
     /**
-     * @author Byron Chen
+     * @author Ing Tian
      * successful case of createCustomer
      */
     @Test
@@ -808,8 +824,9 @@ public class TestAccountService {
         assertEquals(TEST_CUSTOMER_ADDRESS, customer.getHomeAddress());
         assertEquals(TEST_CUSTOMER_EMAIL, customer.getEmail());
     }
+
     /**
-     * @author Byron Chen
+     * @author Ing Tian
      * unsuccessful case of createCustomer
      */
     @Test
@@ -828,8 +845,9 @@ public class TestAccountService {
         assertNull(customer);
         assertEquals("Username cannot be empty!", error);
     }
+
     /**
-     * @author Byron Chen
+     * @author Ing Tian
      * unsuccessful case of createCustomer
      */
     @Test
@@ -849,8 +867,9 @@ public class TestAccountService {
         assertEquals("Username must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
-     * @author Byron Chen
+     * @author Ing Tian
      * unsuccessful case of createCustomer
      */
     @Test
@@ -870,8 +889,9 @@ public class TestAccountService {
         assertEquals("Username must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
-     * @author Byron Chen
+     * @author Ing Tian
      * unsuccessful case of createCustomer
      */
     @Test
@@ -891,8 +911,9 @@ public class TestAccountService {
         assertEquals("Username must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
-     * @author Byron Chen
+     * @author Ing Tian
      * unsuccessful case of createCustomer
      */
     @Test
@@ -912,8 +933,9 @@ public class TestAccountService {
         assertEquals("Password must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
-     * @author Byron Chen
+     * @author Ing Tian
      * unsuccessful case of createCustomer
      */
     @Test
@@ -933,8 +955,9 @@ public class TestAccountService {
         assertEquals("Password must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
-     * @author Byron Chen
+     * @author Ing Tian
      * unsuccessful case of createCustomer
      */
     @Test
@@ -954,8 +977,9 @@ public class TestAccountService {
         assertEquals("Password must be at least 8 characters and at most 16 characters, " +
                 "containing only lowercase and uppercase English alphabets and numbers.", error);
     }
+
     /**
-     * @author Ao shEN
+     * @author Ing Tian
      * unsuccessful case of createCustomer
      */
     @Test
@@ -975,8 +999,9 @@ public class TestAccountService {
         assertNull(customer);
         assertEquals("Name cannot be empty.", error);
     }
+
     /**
-     * @author inG tIAN
+     * @author Ing Tian
      * unsuccessful case of createCustomer
      */
     @Test
@@ -996,6 +1021,7 @@ public class TestAccountService {
         assertNull(customer);
         assertEquals("Phone NO cannot be empty.", error);
     }
+
     /**
      * @author Ing Tian
      * unsuccessful case of createCustomer
@@ -1017,6 +1043,7 @@ public class TestAccountService {
         assertNull(customer);
         assertEquals("Address cannot be empty.", error);
     }
+
     /**
      * @author Ing Tian
      * unsuccessful case of createCustomer
@@ -1038,6 +1065,7 @@ public class TestAccountService {
         assertNull(customer);
         assertEquals("Email cannot be empty.", error);
     }
+
     /**
      * @author Ing Tian
      * unsuccessful case of createCustomer
@@ -1059,6 +1087,7 @@ public class TestAccountService {
         assertNull(customer);
         assertEquals("Phone NO must be a 10-digit number.", error);
     }
+
     /**
      * @author Ing Tian
      * unsuccessful case of createCustomer
@@ -1090,7 +1119,7 @@ public class TestAccountService {
     /**
      * Case1: the updated info that can pass
      *
-     * @author Byron Chen
+     * @author Ing Tian
      */
 
     @Test
@@ -1112,12 +1141,10 @@ public class TestAccountService {
             add(car);
         }});
 
-        String error = "";
-
         try {
             accountService.updateCar(car, TEST_CAR_MODEL, TEST_CAR_YEAR, TEST_CAR_MANUFACTURER, aCustomer);
         } catch (IllegalArgumentException e) {
-            error = e.getMessage();
+            fail();
         }
 
         assertNotNull(car);
@@ -1131,7 +1158,7 @@ public class TestAccountService {
     /**
      * Case2: the updated info that are all empty
      *
-     * @author Byron Chen
+     * @author Ing Tian
      */
     @Test
     public void testUpdateCarEmpty() {
@@ -1172,7 +1199,7 @@ public class TestAccountService {
     /**
      * Case3: the updated info that are all good except year
      *
-     * @author Byron Chen
+     * @author Ing Tian
      */
     @Test
     public void testUpdateCarWithBadYear() {
@@ -1216,7 +1243,7 @@ public class TestAccountService {
 
     /**
      * successful case of createCar
-     * @author Ao Shen
+     * @author Ing Tian
      */
     @Test
     public void testCreateCar() {
@@ -1244,7 +1271,7 @@ public class TestAccountService {
 
     /**
      * unsuccessful case of createCar
-     * @author Ao Shen
+     * @author Ing Tian
      */
     @Test
     public void testCreateCarWithEmptyPlateNo() {
@@ -1265,7 +1292,7 @@ public class TestAccountService {
 
     /**
      * unsuccessful case of createCar
-     * @author Ao Shen
+     * @author Ing Tian
      */
     @Test
     public void testCreateCarWithEmptyModel() {
@@ -1287,7 +1314,7 @@ public class TestAccountService {
 
     /**
      * unsuccessful case of createCar
-     * @author Ao Shen
+     * @author Ing Tian
      */
     @Test
     public void testCreateCarWithEmptyYear() {
@@ -1309,7 +1336,7 @@ public class TestAccountService {
 
     /**
      * unsuccessful case of createCar
-     * @author Ao Shen
+     * @author Ing Tian
      */
     @Test
     public void testCreateCarWithEmptyManufacturer() {
@@ -1331,15 +1358,12 @@ public class TestAccountService {
 
     /**
      * unsuccessful case of createCar
-     * @author Ao Shen
+     * @author Ing Tian
      */
     @Test
     public void testCreateCarWithNoCustomer() {
         assertEquals(0, accountService.getAllOwners().size());
-
-        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
         Car car = null;
-        Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, TEST_CUSTOMER_PHONE_NO, TEST_CUSTOMER_ADDRESS, TEST_CUSTOMER_EMAIL);
         String error = "";
         try {
             car = accountService.createCar(TEST_CAR_PLATE_NO, TEST_CAR_MODEL, TEST_CAR_YEAR, TEST_CAR_MANUFACTURER, null);
@@ -1354,7 +1378,7 @@ public class TestAccountService {
 
     /**
      * unsuccessful case of createCar
-     * @author Ao Shen
+     * @author Ing Tian
      */
     @Test
     public void testCreateCarWithInvalidYear() {
@@ -1377,7 +1401,7 @@ public class TestAccountService {
 
     /**
      * unsuccessful case of createCar
-     * @author Ao Shen
+     * @author Ing Tian
      */
     @Test
     public void testCreateCarWithInvalidPlateNo() {
@@ -1405,9 +1429,8 @@ public class TestAccountService {
 
     /**
      * successful case of updateCustomerInfo
-     * @author Byron Chen
+     * @author Ing Tian
      */
-
     @Test
     public void testUpdateCustomerInfo() {
         RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
@@ -1428,7 +1451,7 @@ public class TestAccountService {
 
     /**
      * unsuccessful case of updateCustomerInfo
-     * @author Byron Chen
+     * @author Ing Tian
      */
     @Test
     public void testUpdateCustomerInfoWithEmptyEmail() {
@@ -1445,9 +1468,10 @@ public class TestAccountService {
         assertNotNull(customer);
         assertEquals(error, "New email cannot be empty.");
     }
+
     /**
      * unsuccessful case of updateCustomerInfo
-     * @author Byron Chen
+     * @author Ing Tian
      */
     @Test
     public void testUpdateCustomerInfoInfoWithEmptyAddress() {
@@ -1464,12 +1488,13 @@ public class TestAccountService {
         assertNotNull(customer);
         assertEquals(error, "New address cannot be empty.");
     }
+
     /**
      * unsuccessful case of updateCustomerInfo
-     * @author Byron Chen
+     * @author Ing Tian
      */
     @Test
-    public void testUpdateCustomerInfofoWithEmptyPhoneNo() {
+    public void testUpdateCustomerInfoWithEmptyPhoneNo() {
         RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
         Customer customer = accountService.createCustomer(TEST_USER_USERNAME, TEST_USER_PASSWORD, TEST_USER_NAME, defaultSystem, "1002003111", "4444 Sunshine Street, Palm Beach, Florida", "someonenew@123.com");
         String error = "";
@@ -1483,9 +1508,10 @@ public class TestAccountService {
         assertNotNull(customer);
         assertEquals(error, "New phoneNo cannot be empty.");
     }
+
     /**
      * unsuccessful case of updateCustomerInfo
-     * @author Byron Chen
+     * @author Ing Tian
      */
     @Test
     public void testUpdateCustomerInfoWithInvalidPhoneNo() {
@@ -1502,9 +1528,10 @@ public class TestAccountService {
         assertNotNull(customer);
         assertEquals(error, "Invalid PhoneNo.");
     }
+
     /**
      * unsuccessful case of updateCustomerInfo
-     * @author Byron Chen
+     * @author Ing Tian
      */
     @Test
     public void testUpdateCustomerInfoWithInvalidAddress() {
@@ -1521,9 +1548,10 @@ public class TestAccountService {
         assertNotNull(customer);
         assertEquals(error, "Invalid Address.");
     }
+
     /**
      * unsuccessful case of updateCustomerInfo
-     * @author Byron Chen
+     * @author Ing Tian
      */
     @Test
     public void testUpdateCustomerInfoWithInvalidEmail() {

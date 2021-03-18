@@ -7,7 +7,7 @@ public class CustomerDto extends UserDto {
     private String phoneNo;
     private String homeAddress;
     private String email;
-    private Set<CarDto> Cars;
+    private Set<CarDto> cars;
     private Set<AppointmentDto> appointments;
 
     public CustomerDto() {
@@ -26,7 +26,7 @@ public class CustomerDto extends UserDto {
         super(username, password, name, repairShopManagementSystemDto);
         this.homeAddress = homeAddress;
         this.email = email;
-        this.Cars = Cars;
+        this.cars = Cars;
         this.appointments = appointments;
         this.phoneNo = phoneNo;
     }
@@ -37,7 +37,7 @@ public class CustomerDto extends UserDto {
         this.phoneNo = phoneNo;
         this.homeAddress = homeAddress;
         this.email = email;
-        this.Cars = Cars;
+        this.cars = Cars;
         this.appointments = new HashSet<>();
 
     }
@@ -49,7 +49,7 @@ public class CustomerDto extends UserDto {
         this.phoneNo = phoneNo;
         this.homeAddress = homeAddress;
         this.email = email;
-        this.Cars = new HashSet<>();
+        this.cars = new HashSet<>();
         this.appointments = new HashSet<>();
 
     }
@@ -67,7 +67,7 @@ public class CustomerDto extends UserDto {
     }
 
     public Set<CarDto> getCars() {
-        return Cars;
+        return cars;
     }
 
     public Set<AppointmentDto> getAppointments() {

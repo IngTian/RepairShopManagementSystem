@@ -27,8 +27,6 @@ import ca.mcgill.ecse321.repairshopmanagementsystem.model.*;
 public class TestScheduleService {
 
     @Mock
-    private OwnerRepository ownerDao;
-    @Mock
     private AssistantRepository assistantDao;
     @Mock
     private ShiftRepository shiftDao;
@@ -41,10 +39,6 @@ public class TestScheduleService {
     private ScheduleService scheduleService;
     @InjectMocks
     private SystemService systemService;
-    @InjectMocks
-    private AppointmentService appointmentService;
-    @InjectMocks
-    private AccountService accountService;
 
     private static final String TEST_USER_USERNAME = "TestUsername";
     private static final String TEST_USER_PASSWORD = "TestPassword";
@@ -58,12 +52,15 @@ public class TestScheduleService {
 
     private static final Integer TEST_SCHEDULE_ID = 123456789;
     private static final Integer TEST_SHIFT_ID = 111;
-    
-    private static final Date TEST_DATE=Date.valueOf("2001-01-01");
-    private static final Time TEST_STARTTIME=Time.valueOf("11:00:00");
-    private static final Time TEST_ENDTIME=Time.valueOf("12:00:00");
+
+    private static final Date TEST_DATE = Date.valueOf("2001-01-01");
+    private static final Time TEST_START_TIME = Time.valueOf("11:00:00");
+    private static final Time TEST_END_TIME = Time.valueOf("12:00:00");
 
 
+    /**
+     * @author Ao Shen
+     */
     @BeforeEach
     public void setMockOutput() {
         // findScheduleById
@@ -76,7 +73,7 @@ public class TestScheduleService {
                 return null;
             }
         });
-        
+
         // findScheduleById
         lenient().when(shiftDao.findShiftByShiftId(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
             if (invocation.getArgument(0).equals(TEST_SCHEDULE_ID)) {
@@ -87,7 +84,7 @@ public class TestScheduleService {
                 return null;
             }
         });
-        
+
 
         // Whenever tries to find assistant, just return the default.
         lenient().when(assistantDao.findAssistantByUsername(anyString())).thenAnswer((InvocationOnMock invocation) -> {
@@ -102,7 +99,7 @@ public class TestScheduleService {
                 return null;
             }
         });
-        
+
         // system
         lenient().when(systemDao.findById(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
             if (invocation.getArgument(0).equals(TEST_SYSTEM_ID)) {
@@ -135,11 +132,11 @@ public class TestScheduleService {
             if (invocation.getArgument(0).equals(TEST_SHIFT_ID)) {
                 Shift shift = new Shift();
                 Schedule TEST_SCHEDULE = new Schedule();
-                Assistant TEST_ASSISTANT =  new Assistant();
-                shift.setStartTime(TEST_STARTTIME);
-                shift.setEndTime(TEST_ENDTIME);
+                Assistant TEST_ASSISTANT = new Assistant();
+                shift.setStartTime(TEST_START_TIME);
+                shift.setEndTime(TEST_END_TIME);
                 shift.setDate(TEST_DATE);
-                shift.setSchedule(TEST_SCHEDULE) ;
+                shift.setSchedule(TEST_SCHEDULE);
                 shift.setAssistant(TEST_ASSISTANT);
                 shift.setShiftId(TEST_SHIFT_ID);
                 return shift;
@@ -147,22 +144,22 @@ public class TestScheduleService {
                 return null;
             }
         });
-        
+
         // shift
         lenient().when(shiftDao.findShiftsByAssistant(any(Assistant.class))).thenAnswer((InvocationOnMock invocation) -> {
-                Shift shift = new Shift();
-                Schedule TEST_SCHEDULE = new Schedule();
-                Assistant TEST_ASSISTANT =  new Assistant();
-                shift.setStartTime(TEST_STARTTIME);
-                shift.setEndTime(TEST_ENDTIME);
-                shift.setDate(TEST_DATE);
-                shift.setSchedule(TEST_SCHEDULE) ;
-                shift.setAssistant(TEST_ASSISTANT);
-                shift.setShiftId(TEST_SHIFT_ID);
-                Set<Shift> shifts = new HashSet<Shift>();
-                shifts.add(shift);
-                return shifts;
-            } 
+                    Shift shift = new Shift();
+                    Schedule TEST_SCHEDULE = new Schedule();
+                    Assistant TEST_ASSISTANT = new Assistant();
+                    shift.setStartTime(TEST_START_TIME);
+                    shift.setEndTime(TEST_END_TIME);
+                    shift.setDate(TEST_DATE);
+                    shift.setSchedule(TEST_SCHEDULE);
+                    shift.setAssistant(TEST_ASSISTANT);
+                    shift.setShiftId(TEST_SHIFT_ID);
+                    Set<Shift> shifts = new HashSet<Shift>();
+                    shifts.add(shift);
+                    return shifts;
+                }
         );
         // Whenever tries to find system, just return the default.
         lenient().when(systemDao.findRepairShopManagementSystemByBusinessNameAndBusinessAddressAndBusinessPhoneNumber(anyString(), anyString(), anyString())).thenAnswer((InvocationOnMock invocation) -> {
@@ -189,70 +186,76 @@ public class TestScheduleService {
         lenient().when(assistantDao.save(any(Assistant.class))).thenAnswer(returnParameterAsAnswer);
         lenient().when(shiftDao.save(any(Shift.class))).thenAnswer(returnParameterAsAnswer);
     }
-//------------------------------------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------------------------------------
-  //---------------------------------------------------Author:Ao Shen----------------------------------------------------
-  //------------------------------------------------------------------------------------------------------------------------
-    
-    
+
+    /**
+     * @author Ao Shen
+     */
     @Test
     public void testCreateSchedule() {
         assertEquals(0, scheduleService.getAllSchedules().size());
 
         RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
         Schedule schedule = new Schedule();
-        String error = "";
         try {
-            schedule = scheduleService.createSchedule(defaultSystem,11);
+            schedule = scheduleService.createSchedule(defaultSystem, 11);
         } catch (Exception e) {
-            error = e.getMessage();
+            fail();
         }
 
         assertNotNull(schedule);
     }
 
+    /**
+     * @author Ao Shen
+     */
     @Test
     public void testUpdateSchedule() {
         RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
         Schedule schedule = new Schedule();
-        String error = "";
         Shift shiftNew = new Shift();
         shiftNew.setShiftId(111);
         Set<Shift> shiftSet = new HashSet<Shift>();
         shiftSet.add(shiftNew);
         try {
-            schedule = scheduleService.createSchedule(defaultSystem,11);
+            schedule = scheduleService.createSchedule(defaultSystem, 11);
             scheduleService.updateSchedule(schedule, shiftNew);
         } catch (Exception e) {
-            error = e.getMessage();
+            fail();
         }
         assertNotNull(schedule);
         assertEquals(shiftSet, schedule.getTimeSlot());
     }
-    
+
+    /**
+     * @author Ao Shen
+     */
     @Test
     public void testCreateShift() {
-    	String error = "";
-    	Shift shift = new Shift();
-        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);    	
-    	Date date=Date.valueOf("2021-01-01");
-    	Time startTime = Time.valueOf("11:00:00");
-        Time endTime = Time.valueOf("12:00:00");
-    	try {
-    	shift = scheduleService.createShift(date, startTime, endTime, null);
-    	} catch (Exception e) {
-            error = e.getMessage();
+        Shift shift = null;
+        Date date = Date.valueOf("2021-01-01");
+        Time startTime = Time.valueOf("14:00:00");
+        Time endTime = Time.valueOf("15:00:00");
+        Assistant assistant = new Assistant();
+        Set<Shift> shiftSet = new HashSet<>();
+        assistant.setShift(shiftSet);
+
+        try {
+            shift = scheduleService.createShift(date, startTime, endTime, assistant);
+        } catch (Exception e) {
+            fail();
         }
-    	assertNotNull(shift);
+        assertNotNull(shift);
     }
-    
+
+    /**
+     * @author Ao Shen
+     */
     @Test
     public void testCreateShiftWithConflictShift() {
-    	String error = "";
-    	Shift shift = new Shift();
-        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);    	
-    	Date date=Date.valueOf("2021-01-01");
-    	Time startTime = Time.valueOf("11:01:00");
+        String error = "";
+        Shift shift = null;
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
+        Time startTime = Time.valueOf("11:01:00");
         Time endTime = Time.valueOf("11:30:00");
         Assistant assistant = new Assistant();
         Set<Shift> shifts = new HashSet<Shift>();
@@ -264,25 +267,27 @@ public class TestScheduleService {
         assistant.setShift(shifts);
         Shift shiftOld = new Shift();
         shiftOld.setDate(TEST_DATE);
-        shiftOld.setStartTime(TEST_STARTTIME);
-        shiftOld.setEndTime(TEST_ENDTIME);
+        shiftOld.setStartTime(TEST_START_TIME);
+        shiftOld.setEndTime(TEST_END_TIME);
         shiftOld.setAssistant(assistant);
         shifts.add(shiftOld);
         try {
-    	shift = scheduleService.createShift(TEST_DATE,startTime,endTime, assistant);
-    	} catch (Exception e) {
+            shift = scheduleService.createShift(TEST_DATE, startTime, endTime, assistant);
+        } catch (Exception e) {
             error = e.getMessage();
         }
-    	assertEquals(error, "New shift has conflicts with existing shifts.");
+        assertNull(shift);
+        assertEquals(error, "New shift has conflicts with existing shifts.");
     }
-    
+
+    /**
+     * @author Ao Shen
+     */
     @Test
     public void testDeleteShift() {
-    	String error = "";
-    	Shift shift = new Shift();
-    	Shift shiftNew = new Shift();
-        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);    	
-        Shift shiftOld = new Shift();
+        Shift shift = new Shift();
+        Shift shiftNew = new Shift();
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
         Set<Shift> shifts = new HashSet<Shift>();
         Assistant assistant = new Assistant();
         assistant.setUsername(TEST_USER_USERNAME);
@@ -291,20 +296,23 @@ public class TestScheduleService {
         assistant.setUserId(111);
         assistant.setRepairShopManagementSystem(defaultSystem);
         assistant.setShift(shifts);
-    	try {
-    	shiftNew = scheduleService.deleteShift(shift);
-    	} catch (Exception e) {
-            error = e.getMessage();
+        try {
+            shiftNew = scheduleService.deleteShift(shift);
+        } catch (Exception e) {
+            fail();
         }
-    	assertEquals(shift, shiftNew);
+        assertEquals(shift, shiftNew);
     }
+
+    /**
+     * @author Ao Shen
+     */
     @Test
     public void testDeleteShiftWithAppointment() {
-    	String error = "";
-    	Shift shift = new Shift();
-    	Shift shiftNew = new Shift();
-        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);    	
-        Shift shiftOld = new Shift();
+        String error = "";
+        Shift shift = new Shift();
+        Shift shiftNew = null;
+        RepairShopManagementSystem defaultSystem = systemService.getSystem(TEST_SYSTEM_NAME, TEST_SYSTEM_PHONE_NO, TEST_SYSTEM_ADDRESS);
         Set<Shift> shifts = new HashSet<Shift>();
         Assistant assistant = new Assistant();
         assistant.setUsername(TEST_USER_USERNAME);
@@ -315,17 +323,14 @@ public class TestScheduleService {
         assistant.setShift(shifts);
         Appointment appointment = new Appointment();
         shift.setAppointment(appointment);
-    	try {
-    	shiftNew = scheduleService.deleteShift(shift);
-    	} catch (Exception e) {
+        try {
+            shiftNew = scheduleService.deleteShift(shift);
+        } catch (Exception e) {
             error = e.getMessage();
         }
-    	assertEquals(error, "Cannot delete the shift with an appointment!");
+        assertNull(shiftNew);
+        assertEquals(error, "Cannot delete the shift with an appointment!");
     }
-
-
-
-
 
 
 }

@@ -1,14 +1,10 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.controller;
 
-import ca.mcgill.ecse321.repairshopmanagementsystem.dto.*;
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.*;
-import ca.mcgill.ecse321.repairshopmanagementsystem.service.*;
-import ca.mcgill.ecse321.repairshopmanagementsystem.utils.Util;
-import net.sf.json.*;
+import ca.mcgill.ecse321.repairshopmanagementsystem.dto.RepairShopManagementSystemDto;
+import ca.mcgill.ecse321.repairshopmanagementsystem.model.RepairShopManagementSystem;
+import ca.mcgill.ecse321.repairshopmanagementsystem.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -19,13 +15,13 @@ public class RepairShopManagementSystemController {
     private SystemService systemService;
 
     @PostMapping(value = "create")
-    public RepairShopManagementSystemDto createSystem(@RequestBody RepairShopManagementSystemDto system) throws IllegalArgumentException {
+    public RepairShopManagementSystemDto createSystem(@RequestBody RepairShopManagementSystemDto system) {
         RepairShopManagementSystem s = systemService.createSystem(system.getBusinessName(), system.getBusinessPhoneNumber(), system.getBusinessAddress());
         return convertToDto(s);
     }
 
     @GetMapping(value = "most_recent")
-    public RepairShopManagementSystemDto getMostRecentSystem() throws IllegalArgumentException {
+    public RepairShopManagementSystemDto getMostRecentSystem() {
         return convertToDto(systemService.getMostRecentSystem());
     }
 

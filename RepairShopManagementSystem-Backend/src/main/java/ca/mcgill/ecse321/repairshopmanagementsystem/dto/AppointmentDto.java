@@ -1,7 +1,6 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.dto;
 
 import java.util.List;
-import java.util.Set;
 
 public class AppointmentDto {
     private Integer appointmentId;

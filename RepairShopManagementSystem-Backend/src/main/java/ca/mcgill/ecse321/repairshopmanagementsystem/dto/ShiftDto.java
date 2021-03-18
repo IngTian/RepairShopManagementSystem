@@ -1,7 +1,5 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.dto;
 
-import ca.mcgill.ecse321.repairshopmanagementsystem.model.Assistant;
-
 import java.sql.Date;
 import java.sql.Time;
 

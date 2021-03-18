@@ -6,12 +6,14 @@ import ca.mcgill.ecse321.repairshopmanagementsystem.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Array;
+import javax.transaction.Transactional;
 import java.sql.Date;
 import java.sql.Time;
-import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class AppointmentService {
@@ -32,8 +34,6 @@ public class AppointmentService {
     private CustomerRepository customerRepository;
     @Autowired
     private CarRepository carRepository;
-    @Autowired
-    private AssistantRepository assistantRepository;
 
     @Autowired
     private RepairShopManagementSystemRepository systemRepository;
@@ -62,18 +62,6 @@ public class AppointmentService {
     ----------------------------------------------------------------------------
      */
 
-
-    /**
-     * @param serviceType
-     * @param username
-     * @param plateNo
-     * @param date
-     * @param startTime
-     * @param endTime
-     * @param weight
-     * @return customer can make an appointment based on the input of the customer
-     * @author
-     */
     @Transactional
     public Appointment makeAppointment(String serviceType, String username, String plateNo, Date date,
                                        Time startTime, Time endTime, Integer weight) {
@@ -138,11 +126,11 @@ public class AppointmentService {
         appointment.setAppointmentId(appointment.hashCode());
 
         customer = customerRepository.save(customer);
-
+        
 
         // Reload the updated appointment.
-        for (Appointment a : customer.getAppointment())
-            if (a.getAppointmentId().equals(appointment.getAppointmentId())) {
+        for(Appointment a : customer.getAppointment())
+            if(a.getAppointmentId().equals(appointment.getAppointmentId())){
                 appointment = a;
                 break;
             }
@@ -150,42 +138,33 @@ public class AppointmentService {
         return appointment;
     }
 
-    /**
-     * register a shift to an appointment
-     *
-     * @param appointment
-     * @param shift
-     * @return
-     */
     @Transactional
-    public Shift registerAnAppointmentToAShift(Appointment appointment, Shift shift) {
+    public Shift registerAnAppointmentToAShift(Appointment appointment, Shift shift){
         shift.setAppointment(appointment);
-
         shiftRepository.save(shift);
         return shift;
     }
-//since this is not required for the deliverable, we wrote it in case if we need it in the futur deliverable.
-//    @Transactional
-//    public Appointment updateAppointmentTime(Integer shiftId, Integer appointmentId) {
-//        Appointment appointment = appointmentRepository.findAppointmentByAppointmentId(appointmentId);
-//        List<Space> freeSpaces = new ArrayList<Space>();
-//        List<Shift> freeShifts = new ArrayList<Shift>();
-//        List<Space> listSpace = toList(spaceRepository.findAll());
-//        Set<Space> setSpace = new HashSet<Space>(listSpace);
-//        if (Util.canMakeAppointment(0,
-//                appointmentRepository.findAppointmentByAppointmentId(appointmentId).getShift().getDate(),
-//                appointmentRepository.findAppointmentByAppointmentId(appointmentId).getShift().getStartTime(),
-//                appointmentRepository.findAppointmentByAppointmentId(appointmentId).getShift().getEndTime(),
-//                scheduleRepository.findScheduleByWeekNo(Util.getWeekNo(getShift(shiftId).getDate())),
-//                setSpace,
-//                freeSpaces,
-//                freeShifts)) {
-//            appointment.setShift(shiftRepository.findShiftByShiftId(shiftId));
-//        }
-//        return appointment;
-//    }
 
     @Transactional
+    public Appointment UpdateAppointmentTime(Integer shiftId, Integer appointmentId) {
+        Appointment appointment = appointmentRepository.findAppointmentByAppointmentId(appointmentId);
+        List<Space> freeSpaces = new ArrayList<Space>();
+        List<Shift> freeShifts = new ArrayList<Shift>();
+        List<Space> listSpace = toList(spaceRepository.findAll());
+        Set<Space> setSpace = new HashSet<Space>(listSpace);
+        if (Util.canMakeAppointment(0,
+                appointmentRepository.findAppointmentByAppointmentId(appointmentId).getShift().getDate(),
+                appointmentRepository.findAppointmentByAppointmentId(appointmentId).getShift().getStartTime(),
+                appointmentRepository.findAppointmentByAppointmentId(appointmentId).getShift().getEndTime(),
+                scheduleRepository.findScheduleByWeekNo(Util.getWeekNo(getShift(shiftId).getDate())),
+                setSpace,
+                freeSpaces,
+                freeShifts)) {
+            appointment.setShift(shiftRepository.findShiftByShiftId(shiftId));
+        }
+        return appointment;
+    }
+
     public Appointment getAppointmentById(Integer id) {
         return appointmentRepository.findAppointmentByAppointmentId(id);
     }
@@ -201,13 +180,6 @@ public class AppointmentService {
         return toList(appointmentRepository.findAll());
     }
 
-    /**
-     * change a service type of an appointment
-     *
-     * @param appointment
-     * @param newServiceType
-     * @return
-     */
     @Transactional
     public Appointment changeServiceType(Appointment appointment, String newServiceType) {
         String error = "";
@@ -231,18 +203,12 @@ public class AppointmentService {
 
     }
 
-    /**
-     * delete an appointment in the system
-     *
-     * @param appointment
-     * @return
-     */
     @Transactional
     public Appointment deleteAppointment(Appointment appointment) {
         Date now = new Date(System.currentTimeMillis());
         if (appointment.getShift().getDate().compareTo(now) > 0)
             throw new IllegalArgumentException("This appointment will start in 1 day!");
-        for (Car c : appointment.getCar())
+        for(Car c : appointment.getCar())
             c.getAppointment().remove(appointment);
         appointment.setCar(new HashSet<>());
         appointmentRepository.delete(appointment);
@@ -255,12 +221,6 @@ public class AppointmentService {
     ----------------------------------------------------------------------------
      */
 
-    /**
-     * customer make a payment and update the status of the given bill
-     *
-     * @param bill
-     * @return
-     */
     @Transactional
     public Bill makePayment(Bill bill) {
         if (bill == null)
@@ -270,24 +230,10 @@ public class AppointmentService {
         return bill;
     }
 
-    /**
-     * get the bill in the database base on the id provided
-     *
-     * @param id
-     * @return
-     */
     public Bill getBillByBillNo(Integer id) {
         return billRepository.findBillByBillNo(id);
     }
 
-    /**
-     * create the bill for a given appointment
-     *
-     * @param price
-     * @param appointment
-     * @param isPaid
-     * @return
-     */
     @Transactional
     public Bill createBill(Integer price, Appointment appointment, boolean isPaid) {
         if (price == null)
@@ -303,12 +249,6 @@ public class AppointmentService {
         return newBill;
     }
 
-    /**
-     * get all the bill of an associated appointment
-     *
-     * @param appointment
-     * @return
-     */
     @Transactional
     public List<Bill> getBill(Appointment appointment) {
         return billRepository.findByAppointment(appointment);
@@ -325,13 +265,6 @@ public class AppointmentService {
     ----------------------------------------------------------------------------
      */
 
-    /**
-     * create a space in the system
-     *
-     * @param maxWeightLoad
-     * @param RepairShopManagementSystem
-     * @return
-     */
     @Transactional
     public Space createSpace(Integer maxWeightLoad, RepairShopManagementSystem RepairShopManagementSystem) {
         String error = "";
@@ -350,11 +283,6 @@ public class AppointmentService {
 
     }
 
-    /**
-     * get all the spaces in the system
-     *
-     * @return
-     */
     @Transactional
     public List<Space> getAllSpace() {
         return toList(spaceRepository.findAll());

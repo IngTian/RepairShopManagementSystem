@@ -10,7 +10,7 @@ public class AssistantDto extends UserDto {
         super();
     }
 
-    public AssistantDto(String username, String password, String name){
+    public AssistantDto(String username, String password, String name) {
         super(username, password, name);
     }
 

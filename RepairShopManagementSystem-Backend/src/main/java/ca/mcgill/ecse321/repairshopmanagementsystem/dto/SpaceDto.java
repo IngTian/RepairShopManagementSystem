@@ -38,4 +38,3 @@ public class SpaceDto {
         return system;
     }
 }
-

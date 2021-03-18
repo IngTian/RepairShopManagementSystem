@@ -1,7 +1,5 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.dto;
 
-import java.util.Set;
-
 public class OwnerDto extends UserDto {
 
     public OwnerDto() {
