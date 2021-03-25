@@ -85,29 +85,6 @@ export default {
 
 
       ],
-      activities: [
-        {
-          imageFileName: "LeetCode500.png",
-          titleFlag: "Per Aspera Ad Astra",
-          title: "Ace Interview!",
-          description:"Complete 500 questions on LeetCode.",
-          id: 1
-        },
-        {
-          imageFileName: "django_development.png",
-          titleFlag: "I LIKE THE WAY YOU DIE, BOY",
-          title: "Software development",
-          description:"Turn ideas into numbers",
-          id: 2
-        },
-        {
-          imageFileName: "ml_goal.jpg",
-          titleFlag: "The real 'Homo clusus?'",
-          title: "Embrace the Age of AI",
-          description:"Computer Vision, NLP, et cetera",
-          id: 3
-        },
-      ]
     };
   },
   methods:{
