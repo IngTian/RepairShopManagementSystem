@@ -1,18 +1,14 @@
 <template>
-  <div class="hello">
+  <div class="about">
     <h1>{{ msg }}</h1>
-    <h3>McGill Repair Shop</h3>
+    <h3>{{getBusinessName}} </h3>
     <h3>Contact Number</h3>
     <ul>
-      <p>
-        123123123 {{getBusinessAddress}} {{getBusinessName}} {{getBusinessPhoneNo}}
-      </p>
+        {{getBusinessPhoneNo}}
     </ul>
     <h3>Address</h3>
     <ul>
-      <p>
-        6666 Rue Mcgill Montreal Canada.
-      </p>
+        {{getBusinessAddress}}
     </ul>
   </div>
 </template>
