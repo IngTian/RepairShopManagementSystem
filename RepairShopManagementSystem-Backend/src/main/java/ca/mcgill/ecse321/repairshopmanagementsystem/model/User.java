@@ -36,17 +36,6 @@ public abstract class User {
         return this.name;
     }
 
-    private Set<Schedule> schedule;
-
-    @ManyToMany
-    public Set<Schedule> getSchedule() {
-        return this.schedule;
-    }
-
-    public void setSchedule(Set<Schedule> schedules) {
-        this.schedule = schedules;
-    }
-
     private RepairShopManagementSystem repairShopManagementSystem;
 
     @ManyToOne(optional = false)
