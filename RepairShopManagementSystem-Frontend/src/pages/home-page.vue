@@ -1,32 +1,25 @@
 <template>
   <div class="root">
-    <!--Entry Image-->
     <div class="main-info-section">
       <div class="blur">
         <div class="shade"></div>
         <div class="motto">
-          <h1>Salve! Quis Agis?</h1>
+          <h1>Trust us with your car!!</h1>
         </div>
       </div>
     </div>
-    <section-title title="Reading List" sub-title="Drinking darkness and pouring out light"></section-title>
+
+
+    <div class="Shop-Information">
+      <section-title title="Mcgill Repair Shop" sub-title="Service provided"></section-title>
+      <horizontal-gallery :images="shopImages"></horizontal-gallery>
+      <horizontal-gallery :images="shopImagessub"></horizontal-gallery>
+    </div>
+
+    <section-title title="Discount" sub-title="Take care of your love car with amazing discount!!"></section-title>
     <horizontal-gallery :images="galleryImages"></horizontal-gallery>
-    <section-title title="Current Projects" sub-title="Acta Non Verba"></section-title>
-    <div class="projects">
-      <div class="project" v-for="activity in activities" :key="activity.id"
-           :style="{'backgroundImage': `url('${getImagePath(activity.imageFileName)}')`}">
-        <div class="activity-promotion">
-          <div class="activity-dash"></div>
-          <div class="activity-flag">{{ activity.titleFlag }}</div>
-          <div class="activity-title">{{ activity.title }}</div>
-          <div class="activity-description">{{ activity.description }}</div>
-          <RedButton destination="/" text="View Github" background-color="#b10000"
-                     style="width: 150px; height: 50px; margin-top: 20px"></RedButton>
-        </div>
-      </div>
-    </div>
-    <section-title title="A Small Planet" sub-title="Drag it!"></section-title>
   </div>
+
 </template>
 
 <script>
@@ -35,71 +28,92 @@
 
 import SectionTitle from "@/components/section-title";
 import HorizontalGallery from "@/components/horizontal-gallery";
-import RedButton from "@/components/button";
+
 
 export default {
   name: "home-page",
-  components: {RedButton, HorizontalGallery, SectionTitle},
+  components: {HorizontalGallery, SectionTitle},
   data: function () {
     return {
       galleryImages: [
         {
-          fileName: "introduction_to_algorithms.jpg",
-          title: "Introduction to Algorithms",
-          description: "In progress",
+          fileName: "15discount.jpeg",
+          title: "For the first time user",
+
           id: 1
         },
         {
-          fileName: "20000_leagues_under_the_sea.jpg",
-          title: "20000 Leagues under the Sea",
-          description: "In progress",
+          fileName: "20discount.jpeg",
+          title: "Invite your friend!!",
+
           id: 2
         },
-        {fileName: "war_and_peace.jpg", title: "War and Peace", description: "In progress", id: 3},
-        {fileName: "latin_language.jpg", title: "Oxford Latin Course", description: "In progress", id: 4},
-        {fileName: "song_history.jpg", title: "History of Song", description: "Scheduled", id: 5},
-        {fileName: "child_labor_history.jpg", title: "History of Child Labor", description: "Scheduled", id: 6},
-        {fileName: "kyoto_art.jpg", title: "Kyoto", description: "Scheduled", id: 7},
+        {fileName: "20discount.jpeg", title: "Take a one year plan with us!!", id: 3},
+
+      ],
+      shopImages: [
+        {
+          fileName: "carwash.jpeg",
+          title: "     Car Wash",
+
+          id: 1
+        },
+        {
+          fileName: "maintenace.png",
+          title: "    Maintenance",
+
+          id: 2
+        },
+        {fileName: "tire.jpeg", title: "Change tire", id: 3},
+        {fileName: "latin_language.jpg", title: "Oxford Latin Course", description: "Repair", id: 4},
+
+      ],
+      shopImagessub: [
+        {
+          fileName: "repair.jpeg",
+          title: "Repair",
+
+          id: 1
+        },
+        {
+          fileName: "modified.jpeg",
+          title: "Modification",
+
+          id: 2
+        },
+        {fileName: "tel.jpg", title: "Consultation", id: 3},
+
+
       ],
       activities: [
         {
           imageFileName: "LeetCode500.png",
           titleFlag: "Per Aspera Ad Astra",
           title: "Ace Interview!",
-          description: "Complete 500 questions on LeetCode.",
+          description:"Complete 500 questions on LeetCode.",
           id: 1
         },
         {
           imageFileName: "django_development.png",
           titleFlag: "I LIKE THE WAY YOU DIE, BOY",
           title: "Software development",
-          description: "Turn ideas into numbers",
+          description:"Turn ideas into numbers",
           id: 2
         },
         {
           imageFileName: "ml_goal.jpg",
           titleFlag: "The real 'Homo clusus?'",
           title: "Embrace the Age of AI",
-          description: "Computer Vision, NLP, et cetera",
+          description:"Computer Vision, NLP, et cetera",
           id: 3
         },
       ]
     };
   },
-  methods: {
-    getImagePath: function (imageFileName) {
+  methods:{
+    getImagePath: function (imageFileName){
       return require(`.././assets/img/${imageFileName}`)
     }
-  },
-  created() {
-    // Get business information.
-    let businessInfo = {
-      businessName: "McGill Repair Shop",
-      businessAddress: "6666 Rue Mcgill Montreal Canada.",
-      businessPhoneNo: "1234567899"
-    }
-
-    localStorage.setItem('businessInfo', JSON.stringify(businessInfo))
   }
 }
 </script>
@@ -109,7 +123,7 @@ export default {
 .main-info-section {
   height: 90vh;
   width: 100%;
-  background-image: url(".././assets/Raphael_School_of_Athens.jpg");
+  background-image: url("../../src/assets/img/carshop.jpg");
 
   background-attachment: fixed;
   background-repeat: no-repeat;
@@ -130,15 +144,18 @@ export default {
   height: max-content;
   width: max-content;
 }
-
+.Shop-Information{
+  align-items: center;
+}
 .motto {
   margin-top: 0;
   font-size: 35px;
   font-family: "Times New Roman", sans-serif;
-  color: white;
+
+  color: black;
 }
 
-.projects {
+.projects{
   width: 85%;
   margin-left: auto;
   margin-right: auto;
@@ -146,7 +163,7 @@ export default {
   overflow: hidden;
 }
 
-.project {
+.project{
   width: 100%;
   height: 500px;
   position: relative;
@@ -157,12 +174,12 @@ export default {
   transition: 0.4s ease;
 }
 
-.project:hover {
+.project:hover{
   filter: sepia(0);
   transition: 0.8s ease;
 }
 
-.activity-promotion {
+.activity-promotion{
   width: 30%;
   height: 100%;
   margin-left: 80px;
@@ -172,30 +189,30 @@ export default {
   align-items: flex-start;
 }
 
-.activity-dash {
+.activity-dash{
   background: #b10000;
   height: 3px;
   margin-bottom: 10px;
   width: 30px
 }
 
-.activity-flag, .activity-title, .activity-description {
+.activity-flag, .activity-title, .activity-description{
   color: white;
 }
 
-.activity-flag, .activity-description {
+.activity-flag, .activity-description{
   font-family: Roboto, sans-serif;
 }
 
-.activity-flag {
+.activity-flag{
   font-size: 35px;
 }
 
-.activity-description {
+.activity-description{
   font-size: 40px;
 }
 
-.activity-title {
+.activity-title{
   font-size: 50px;
   font-family: "Playfair Display SC", serif;
   font-weight: 600;

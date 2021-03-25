@@ -26,7 +26,7 @@ export default {
   data: function () {
     return {
       startingIndex: 0,
-      maximumLength: 7,
+      maximumLength: 3,
       prevCharacter: "<",
       nextCharacter: ">",
     }
