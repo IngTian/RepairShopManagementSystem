@@ -35,7 +35,7 @@
           <input class="form-input" v-model="username" placeholder="Username" style="width: 76%; margin-bottom: 20px">
           <input class="form-input" v-model="password" placeholder="Password" style="width: 76%; margin-bottom: 40px">
           <action-button background-color="black" text="LOG IN"
-                         style="width: 200px; height: 60px"></action-button>
+                         style="width: 200px; height: 60px" v-on:clicked="LoginButtonClicked"></action-button>
         </div>
       </transition>
 
@@ -116,6 +116,32 @@ export default {
       ).then(resp => {
         response = resp;
         console.log(response)
+      }).catch(e => {
+        console.error(e.toString())
+      })
+    },
+    LoginButtonClicked: function () {
+
+      let username = this.username;
+     // let password = this.password;
+
+      AXIOS.get("users/customers/get_by_username",
+          {
+
+        params:{
+        username: username
+        }},
+
+      ).then(resp => {
+        let userInfo = resp.data;
+        if (userInfo.password === this.password) {
+          // Give permission
+          localStorage.setItem('userInformation', JSON.stringify(userInfo))
+          this.$router.push("/user")
+        } else {
+          // Alert or something
+          console.error("Login failure.")
+        }
       }).catch(e => {
         console.error(e.toString())
       })

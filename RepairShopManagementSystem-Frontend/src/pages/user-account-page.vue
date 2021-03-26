@@ -71,11 +71,11 @@
             style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%">
           <div style="width: max-content">
             <action-button background-color="black" :text="getEditInfoButtonText"
-                           v-on:clicked="updateUserInfomationClicked"
+                           v-on:clicked="isUpdatingBasicInformation=!isUpdatingBasicInformation"
                            style="width: 150px"></action-button>
           </div>
           <div style="width: max-content">
-            <action-button background-color="black" text="Update" style="width: 150px"></action-button>
+            <action-button background-color="black" text="Update" style="width: 150px" v-on:clicked="updateUserInformationClicked"></action-button>
           </div>
         </div>
       </div>
@@ -106,16 +106,16 @@ export default {
     }
   },
   methods:{
-    updateUserInfomationClicked:function(){
+    updateUserInformationClicked:function(){
      let password=this.updatedPassword;
      let name=this.updatedName;
      let address=this.updatedAddress;
      let phoneNo=this.updatedPhoneNo;
-     let email=this.email;
+     let email=this.updatedEmail;
       let response = Object
       AXIOS.post("users/customers/update_info",
           {
-           //requestbody
+           //request body
             username: this.getUsername,
             password: this.getPassword,
             name: this.getName,
@@ -123,7 +123,8 @@ export default {
             homeAddress: this.getAddress,
             email: this.getEmail,
           },
-          {parm:{
+          {
+            params:{
             newUsername:this.getUsername,
               newPassword:password,
               newName:name,
