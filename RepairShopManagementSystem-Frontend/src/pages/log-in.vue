@@ -136,6 +136,7 @@ export default {
         let userInfo = resp.data;
         if (userInfo.password === this.password) {
           // Give permission
+
           localStorage.setItem('userInformation', JSON.stringify(userInfo))
           this.$router.push("/user")
         } else {

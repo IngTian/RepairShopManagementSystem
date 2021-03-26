@@ -10,14 +10,26 @@
 <script>
 export default {
   name: "user-page",
+  data:function(){
+    return{
+      username:"",
+      name:"",
+      password:"",
+      address:"",
+      phoneNo:"",
+      email:"",
+
+    }
+  },
   mounted() {
+
     let userInformation = {
-      name: "Carl Von Schneider",
-      username: "aUsername",
-      password: "aPassword",
-      address: "1234 Ile Street, Palm Beach, Florida",
-      phoneNo: "1123345566",
-      email: "hello@world.edu",
+      name: localStorage.getItem('userInformation').name,
+      username: localStorage.getItem('userInformation').username,
+      password: localStorage.getItem('userInformation').password,
+      address: localStorage.getItem('userInformation').address,
+      phoneNo: localStorage.getItem('userInformation').phoneNo,
+      email: localStorage.getItem('userInformation').email,
 
       // Some appointments
       appointments: [
