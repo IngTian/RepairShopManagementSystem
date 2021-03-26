@@ -25,8 +25,8 @@
           <input class="form-input" v-model="address" placeholder="Address" style="width: 76%; margin-bottom: 20px">
           <input class="form-input" v-model="username" placeholder="Username" style="width: 76%; margin-bottom: 20px">
           <input class="form-input" v-model="password" placeholder="Password" style="width: 76%; margin-bottom: 40px">
-          <red-button destination="/" background-color="red" text="SIGN UP"
-                      style="width: 200px; height: 60px"></red-button>
+          <action-button background-color="black" text="SIGN UP"
+                         style="width: 200px; height: 60px" v-on:clicked="signUpButtonClicked"></action-button>
         </div>
         <div v-else class="form-container" key="logInForm">
           <div class="title">
@@ -34,8 +34,8 @@
           </div>
           <input class="form-input" v-model="username" placeholder="Username" style="width: 76%; margin-bottom: 20px">
           <input class="form-input" v-model="password" placeholder="Password" style="width: 76%; margin-bottom: 40px">
-          <red-button destination="/" background-color="red" text="LOG IN"
-                      style="width: 200px; height: 60px"></red-button>
+          <action-button background-color="black" text="LOG IN"
+                         style="width: 200px; height: 60px"></action-button>
         </div>
       </transition>
 
@@ -55,11 +55,12 @@
 </template>
 
 <script>
-import RedButton from "@/components/button";
-
+import axios from "axios"
+var AXIOS = axios.create({
+  baseURL: "http://localhost:8080",
+})
 export default {
   name: "log-in",
-  components: {RedButton},
   data: function () {
     return {
       title: "Sign Up Now!",
@@ -81,7 +82,6 @@ export default {
     getSignUpSelectorStyle: function () {
       return this.displaySignUp ? this.selectedStyle : null;
     },
-
     getLogInSelectorStyle: function () {
       return this.displayLogIn ? this.selectedStyle : null;
     }
@@ -94,41 +94,60 @@ export default {
     logInSelectorClicked: function () {
       this.displayLogIn = true;
       this.displaySignUp = false;
+    },
+    signUpButtonClicked: function () {
+      let name = this.firstName + " " + this.lastName;
+      let username = this.username;
+      let password = this.password;
+      let email = this.email;
+      let address = this.address;
+      let phoneNo = this.phoneNo;
+      let response = Object
+      AXIOS.post("users/customers/create_to_most_recent_system",
+          {
+            // Request body
+            username: username,
+            password: password,
+            name: name,
+            phoneNo: phoneNo,
+            homeAddress: address,
+            email: email
+          },
+      ).then(resp => {
+        response = resp;
+        console.log(response)
+      }).catch(e => {
+        console.error(e.toString())
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-
 .login-form {
   width: 40em;
   height: max-content;
   padding-bottom: 40px;
   background-color: whitesmoke;
-
   margin-left: auto;
   margin-right: auto;
   margin-top: 100px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   align-content: space-around;
   justify-content: flex-start;
 }
-
 .log-in-sign-up-selector {
   width: 80%;
   height: 5em;
   margin-top: 50px;
   margin-left: auto;
   margin-right: auto;
-
   display: table;
   vertical-align: center;
 }
-
 .selector {
   display: table-cell;
   vertical-align: middle;
@@ -136,7 +155,6 @@ export default {
   color: white;
   width: 50%;
 }
-
 .selector-box {
   height: 100%;
   width: 100%;
@@ -144,47 +162,38 @@ export default {
   line-height: 100px;
   font-size: 1.5em;
   font-family: Roboto, sans-serif;
-
   transition: ease .5s;
 }
-
 .selector-box:hover {
   background-color: darkgray;
 }
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s ease-in-out;
 }
-
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
 {
   opacity: 0;
 }
-
 .title {
   width: 80%;
   height: 80px;
   margin-top: 30px;
   margin-left: auto;
   margin-right: auto;
-
   text-align: center;
   line-height: 80px;
   font-size: 40px;
   font-family: Roboto, sans-serif;
 }
-
 .form-container {
   width: 80%;
   height: max-content;
   margin-top: 40px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
 }
-
 .form-input {
   display: block;
   height: 1.5em;
@@ -192,19 +201,15 @@ export default {
   background-color: white;
   outline: none;
   border: gray solid 1px;
-
   font-family: sans-serif;
   font-size: 18px;
   text-decoration: none;
-
   transition: border-color .4s ease, box-shadow .4s ease;
 }
-
 .form-input:focus {
   border: red 1px solid;
   transition: border-color .4s ease, box-shadow .4s ease;
 }
-
 .logo {
   width: 30em;
   height: 100px;
@@ -213,7 +218,6 @@ export default {
   margin-top: 80px;
   margin-bottom: 100px;
   background-color: white;
-
   font-family: 'Train One', cursive;
   font-size: 50px;
   text-align: center;

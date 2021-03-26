@@ -195,10 +195,13 @@ public class AccountService {
         customerRepository.save(customer);
         return customer;
     }
-
+   
     @Transactional
     public Customer getCustomer(String username) {
-        return customerRepository.findCustomerByUsername(username);
+    	
+       Customer customer=customerRepository.findCustomerByUsername(username);
+       if(customer==null) throw new IllegalArgumentException("no customer find");
+       return customer;
     }
 
     @Transactional

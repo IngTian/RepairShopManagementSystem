@@ -11,8 +11,8 @@ Related to user operations.
  */
 import UserWelcomePage from "@/pages/user-welcome-page"
 import UserAccountPage from "@/pages/user-account-page"
-import UserManageAppointment from "@/pages/user-manage-component"
 import UserMakeAppointment from "@/pages/user-make-appointment"
+
 
 const routes = [
     {path: '/', name: '/', component: HomePage},
@@ -31,12 +31,11 @@ const routes = [
                 component: UserAccountPage
             },
             {
-                path: "manage-appointment",
-                component: UserManageAppointment
-            },
-            {
                 path: "make-appointment",
-                component: UserMakeAppointment
+                component: UserMakeAppointment,
+                children: [
+
+                ]
             }
         ]
     },
