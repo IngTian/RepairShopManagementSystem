@@ -75,7 +75,7 @@
                            style="width: 150px"></action-button>
           </div>
           <div style="width: max-content">
-            <action-button background-color="black" text="Update" style="width: 150px" v-on:clicked="updateUserInfomationClicked"></action-button>
+            <action-button background-color="black" text="Update" style="width: 150px" v-on:clicked="updateUserInformationClicked"></action-button>
           </div>
         </div>
       </div>
@@ -106,12 +106,12 @@ export default {
     }
   },
   methods:{
-    updateUserInfomationClicked:function(){
+    updateUserInformationClicked:function(){
      let password=this.updatedPassword;
      let name=this.updatedName;
      let address=this.updatedAddress;
      let phoneNo=this.updatedPhoneNo;
-     let email=this.email;
+     let email=this.updatedEmail;
       let response = Object
       AXIOS.post("users/customers/update_info",
           {

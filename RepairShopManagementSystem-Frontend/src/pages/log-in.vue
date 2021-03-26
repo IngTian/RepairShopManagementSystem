@@ -124,20 +124,24 @@ export default {
 
       let username = this.username;
      // let password = this.password;
-     let CustomerInfo= Object;
-      AXIOS.get("users/customers/get_By_Username",
+
+      AXIOS.get("users/customers/get_by_username",
           {
 
         params:{
-        name: username
+        username: username
         }},
 
-      ).then(respo => {
-      CustomerInfo= respo;
-
-
-
-        console.log(CustomerInfo)
+      ).then(resp => {
+        let userInfo = resp.data;
+        if (userInfo.password === this.password) {
+          // Give permission
+          localStorage.setItem('userInformation', JSON.stringify(userInfo))
+          this.$router.push("/user")
+        } else {
+          // Alert or something
+          console.error("Login failure.")
+        }
       }).catch(e => {
         console.error(e.toString())
       })

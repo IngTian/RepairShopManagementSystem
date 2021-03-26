@@ -84,9 +84,9 @@ public class AccountController {
         List<Customer> customerList = accountService.getAllCustomers();
         return convertToDtoListForCustomer(customerList);
     }
-    @GetMapping(value = "customers/get_By_Username")
-    public CustomerDto getOneCustomer(@RequestParam String userName) {
-      Customer customer = accountService.getCustomer(userName);
+    @GetMapping(value = "customers/get_by_username")
+    public CustomerDto getOneCustomer(@RequestParam String username) {
+      Customer customer = accountService.getCustomer(username);
         return convertToDto(customer);
     }
 
