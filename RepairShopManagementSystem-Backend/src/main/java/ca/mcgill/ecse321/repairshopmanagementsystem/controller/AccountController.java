@@ -56,7 +56,11 @@ public class AccountController {
         List<Assistant> assistantList = accountService.getAllAssistants();
         return convertToDtoListForAssistant(assistantList);
     }
-
+    @GetMapping(value = "assistants/get_By_AssistantName")
+    public AssistantDto getOneAssistant(@RequestParam String userName) {
+     Assistant assistant = accountService.getAssistant(userName);
+        return convertToDto(assistant);
+    }
     @PostMapping(value = "assistants/create_to_most_recent_system")
     public AssistantDto createAssistantToMostRecentSystem(@RequestBody AssistantDto a) {
         Assistant assistant = accountService.createAssistant(a.getUsername(), a.getPassword(), a.getName(), systemService.getMostRecentSystem());
@@ -79,6 +83,11 @@ public class AccountController {
     public List<CustomerDto> getAllCustomers() {
         List<Customer> customerList = accountService.getAllCustomers();
         return convertToDtoListForCustomer(customerList);
+    }
+    @GetMapping(value = "customers/get_By_Username")
+    public CustomerDto getOneCustomer(@RequestParam String userName) {
+      Customer customer = accountService.getCustomer(userName);
+        return convertToDto(customer);
     }
 
     @PostMapping(value = "customers/update_info")

@@ -57,7 +57,7 @@
 <script>
 import axios from "axios"
 var AXIOS = axios.create({
-  baseURL: "http://192.168.3.52:8080",
+  baseURL: "http://localhost:8080",
 })
 export default {
   name: "log-in",

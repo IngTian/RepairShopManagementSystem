@@ -71,7 +71,7 @@
             style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%">
           <div style="width: max-content">
             <action-button background-color="black" :text="getEditInfoButtonText"
-                           v-on:clicked="isUpdatingBasicInformation=!isUpdatingBasicInformation"
+                           v-on:clicked="updateUserInfomationClicked"
                            style="width: 150px"></action-button>
           </div>
           <div style="width: max-content">
@@ -88,6 +88,10 @@
 </template>
 
 <script>
+import axios from "axios"
+var AXIOS = axios.create({
+  baseURL: "http://localhost:8080",
+})
 export default {
   name: "user-account-page",
   data: function () {
@@ -101,6 +105,49 @@ export default {
       updatedName: "",
     }
   },
+  methods:{
+    updateUserInfomationClicked:function(){
+     let password=this.updatedPassword;
+     let name=this.updatedName;
+     let address=this.updatedAddress;
+     let phoneNo=this.updatedPhoneNo;
+     let email=this.email;
+      let response = Object
+      AXIOS.post("users/customers/update_info",
+          {
+           //requestbody
+            username: this.getUsername,
+            password: this.getPassword,
+            name: this.getName,
+            phoneNo: this.getPhoneNo,
+            homeAddress: this.getAddress,
+            email: this.getEmail,
+          },
+          {parm:{
+            newUsername:this.getUsername,
+              newPassword:password,
+              newName:name,
+              newPhoneNo:phoneNo,
+              newAddress:address,
+              newEmail:email,
+
+
+
+
+            }
+      }
+
+      ).then(resp => {
+        response = resp;
+        console.log(response)
+      }).catch(e => {
+        console.error(e.toString())
+      })
+
+
+    }
+  },
+
   mounted() {
     // Load user info from local storage.
     this.customerInfo = JSON.parse(localStorage.getItem('userInformation'));
