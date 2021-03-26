@@ -109,7 +109,16 @@ public class AppointmentService {
         Bill aBill = new Bill();
         aBill.setAppointment(appointment);
         aBill.setBillNo(appointment.hashCode());
-        aBill.setPrice(100);
+        int price=0;
+        if(serviceType.equalsIgnoreCase("car wash")) {
+        	price=30;
+        }
+        else if(serviceType.equalsIgnoreCase("maintenance")){
+        	price=80;
+        }
+        else if(serviceType.equalsIgnoreCase("repair")) price=150;
+        else if(serviceType.equalsIgnoreCase("changeTire")) price=30;
+        aBill.setPrice(price);
         aBill.setIsPaid(false);
         bills.add(aBill);
         appointment.setBill(bills);
