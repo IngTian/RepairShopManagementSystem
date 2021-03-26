@@ -87,7 +87,7 @@ export default {
 
 .exhibition {
   height: 100%;
-  width: 13vw;
+  width: 25vw;
   margin-right: 30px;
   overflow: hidden;
   display: inline-flex;
