@@ -8,14 +8,14 @@ public class AppointmentDto {
     private ServiceDto service;
     private ShiftDto shift;
     private CustomerDto customer;
-    private List <CarDto> cars;
+    private List<CarDto> cars;
     private SpaceDto space;
 
     public AppointmentDto() {
 
     }
 
-    public AppointmentDto(Integer id){
+    public AppointmentDto(Integer id) {
         this.appointmentId = id;
     }
 
@@ -28,14 +28,23 @@ public class AppointmentDto {
         this.shift = shift;
         this.customer = customer;
     }
+
     public AppointmentDto(Integer appointmentId, List<BillDto> bill, ShiftDto shift, CustomerDto customer, List<CarDto> cars, SpaceDto space) {
         this.appointmentId = appointmentId;
         this.cars = cars;
         this.bill = bill;
         this.space = space;
-       
+
         this.shift = shift;
         this.customer = customer;
+    }
+
+    public AppointmentDto(Integer appointmentId, List<BillDto> bill, ShiftDto shift, List<CarDto> cars, SpaceDto space) {
+        this.appointmentId = appointmentId;
+        this.bill = bill;
+        this.shift = shift;
+        this.cars = cars;
+        this.space = space;
     }
 
     public Integer getAppointmentId() {
