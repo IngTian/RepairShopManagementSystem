@@ -45,6 +45,7 @@ public class AppointmentDto {
         this.shift = shift;
         this.cars = cars;
         this.space = space;
+        this.service = service;
     }
 
     public Integer getAppointmentId() {
