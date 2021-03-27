@@ -92,7 +92,7 @@ export default {
   width: 100%;
   height: 70%;
   overflow: hidden;
-  border: 1px solid gray;
+  border: 1px solid white;
 }
 .img div {
   width: 100%;

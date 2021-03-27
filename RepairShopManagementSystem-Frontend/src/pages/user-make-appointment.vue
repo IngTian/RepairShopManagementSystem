@@ -11,7 +11,7 @@
     </div>
     <section-title title="How can we serve?" sub-title="Choose a service type."></section-title>
     <div style="width: 85%; margin-left: auto; margin-right: auto">
-      <horizontal-gallery :images="this.services" :maximum-length="galleryMaxLength"
+      <horizontal-gallery :images="this.serviceImages" :maximum-length="galleryMaxLength"
                           v-on:image-selected="onServiceSelected"></horizontal-gallery>
     </div>
     <transition name="fade" mode="out-in">
@@ -66,27 +66,43 @@ export default {
   name: "user-make-appointment",
   data: function () {
     return {
-      services: [
+      serviceImages: [
         {
-          fileName: "introduction_to_algorithms.jpg",
-          title: "Learn CS",
-          description: "while(true){print('Hello');}",
+          fileName: "clean_car.jpg",
+          title: "Car Wash",
+          description: "You car looks anew.",
           id: 1
         },
         {
-          fileName: "20000_leagues_under_the_sea.jpg",
-          title: "Learn Math",
-          description: "Math is fun, isn't it?",
+          fileName: "old_car.jpg",
+          title: "Maintenance",
+          description: "Should last another 50 years.",
           id: 2
         },
         {
-          fileName: "war_and_peace.jpg",
-          title: "Learn Literature",
-          description: "May I compare thee to a summer's day?",
+          fileName: "guardian_angel.jpg",
+          title: "Road Assistance",
+          description: "Come as needed",
           id: 3
         },
-        {fileName: "latin_language.jpg", title: "Learn Latin", description: "Quis Agis?", id: 4},
-        {fileName: "song_history.jpg", title: "Learn Arts", description: "Transcend", id: 5},
+        {
+          fileName: "michelin_restaurants.jpg",
+          title: "Tire Change",
+          description: "Michelin Star",
+          id: 4
+        },
+        {
+          fileName: "city_map.jpg",
+          title: "Towing",
+          description: "Any time, Anywhere",
+          id: 5
+        },
+        {
+          fileName: "car_engine_blueprint.jpg",
+          title: "Car Inspection",
+          description: "We the experts",
+          id: 6
+        },
       ],
       galleryMaxLength: 5,
       selectedService: null,

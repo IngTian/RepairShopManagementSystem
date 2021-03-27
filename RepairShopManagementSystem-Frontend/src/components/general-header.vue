@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <div class="logo"><p>US<span> of </span>SG</p></div>
+    <div class="logo"><p>McGill<span> ian </span>Repair</p></div>
     <ul class="navigation">
       <router-link to="/about" class="navigation-link">
         <li>About</li>
