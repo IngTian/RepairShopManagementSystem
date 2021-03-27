@@ -10,15 +10,20 @@ public class ServiceDto {
     public ServiceDto() {
     }
 
+    public ServiceDto(String serviceType) {
+        this.serviceType = serviceType;
+    }
+
     public ServiceDto(String serviceType, List<AssistantDto> assistant, AppointmentDto appointment) {
         this.serviceType = serviceType;
         this.assistant = assistant;
         this.appointment = appointment;
     }
+
     public ServiceDto(String serviceType, List<AssistantDto> assistant) {
         this.serviceType = serviceType;
         this.assistant = assistant;
-       
+
     }
 
     public String getServiceType() {

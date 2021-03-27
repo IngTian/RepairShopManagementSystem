@@ -163,6 +163,10 @@ public class AccountController {
         );
     }
 
+    private ServiceDto convertToDto(Service service) {
+        return new ServiceDto(service.getServiceType());
+    }
+
     private Set<AppointmentDto> convertToDtoListForAppointment(Iterable<Appointment> appointments) {
         Set<AppointmentDto> appointmentDtos = new HashSet<>();
         for (Appointment appointment : appointments)
@@ -171,7 +175,8 @@ public class AccountController {
                     convertToDtoListForBill(appointment.getBill()),
                     convertToDto(appointment.getShift()),
                     new ArrayList<>(convertToDtoListForCar(appointment.getCar())),
-                    convertToDto(appointment.getSpace())
+                    convertToDto(appointment.getSpace()),
+                    convertToDto(appointment.getService())
             ));
         return appointmentDtos;
     }

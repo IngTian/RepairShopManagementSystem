@@ -39,7 +39,7 @@ public class AppointmentDto {
         this.customer = customer;
     }
 
-    public AppointmentDto(Integer appointmentId, List<BillDto> bill, ShiftDto shift, List<CarDto> cars, SpaceDto space) {
+    public AppointmentDto(Integer appointmentId, List<BillDto> bill, ShiftDto shift, List<CarDto> cars, SpaceDto space, ServiceDto service) {
         this.appointmentId = appointmentId;
         this.bill = bill;
         this.shift = shift;
