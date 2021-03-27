@@ -12,6 +12,7 @@ Related to user operations.
 import UserWelcomePage from "@/pages/user-welcome-page"
 import UserAccountPage from "@/pages/user-account-page"
 import UserMakeAppointment from "@/pages/user-make-appointment"
+import UserManageCar from "@/pages/car-page"
 
 const routes = [
     {path: '/', name: '/', component: HomePage},
@@ -32,7 +33,12 @@ const routes = [
             {
                 path: "make-appointment",
                 component: UserMakeAppointment
+            },
+            {
+                path: "car",
+                component: UserManageCar
             }
+
         ]
     },
 ];
