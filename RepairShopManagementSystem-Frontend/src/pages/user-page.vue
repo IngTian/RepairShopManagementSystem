@@ -23,36 +23,36 @@ export default {
   },
   mounted() {
 
-    let userInformation = {
-      name: localStorage.getItem('userInformation').name,
-      username: localStorage.getItem('userInformation').username,
-      password: localStorage.getItem('userInformation').password,
-      address: localStorage.getItem('userInformation').address,
-      phoneNo: localStorage.getItem('userInformation').phoneNo,
-      email: localStorage.getItem('userInformation').email,
-
-      // Some appointments
-      appointments: [
-        {
-          date: "2021-03-25",
-          startTime: "09:25",
-          endTime: "10:38",
-          serviceType: "Study arts",
-          price: "$100",
-          isPaid: false
-        },
-        {
-          date: "2021-03-24",
-          startTime: "09:25",
-          endTime: "10:38",
-          serviceType: "Study arts",
-          price: "$100",
-          isPaid: false
-        }
-      ]
-    }
-    if (!localStorage.getItem('userInformation'))
-      localStorage.setItem('userInformation', JSON.stringify(userInformation))
+    // let userInformation = {
+    //   name: localStorage.getItem('userInformation').name,
+    //   username: localStorage.getItem('userInformation').username,
+    //   password: localStorage.getItem('userInformation').password,
+    //   address: localStorage.getItem('userInformation').address,
+    //   phoneNo: localStorage.getItem('userInformation').phoneNo,
+    //   email: localStorage.getItem('userInformation').email,
+    //
+    //   // Some appointments
+    //   appointments: [
+    //     {
+    //       date: "2021-03-25",
+    //       startTime: "09:25",
+    //       endTime: "10:38",
+    //       serviceType: "Study arts",
+    //       price: "$100",
+    //       isPaid: false
+    //     },
+    //     {
+    //       date: "2021-03-24",
+    //       startTime: "09:25",
+    //       endTime: "10:38",
+    //       serviceType: "Study arts",
+    //       price: "$100",
+    //       isPaid: false
+    //     }
+    //   ]
+    // }
+    // if (!localStorage.getItem('userInformation'))
+    //   localStorage.setItem('userInformation', JSON.stringify(userInformation))
   }
 }
 </script>
