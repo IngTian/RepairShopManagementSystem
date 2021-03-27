@@ -21,6 +21,12 @@ public class AccountController {
     @Autowired
     private SystemService systemService;
 
+
+    @GetMapping(value = "get_user_info")
+    public String getUserInformation(@RequestParam String username) {
+        return accountService.getUserType(username);
+    }
+
     /*
     ----------------------------------------------------------------------------
     ------------------------------------Owner-----------------------------------
@@ -45,6 +51,11 @@ public class AccountController {
         return convertToDto(newOwner);
     }
 
+    @GetMapping(value = "owners/get_by_username")
+    public OwnerDto getOwnerByUsername(String username) {
+        return convertToDto(accountService.getOwner(username));
+    }
+
     /*
     ----------------------------------------------------------------------------
     --------------------------------Assistant-----------------------------------
@@ -56,11 +67,13 @@ public class AccountController {
         List<Assistant> assistantList = accountService.getAllAssistants();
         return convertToDtoListForAssistant(assistantList);
     }
-    @GetMapping(value = "assistants/get_By_AssistantName")
+
+    @GetMapping(value = "assistants/get_by_username")
     public AssistantDto getOneAssistant(@RequestParam String userName) {
-     Assistant assistant = accountService.getAssistant(userName);
+        Assistant assistant = accountService.getAssistant(userName);
         return convertToDto(assistant);
     }
+
     @PostMapping(value = "assistants/create_to_most_recent_system")
     public AssistantDto createAssistantToMostRecentSystem(@RequestBody AssistantDto a) {
         Assistant assistant = accountService.createAssistant(a.getUsername(), a.getPassword(), a.getName(), systemService.getMostRecentSystem());
@@ -84,9 +97,10 @@ public class AccountController {
         List<Customer> customerList = accountService.getAllCustomers();
         return convertToDtoListForCustomer(customerList);
     }
+
     @GetMapping(value = "customers/get_by_username")
     public CustomerDto getOneCustomer(@RequestParam String username) {
-      Customer customer = accountService.getCustomer(username);
+        Customer customer = accountService.getCustomer(username);
         return convertToDto(customer);
     }
 

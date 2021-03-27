@@ -6,7 +6,7 @@ public abstract class UserDto {
     private String name;
     private RepairShopManagementSystemDto system;
 
-    public UserDto(){
+    public UserDto() {
 
     }
 
