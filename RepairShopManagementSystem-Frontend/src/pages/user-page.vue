@@ -10,7 +10,12 @@
 <script>
 export default {
   name: "user-page",
+  data: function (){
+    return{
+    }
+  },
   mounted() {
+    // Test data
     let userInformation = {
       name: "Carl Von Schneider",
       username: "aUsername",
@@ -22,20 +27,34 @@ export default {
       // Some appointments
       appointments: [
         {
+          appointmentId: 1,
           date: "2021-03-25",
           startTime: "09:25",
           endTime: "10:38",
           serviceType: "Study arts",
           price: "$100",
-          isPaid: false
+          isPaid: false,
+          Bill: [
+            {
+              billNo: 12345,
+              billAmount: 123
+            },
+          ]
         },
         {
+          appointmentId: 1,
           date: "2021-03-24",
           startTime: "09:25",
           endTime: "10:38",
           serviceType: "Study arts",
           price: "$100",
-          isPaid: false
+          isPaid: false,
+          Bill: [
+            {
+              billNo: 12345,
+              billAmount: 123
+            },
+          ]
         }
       ]
     }
