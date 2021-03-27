@@ -6,7 +6,7 @@
         <div class="view-info-row">
           <div class="view-info-row-description">PlateNo:</div>
           <div class="view-info-row-information">
-            <input class="form-input" v-model="plateNumberToAdd" key="input">
+            <input class="form-input" v-model="plateNo" key="input">
           </div>
         </div>
         <div class="view-info-row">
@@ -14,7 +14,7 @@
           <transition name="fade" mode="out-in">
 
             <div class="view-info-row-information" >
-              <input class="form-input" v-model="modelOfCar" key="input">
+              <input class="form-input" v-model="model" key="input">
             </div>
           </transition>
         </div>
@@ -23,7 +23,7 @@
           <transition name="fade" mode="out-in">
 
             <div class="view-info-row-information" >
-              <input class="form-input" v-model="manufacturerOfCar" key="input">
+              <input class="form-input" v-model="manufacturer" key="input">
             </div>
           </transition>
         </div>
@@ -32,7 +32,7 @@
           <transition name="fade" mode="out-in">
 
             <div class="view-info-row-information" >
-              <input class="form-input" v-model="yearOfCar" key="input">
+              <input class="form-input" v-model="year" key="input">
             </div>
           </transition>
         </div>
@@ -56,28 +56,82 @@
 </template>
 
 <script>
-
+import axios from "axios"
+var AXIOS = axios.create({
+  baseURL: "http://localhost:8080",
+})
 export default {
   name: "car-page",
   data: function () {
     return {
       customerInfo: Object,
       isUpdatingBasicInformation: false,
-      plateNumberToAdd:"",
-      modelOfCar: "",
-      manufacturerOfCar: "",
-      yearOfCar: "",
+      plateNo:"",
+      model: "",
+      manufacturer: "",
+      year: "",
       updatedAddress: "",
       updatedName: "",
     }
   },
   methods :{
     updateCarClicked: function(){
-
+      let plateNo = this.plateNo;
+      let model = this.model;
+      let manufacturer = this.manufacturer;
+      let year = this.year;
+      let username = this.username;
+      let response = Object
+      AXIOS.post("users/cars/update",
+          {
+              username:username,
+              model: model,
+              year: year,
+              manufacturer: manufacturer,
+          },
+          {
+            // Request body
+            params: {
+              plateNo:plateNo,
+              model:model,
+              manufacturer:manufacturer,
+              year:year
+            }
+          },
+      ).then(resp => {
+        response = resp;
+        console.log(response)
+      }).catch(e => {
+        console.error(e.toString())
+      })
 
     },
     addCarClicked :function(){
-
+      let plateNo = this.plateNo;
+      let model = this.model;
+      let manufacturer = this.manufacturer;
+      let year = this.year;
+      let username = this.username;
+      let response = Object
+      AXIOS.post("users/cars/create",
+          {
+            // Request body
+            plateNo:plateNo,
+            model:model,
+            manufacturer:manufacturer,
+            year:year
+          },
+          {
+            params:{
+              username:username,
+            }
+          },
+      ).then(resp => {
+        response = resp;
+        console.log(response)
+      }).catch(e => {
+        console.error(e.toString())
+      })
     }
   },
 

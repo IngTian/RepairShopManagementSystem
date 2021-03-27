@@ -17,10 +17,10 @@ public class CarDto {
     }
 
     public CarDto(String plateNo, String model, String manufacturer, String year) {
-        this.year = year;
         this.plateNo = plateNo;
         this.model = model;
         this.manufacturer = manufacturer;
+        this.year = year;
     }
 
     public CarDto(String plateNo, String model, String manufacturer, CustomerDto customer) {
