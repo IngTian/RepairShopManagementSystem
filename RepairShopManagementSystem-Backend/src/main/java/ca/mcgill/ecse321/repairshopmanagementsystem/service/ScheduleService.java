@@ -125,6 +125,7 @@ public class ScheduleService {
         shift.setStartTime(startTime);
         shift.setEndTime(endTime);
         shift.setSchedule(schedule);
+        shift.setShiftId(shift.hashCode());
         schedule.getTimeSlot().add(shift);
 
         Set<Shift> shifts = shiftRepository.findShiftsByAssistant(assistant);
