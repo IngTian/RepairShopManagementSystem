@@ -43,7 +43,7 @@ export default {
     }
   },
   methods :{
-    
+
     addSpaceClicked :function(){
 
     }
