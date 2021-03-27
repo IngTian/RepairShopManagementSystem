@@ -75,8 +75,7 @@
                            style="width: 150px"></action-button>
           </div>
           <div style="width: max-content">
-            <action-button background-color="black" text="Update" style="width: 150px"
-                           v-on:clicked="updateUserInformationClicked"></action-button>
+            <action-button background-color="black" text="Update" style="width: 150px" v-on:clicked="updateUserInformationClicked"></action-button>
           </div>
         </div>
       </div>
@@ -90,9 +89,8 @@
 
 <script>
 import axios from "axios"
-
 var AXIOS = axios.create({
-  baseURL: "http://192.168.3.52:8080",
+  baseURL: "http://localhost:8080",
 })
 export default {
   name: "user-account-page",
@@ -107,17 +105,17 @@ export default {
       updatedName: "",
     }
   },
-  methods: {
-    updateUserInformationClicked: function () {
-      let password = this.updatedPassword;
-      let name = this.updatedName;
-      let address = this.updatedAddress;
-      let phoneNo = this.updatedPhoneNo;
-      let email = this.updatedEmail;
+  methods:{
+    updateUserInformationClicked:function(){
+     let password=this.updatedPassword;
+     let name=this.updatedName;
+     let address=this.updatedAddress;
+     let phoneNo=this.updatedPhoneNo;
+     let email=this.updatedEmail;
       let response = Object
       AXIOS.post("users/customers/update_info",
           {
-            //request body
+           //request body
             username: this.getUsername,
             password: this.getPassword,
             name: this.getName,
@@ -126,15 +124,20 @@ export default {
             email: this.getEmail,
           },
           {
-            params: {
-              newUsername: this.getUsername,
-              newPassword: password,
-              newName: name,
-              newPhoneNo: phoneNo,
-              newAddress: address,
-              newEmail: email,
+            params:{
+            newUsername:this.getUsername,
+              newPassword:password,
+              newName:name,
+              newPhoneNo:phoneNo,
+              newAddress:address,
+              newEmail:email,
+
+
+
+
             }
-          }
+      }
+
       ).then(resp => {
         response = resp;
         console.log(response)

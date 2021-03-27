@@ -10,51 +10,44 @@
 <script>
 export default {
   name: "user-page",
-  data: function (){
+  data:function(){
     return{
+      username:"",
+      name:"",
+      password:"",
+      address:"",
+      phoneNo:"",
+      email:"",
+
     }
   },
   mounted() {
-    // Test data
+
     let userInformation = {
-      name: "Carl Von Schneider",
-      username: "aUsername",
-      password: "aPassword",
-      address: "1234 Ile Street, Palm Beach, Florida",
-      phoneNo: "1123345566",
-      email: "hello@world.edu",
+      name: localStorage.getItem('userInformation').name,
+      username: localStorage.getItem('userInformation').username,
+      password: localStorage.getItem('userInformation').password,
+      address: localStorage.getItem('userInformation').address,
+      phoneNo: localStorage.getItem('userInformation').phoneNo,
+      email: localStorage.getItem('userInformation').email,
 
       // Some appointments
       appointments: [
         {
-          appointmentId: 1,
           date: "2021-03-25",
           startTime: "09:25",
           endTime: "10:38",
           serviceType: "Study arts",
           price: "$100",
-          isPaid: false,
-          Bill: [
-            {
-              billNo: 12345,
-              billAmount: 123
-            },
-          ]
+          isPaid: false
         },
         {
-          appointmentId: 1,
           date: "2021-03-24",
           startTime: "09:25",
           endTime: "10:38",
           serviceType: "Study arts",
           price: "$100",
-          isPaid: false,
-          Bill: [
-            {
-              billNo: 12345,
-              billAmount: 123
-            },
-          ]
+          isPaid: false
         }
       ]
     }

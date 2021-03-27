@@ -13,7 +13,6 @@ import UserWelcomePage from "@/pages/user-welcome-page"
 import UserAccountPage from "@/pages/user-account-page"
 import UserMakeAppointment from "@/pages/user-make-appointment"
 
-
 const routes = [
     {path: '/', name: '/', component: HomePage},
     {path: '/about', component: About},
@@ -32,10 +31,7 @@ const routes = [
             },
             {
                 path: "make-appointment",
-                component: UserMakeAppointment,
-                children: [
-
-                ]
+                component: UserMakeAppointment
             }
         ]
     },

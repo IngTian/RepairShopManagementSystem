@@ -56,7 +56,6 @@
 
 <script>
 import axios from "axios"
-
 var AXIOS = axios.create({
   baseURL: "http://localhost:8080",
 })
@@ -122,16 +121,22 @@ export default {
       })
     },
     LoginButtonClicked: function () {
-      AXIOS.get("users/customers/get_By_Username",
+
+      let username = this.username;
+     // let password = this.password;
+
+      AXIOS.get("users/customers/get_by_username",
           {
-            params: {
-              userName: this.username
-            }
-          },
+
+        params:{
+        username: username
+        }},
+
       ).then(resp => {
         let userInfo = resp.data;
         if (userInfo.password === this.password) {
           // Give permission
+
           localStorage.setItem('userInformation', JSON.stringify(userInfo))
           this.$router.push("/user")
         } else {
@@ -161,7 +166,6 @@ export default {
   align-content: space-around;
   justify-content: flex-start;
 }
-
 .log-in-sign-up-selector {
   width: 80%;
   height: 5em;
@@ -171,7 +175,6 @@ export default {
   display: table;
   vertical-align: center;
 }
-
 .selector {
   display: table-cell;
   vertical-align: middle;
@@ -179,7 +182,6 @@ export default {
   color: white;
   width: 50%;
 }
-
 .selector-box {
   height: 100%;
   width: 100%;
@@ -189,20 +191,16 @@ export default {
   font-family: Roboto, sans-serif;
   transition: ease .5s;
 }
-
 .selector-box:hover {
   background-color: darkgray;
 }
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s ease-in-out;
 }
-
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
 {
   opacity: 0;
 }
-
 .title {
   width: 80%;
   height: 80px;
@@ -214,7 +212,6 @@ export default {
   font-size: 40px;
   font-family: Roboto, sans-serif;
 }
-
 .form-container {
   width: 80%;
   height: max-content;
@@ -224,7 +221,6 @@ export default {
   align-items: center;
   justify-content: space-around;
 }
-
 .form-input {
   display: block;
   height: 1.5em;
@@ -237,12 +233,10 @@ export default {
   text-decoration: none;
   transition: border-color .4s ease, box-shadow .4s ease;
 }
-
 .form-input:focus {
   border: red 1px solid;
   transition: border-color .4s ease, box-shadow .4s ease;
 }
-
 .logo {
   width: 30em;
   height: 100px;
