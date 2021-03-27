@@ -131,10 +131,6 @@ export default {
               newPhoneNo:phoneNo,
               newAddress:address,
               newEmail:email,
-
-
-
-
             }
       }
 
@@ -167,7 +163,7 @@ export default {
     },
 
     getAddress: function () {
-      return this.customerInfo.address;
+      return this.customerInfo.homeAddress;
     },
 
     getEmail: function () {

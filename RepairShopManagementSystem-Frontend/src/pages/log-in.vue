@@ -143,7 +143,7 @@ export default {
             let password = ownerInformation.password;
             if (this.password === password) {
               localStorage.setItem('userInformation', JSON.stringify(ownerInformation));
-              this.$route.push("/user")
+              this.$router.push("/user")
             } else {
               console.error("Password entered is incorrect.")
             }
@@ -160,7 +160,7 @@ export default {
             let password = assistantInformation.password;
             if (this.password === password) {
               localStorage.setItem('userInformation', JSON.stringify(assistantInformation));
-              this.$route.push("/user")
+              this.$router.push("/user")
             } else {
               console.error("Password entered is incorrect.")
             }
@@ -177,7 +177,7 @@ export default {
             let password = customerInformation.password;
             if (this.password === password) {
               localStorage.setItem('userInformation', JSON.stringify(customerInformation));
-              this.$route.push("/user")
+              this.$router.push("/user")
             } else {
               console.error("Password entered is incorrect.")
             }
