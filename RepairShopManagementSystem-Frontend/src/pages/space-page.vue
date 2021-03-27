@@ -30,7 +30,10 @@
 </template>
 
 <script>
-
+import axios from "axios"
+var AXIOS = axios.create({
+  baseURL: "http://localhost:8080",
+})
 export default {
   name: "space-page",
   data: function () {
@@ -45,6 +48,25 @@ export default {
   methods :{
 
     addSpaceClicked :function(){
+      let maxWeightLoad = this.weightload;
+      // let password = this.password;
+      let response=Object
+      AXIOS.post("appointment/space/create",
+          {
+
+            },
+          {
+            params:{
+              weight:maxWeightLoad
+            }
+          }
+
+      ).then(resp => {
+        response=resp.data;
+        console.log(response)
+      }).catch(e => {
+        console.error(e.toString())
+      })
 
     }
   },
