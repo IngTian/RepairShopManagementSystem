@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -57,6 +59,18 @@ public class ScheduleController {
     ----------------------------------------------------------------------------
      */
 
+    @GetMapping("shifts/get_for_dates")
+    public List<ShiftDto> getShifts(@RequestParam String dates) throws ParseException {
+        String[] temp = dates.split(",");
+        List<Date> datesArray = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        for (String date : temp) {
+            java.util.Date ud = sdf.parse(date);
+            datesArray.add(new java.sql.Date(ud.getTime()));
+        }
+        return convertToDtoListForShift(scheduleService.getShiftsForDates(datesArray));
+    }
+
     @GetMapping(value = "shifts")
     public List<ShiftDto> getAllShifts() {
         List<Shift> shiftList = scheduleService.getAllShifts();
@@ -101,7 +115,7 @@ public class ScheduleController {
 
     private ShiftDto convertToDto(Shift shift) {
         return new ShiftDto(shift.getDate(), shift.getStartTime(), shift.getEndTime(),
-                convertToDto(shift.getAssistant()));
+                convertToDto(shift.getAssistant()), shift.getShiftId());
     }
 
     private List<ShiftDto> convertToDtoListForShift(Iterable<Shift> shifts) {

@@ -4,7 +4,7 @@
       <router-link to="/user/welcome" class="link">Welcome</router-link>
       <router-link to="/user/account" class="link">Account</router-link>
       <router-link to="/user/make-appointment" class="link">Booking</router-link>
-      <router-link to="/user/car" class="link">Car Management</router-link>
+      <router-link to="/user/car" class="link">Cars</router-link>
     </div>
   </div>
 </template>

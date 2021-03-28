@@ -19,12 +19,16 @@
           this.selectedService
         }}</span></div>
     </transition>
+    <section-title title="Which car?" sub-title="Always a pleasure to see one."></section-title>
+    <div style="width: 85%; margin-left: auto; margin-right: auto">
+      <car-table :customer-info="this.userInfo" :selecting="true" v-on:carSelected="onCarSelected"></car-table>
+    </div>
     <section-title title="What date?" sub-title="Choose a preferred date."></section-title>
     <div class="date-picking-container">
       <div class="date-picking-calendar">
         <calendar :attributes="attributes" @dayclick="onDayClick"/>
         <action-button text="View Shifts" background-color="black"
-                       style="margin-top: 40px; margin-left: 15%;"></action-button>
+                       style="margin-top: 40px; margin-left: 15%;" v-on:clicked="onViewShiftsClicked"></action-button>
       </div>
       <div class="date-picking-shifts">
         <shifts-table :shifts="this.shifts" v-on:selected="onShiftSelected"></shifts-table>
@@ -53,19 +57,37 @@
           <div v-else class="order-info-row-information" key="shiftNotSelected">{{ this.selectedService }}</div>
         </transition>
       </div>
+      <div class="order-info-row">
+        <div class="order-info-row-description">Car</div>
+        <transition name="fade" mode="out-in">
+          <div v-if="!this.selectedCar" key="shiftSelected" class="order-info-row-information">Not selected.</div>
+          <div v-else class="order-info-row-information" key="shiftNotSelected">{{ this.selectedCar }}</div>
+        </transition>
+      </div>
     </div>
 
     <div style="width: max-content; margin-bottom: 50px; margin-left: auto; margin-right: auto;">
-      <action-button background-color="black" text="Book!" style="width: 200px"></action-button>
+      <action-button background-color="black" text="Book!" style="width: 200px"
+                     @click="onMakeAppointment"></action-button>
     </div>
   </div>
 </template>
 
 <script>
+
+import axios from "axios"
+
+var config = require("../configuration")
+
+var AXIOS = axios.create({
+  baseURL: config.springServer.baseUrl,
+})
+
 export default {
   name: "user-make-appointment",
   data: function () {
     return {
+      userInfo: {},
       serviceImages: [
         {
           fileName: "clean_car.jpg",
@@ -106,6 +128,7 @@ export default {
       ],
       galleryMaxLength: 5,
       selectedService: null,
+      selectedCar: null,
       shifts: [
         {
           date: "2021-03-27",
@@ -130,6 +153,9 @@ export default {
       days: []
     }
   },
+  created() {
+    this.userInfo = JSON.parse(localStorage.getItem('userInformation'))
+  },
   computed: {
     dates() {
       return this.days.map(day => day.date);
@@ -152,6 +178,7 @@ export default {
           date: day.date,
         });
       }
+      console.log(JSON.stringify(this.days))
     },
     onServiceSelected(event) {
       this.selectedService = event
@@ -160,6 +187,42 @@ export default {
       for (let i = 0; i < this.shifts.length; i++)
         if (this.shifts[i].shiftId === event)
           this.selectedShift = this.shifts[i];
+    },
+    onCarSelected(event) {
+      this.selectedCar = event;
+    },
+    onViewShiftsClicked() {
+      let datesArray = [];
+      for (let i = 0; i < this.days.length; i++)
+        datesArray.push(this.days[i].id)
+      AXIOS.get("/schedules/shifts/get_for_dates", {
+        params: {
+          dates: datesArray.join(',')
+        }
+      }).then(resp => {
+        this.shifts = resp.data;
+      }).catch(e => {
+        console.error(e.toString())
+      })
+    },
+    onMakeAppointment() {
+      AXIOS.post("/appointment/make_appointment", {}, {
+        params: {
+          serviceType: this.selectedService,
+          username: this.userInfo.username,
+          plateNo: this.selectedCar,
+          date: this.selectedShift.date,
+          startTime: this.selectedShift.startTime,
+          endTime: this.selectedShift.endTime,
+          weight: 1000,
+          operatorUsername: this.userInfo.username
+        }
+      }).then(resp => {
+        this.userInfo.appointments.push(resp.data);
+        localStorage.setItem('userInformation', this.userInfo);
+      }).catch(e => {
+        console.error(e.toString())
+      });
     }
   },
 }
@@ -171,6 +234,7 @@ export default {
   height: max-content;
   padding-left: 0;
 }
+
 .welcome-title-section {
   width: 100%;
   height: max-content;
@@ -181,15 +245,18 @@ export default {
   align-items: center;
   justify-content: space-around;
 }
+
 .welcome-title {
   font-family: 'Train One', cursive;
   text-align: center;
   font-size: 4em;
 }
+
 .welcome-subtitle {
   font-family: "Playfair Display SC", serif;
   font-size: 1.7em;
 }
+
 .show-selected-service {
   width: max-content;
   height: 2.5em;
@@ -200,17 +267,20 @@ export default {
   font-size: 30px;
   transition: .5s ease;
 }
+
 .show-selected-service span {
   font-size: 35px;
   font-weight: 600;
   font-style: italic;
 }
+
 .welcome-title-section-divider {
   margin-top: 80px;
   height: 1px;
   width: 85%;
   background-color: gray;
 }
+
 .date-picking-container {
   width: 90%;
   height: max-content;
@@ -222,48 +292,58 @@ export default {
   flex-direction: row;
   align-items: flex-start;
 }
+
 .date-picking-calendar {
   width: 20%;
   padding-left: 10%;
 }
+
 .date-picking-shifts {
   width: 80%;
 }
+
 .order-preview {
   margin-bottom: 50px;
   width: 90%;
   margin-left: auto;
   margin-right: auto;
 }
+
 .order-info-row {
   height: 2.7em;
   margin-top: 10px;
   margin-bottom: 10px;
-  display: table;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   margin-left: auto;
   margin-right: auto;
 }
+
 .order-info-row-description {
   height: 100%;
-  display: table-cell;
+  width: 49%;
   text-align: right;
   line-height: 2em;
   font-size: 20px;
   font-family: Roboto, sans-serif;
 }
+
 .order-info-row-information {
-  width: 60%;
+  width: 51%;
   height: 100%;
   padding-left: 10px;
-  display: table-cell;
   text-align: left;
   line-height: 2em;
   font-size: 20px;
   font-family: "Times New Roman", serif;
 }
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.5s ease-in-out;
 }
+
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
 {
   opacity: 0;

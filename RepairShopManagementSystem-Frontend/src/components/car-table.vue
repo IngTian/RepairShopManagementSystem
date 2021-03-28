@@ -6,7 +6,8 @@
         <div class="model-column title-font">MODEL</div>
         <div class="year-column title-font">YEAR</div>
         <div class="manufacturer-column title-font">MANUFACTURER</div>
-        <div class="select-column title-font">PAY</div>
+        <div class="select-column title-font" v-if="!selecting">Update</div>
+        <div class="select-column title-font" v-else>Select</div>
       </div>
       <transition name="fade" mode="out-in">
         <div v-if="this.cars.length === 0"
@@ -14,14 +15,23 @@
           Sorry, you do not have any car yet.
         </div>
         <transition-group name="list-complete" tag="div" v-else>
-          <div class="car-row" v-for="car in this.cars" :key="car.year">
+          <div class="car-row" v-for="car in cars" :key="car.year">
             <div class="plate-column">{{ car.plateNo }}</div>
             <div class="model-column">{{ car.model }}</div>
             <div class="year-column">{{ car.year }}</div>
             <div class="manufacturer-column">{{ car.manufacturer }}</div>
-            <div class="select-column select-button" @click="updateCar(car)">
+            <div class="select-column select-button" @click="updateCar(car)" v-if="!selecting">
               Update
             </div>
+            <transition name="fade" mode="out-in" v-else>
+              <div class="select-column" v-if="isSelected(car.plateNo)">
+                Selected
+              </div>
+              <div v-else class="select-column select-button"
+                   @click="selectACar(car.plateNo); $emit('carSelected', `${car.plateNo}`);">
+                Select
+              </div>
+            </transition>
           </div>
         </transition-group>
       </transition>
@@ -35,11 +45,13 @@ export default {
   name: "appointment-table",
   data: function () {
     return {
-      cars: Array
+      cars: Array,
+      carSelected: ""
     }
   },
   props: {
     customerInfo: Object,
+    selecting: Boolean
   },
   created() {
     // Setting up
@@ -48,6 +60,12 @@ export default {
   methods: {
     updateCar: function (car) {
       console.debug(JSON.stringify(car));
+    },
+    isSelected: function (plateNo) {
+      return this.carSelected === plateNo
+    },
+    selectACar: function (plateNo) {
+      this.carSelected = plateNo;
     }
   },
   computed: {}

@@ -140,6 +140,11 @@ public class ScheduleService {
     }
 
     @Transactional
+    public Set<Shift> getShiftsForDates(List<Date> dates) {
+        return shiftRepository.findShiftsByDateIn(dates);
+    }
+
+    @Transactional
     public Shift deleteShift(Shift shift) {
         if (shift.getAppointment() != null)
             throw new IllegalArgumentException("Cannot delete the shift with an appointment!");

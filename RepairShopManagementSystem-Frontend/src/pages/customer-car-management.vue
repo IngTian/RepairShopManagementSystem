@@ -3,11 +3,12 @@
     <div class="container">
 
       <section class="section">
-        <car-table :customer-info="this.customerInfo"></car-table>
+        <section-title title="Your cars" sub-title="You look great!"></section-title>
+        <car-table :customer-info="this.customerInfo" :selecting="false"></car-table>
       </section>
 
       <div class="section">
-        <section-title title="Car Management" sub-title="Add or update!"></section-title>
+        <section-title title="Got new cars?" sub-title="Amaze us."></section-title>
         <div class="view-info-row">
           <div class="view-info-row-description">PlateNo:</div>
           <div class="view-info-row-information">
@@ -60,15 +61,16 @@
 <script>
 import axios from "axios"
 
+var config = require("../configuration")
+
 var AXIOS = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: config.springServer.baseUrl,
 })
 export default {
   name: "car-page",
   data: function () {
     return {
       customerInfo: Object,
-      isUpdatingBasicInformation: false,
       plateNo: "",
       model: "",
       manufacturer: "",
