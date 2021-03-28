@@ -196,7 +196,7 @@ public class AccountController {
     }
 
     private ShiftDto convertToDto(Shift shift) {
-        return new ShiftDto(shift.getDate(), shift.getStartTime(), shift.getEndTime());
+        return new ShiftDto(shift.getDate(), shift.getStartTime(), shift.getEndTime(), shift.getShiftId());
     }
 
     private Set<ShiftDto> convertToDtoListForShift(Iterable<Shift> shifts) {

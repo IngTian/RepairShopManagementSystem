@@ -6,16 +6,11 @@
         <div class="view-info-row">
           <div class="view-info-row-description">Maximum weight load:</div>
           <div class="view-info-row-information">
-            <input class="form-input" v-model="weightload" key="input">
+            <input class="form-input" v-model="weightLoad" key="input">
           </div>
         </div>
-
-
-
-
-
         <div
-            style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%">
+            style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%;">
           <div style="width: max-content">
             <action-button background-color="black" text="Add"
                            v-on:clicked="addSpaceClicked"
@@ -25,12 +20,17 @@
         </div>
       </div>
 
+      <div class="section" style="margin-bottom: 150px">
+        <section-title title="All Spaces" sub-title="All space that exists now"></section-title>
+        <space-table :space="this.allSpace"></space-table>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios"
+
 var AXIOS = axios.create({
   baseURL: "http://localhost:8080",
 })
@@ -39,30 +39,31 @@ export default {
   data: function () {
     return {
       customerInfo: Object,
-      isUpdatingBasicInformation: false,
-      weightload:"",
-
-
+      weightLoad: "",
+      allSpace: []
     }
   },
-  methods :{
+  created() {
+    AXIOS.get("/appointment/space/get_all", {}).then(resp => {
+      this.allSpace = resp.data;
+    }).catch(e => {
+      console.error(e.toString())
+    });
+  },
+  methods: {
 
-    addSpaceClicked :function(){
+    addSpaceClicked: function () {
       let maxWeightLoad = this.weightload;
       // let password = this.password;
-      let response=Object
-      AXIOS.post("appointment/space/create",
+      let response = Object
+      AXIOS.post("appointment/space/create", {},
           {
-
-            },
-          {
-            params:{
-              weight:maxWeightLoad
+            params: {
+              weight: maxWeightLoad
             }
           }
-
       ).then(resp => {
-        response=resp.data;
+        response = resp.data;
         console.log(response)
       }).catch(e => {
         console.error(e.toString())
@@ -75,37 +76,6 @@ export default {
     // Load user info from local storage.
     this.customerInfo = JSON.parse(localStorage.getItem('userInformation'));
   },
-  computed: {
-    getUsername: function () {
-      return this.customerInfo.username;
-    },
-
-    getPassword: function () {
-      return this.customerInfo.password;
-    },
-
-    getName: function () {
-      return this.customerInfo.name;
-    },
-
-    getAddress: function () {
-      return this.customerInfo.address;
-    },
-
-    getEmail: function () {
-      return this.customerInfo.email;
-    },
-
-    getPhoneNo: function () {
-      return this.customerInfo.phoneNo;
-    },
-
-    getAppointments: function () {
-      return this.customerInfo.appointments;
-    },
-
-
-  }
 }
 </script>
 

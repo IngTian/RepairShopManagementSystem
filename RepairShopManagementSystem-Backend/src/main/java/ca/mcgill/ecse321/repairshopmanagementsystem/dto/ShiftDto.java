@@ -22,6 +22,13 @@ public class ShiftDto {
         this.endTime = endTime;
     }
 
+    public ShiftDto(Date date, Time startTime, Time endTime, Integer shiftId) {
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.shiftId = shiftId;
+    }
+
     public ShiftDto(Date date, Time startTime, Time endTime, AssistantDto assistant) {
         this.date = date;
         this.startTime = startTime;
