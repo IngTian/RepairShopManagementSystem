@@ -68,7 +68,8 @@
           </transition>
         </div>
         <div
-            style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%">
+            style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%"
+            v-if="isCustomer">
           <div style="width: max-content">
             <action-button background-color="black" :text="getEditInfoButtonText"
                            v-on:clicked="isUpdatingBasicInformation=!isUpdatingBasicInformation"
@@ -79,11 +80,24 @@
                            v-on:clicked="updateUserInformationClicked"></action-button>
           </div>
         </div>
+        <div
+            style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%; margin-bottom: 150px"
+            v-else>
+          <div style="width: max-content">
+            <action-button background-color="black" :text="getEditInfoButtonText"
+                           v-on:clicked="isUpdatingBasicInformation=!isUpdatingBasicInformation"
+                           style="width: 150px"></action-button>
+          </div>
+          <div style="width: max-content">
+            <action-button background-color="black" text="Update" style="width: 150px"
+                           v-on:clicked="updatePasswordAndName"></action-button>
+          </div>
+        </div>
       </div>
-      <div class="section" style="margin-bottom: 150px" v-if="this.userRole === 'customer'">
-        <section-title title="Appointments" sub-title="see booked appointments"></section-title>
-        <appointment-table v-bind:appointments="getAppointments" :customer-info="this.userInfo"></appointment-table>
-      </div>
+    </div>
+    <div class="section" style="margin-bottom: 150px" v-if="this.userRole === 'customer'">
+      <section-title title="Appointments" sub-title="see booked appointments"></section-title>
+      <appointment-table v-bind:appointments="getAppointments" :customer-info="this.userInfo"></appointment-table>
     </div>
   </div>
 </template>
@@ -155,6 +169,31 @@ export default {
       }).catch(e => {
         console.error(e.toString())
       })
+    },
+    updatePasswordAndName() {
+      let password = this.updatedPassword;
+      let name = this.updatedName;
+      let username = this.userInfo.username;
+      let oldPassword = this.userInfo.password;
+      let oldName = this.userInfo.name;
+      let url = this.userRole === "owner" ? "/users/owners/update_info" : "/users/assistants/update_info";
+      AXIOS.post(url, {
+            username: username,
+            password: oldPassword,
+            name: oldName
+          },
+          {
+            params: {
+              newUsername: username,
+              newPassword: password,
+              newName: name
+            }
+          }).then(resp => {
+        this.userInfo = resp.data;
+        localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
+      }).catch(e => {
+        console.error(e.toString());
+      });
     }
   },
 
@@ -194,6 +233,10 @@ export default {
 
     getEditInfoButtonText: function () {
       return this.isUpdatingBasicInformation ? "Abort" : "Edit";
+    },
+
+    isCustomer: function () {
+      return this.userRole === "customer";
     }
   }
 }

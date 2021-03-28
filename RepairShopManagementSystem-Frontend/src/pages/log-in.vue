@@ -136,7 +136,7 @@ export default {
           // The username entered does not exist in the database.
           console.error("Username entered is not correct.")
         } else if (userType === "owner") {
-          AXIOS.get("users/owners/get_by_username", {
+          AXIOS.get("/users/owners/get_by_username", {
             params: {
               username: this.username
             }
@@ -154,7 +154,7 @@ export default {
             console.error(`ERROR: ${e.toString()}`)
           })
         } else if (userType === "assistant") {
-          AXIOS.get("users/assistants/get_by_username", {
+          AXIOS.get("/users/assistants/get_by_username", {
             params: {
               username: this.username
             }
@@ -172,7 +172,7 @@ export default {
             console.error(`ERROR: ${e.toString()}`)
           })
         } else if (userType === "customer") {
-          AXIOS.get("users/customers/get_by_username", {
+          AXIOS.get("/users/customers/get_by_username", {
             params: {
               username: this.username
             }

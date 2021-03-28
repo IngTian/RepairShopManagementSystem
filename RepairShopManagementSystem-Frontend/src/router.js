@@ -13,15 +13,13 @@ import UserWelcomePage from "@/pages/user-welcome-page"
 import UserAccountPage from "@/pages/user-account-page"
 import UserMakeAppointment from "@/pages/user-make-appointment"
 import UserManageCar from "@/pages/customer-car-management"
-import AssistantManageShift from "@/pages/shift-management-page"
-import AssistantCreateSpace from "@/pages/space-page"
+import AssistantShiftManagement from "@/pages/assistant-shift-management"
+import AssistantSpaceManagement from "@/pages/assistant-space-management"
 
 const routes = [
     {path: '/', name: '/', component: HomePage},
     {path: '/about', component: About},
     {path: "/log-in", component: LogIn},
-    {path: "/shift", component: AssistantManageShift},
-    {path: "/space", component: AssistantCreateSpace},
     {
         path: "/user",
         component: UserPage,
@@ -41,9 +39,15 @@ const routes = [
             {
                 path: "car",
                 component: UserManageCar
+            },
+            {
+                path: "shift",
+                component: AssistantShiftManagement
+            },
+            {
+                path: "space",
+                component: AssistantSpaceManagement
             }
-
-
         ]
     },
 ];

@@ -5,6 +5,8 @@
       <router-link to="/user/account" class="link">Account</router-link>
       <router-link to="/user/make-appointment" class="link" v-if="isCustomer">Booking</router-link>
       <router-link to="/user/car" class="link" v-if="isCustomer">Cars</router-link>
+      <router-link to="/user/shift" class="link" v-if="isAssistant">Shifts</router-link>
+      <router-link to="/user/space" class="link" v-if="isAssistant">Space</router-link>
     </div>
   </div>
 </template>

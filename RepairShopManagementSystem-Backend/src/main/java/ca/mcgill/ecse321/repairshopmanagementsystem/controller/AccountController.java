@@ -71,8 +71,8 @@ public class AccountController {
     }
 
     @GetMapping(value = "assistants/get_by_username")
-    public AssistantDto getOneAssistant(@RequestParam String userName) {
-        Assistant assistant = accountService.getAssistant(userName);
+    public AssistantDto getAssistantByUsername(@RequestParam String username) {
+        Assistant assistant = accountService.getAssistant(username);
         return convertToDto(assistant);
     }
 
