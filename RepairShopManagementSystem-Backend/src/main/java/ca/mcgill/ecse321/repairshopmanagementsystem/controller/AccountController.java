@@ -101,7 +101,7 @@ public class AccountController {
     }
 
     @GetMapping(value = "customers/get_by_username")
-    public CustomerDto getOneCustomer(@RequestParam String username) {
+    public CustomerDto getCustomerByUsername(@RequestParam String username) {
         Customer customer = accountService.getCustomer(username);
         return convertToDto(customer);
     }

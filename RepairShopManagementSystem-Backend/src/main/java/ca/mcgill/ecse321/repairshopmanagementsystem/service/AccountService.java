@@ -148,6 +148,8 @@ public class AccountService {
         assistant.setUsername(username);
         assistant.setPassword(password);
         assistant.setName(name);
+        assistant.setService(new HashSet<>());
+        assistant.setShift(new HashSet<>());
         assistant.setRepairShopManagementSystem(system);
         system.getUser().add(assistant);
         assistantRepository.save(assistant);
