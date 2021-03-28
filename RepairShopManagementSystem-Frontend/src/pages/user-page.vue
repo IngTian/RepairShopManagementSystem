@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <user-navigation-panel></user-navigation-panel>
+    <user-navigation-panel :user-role="this.userRole"></user-navigation-panel>
     <transition name="fade" mode="out-in">
       <router-view class="content"></router-view>
     </transition>
@@ -10,49 +10,16 @@
 <script>
 export default {
   name: "user-page",
-  data:function(){
-    return{
-      username:"",
-      name:"",
-      password:"",
-      address:"",
-      phoneNo:"",
-      email:"",
-
+  data: function () {
+    return {
+      userRole: ""
     }
   },
+  created() {
+    this.userRole = localStorage.getItem('userRole')
+  },
   mounted() {
-
-    // let userInformation = {
-    //   name: localStorage.getItem('userInformation').name,
-    //   username: localStorage.getItem('userInformation').username,
-    //   password: localStorage.getItem('userInformation').password,
-    //   address: localStorage.getItem('userInformation').address,
-    //   phoneNo: localStorage.getItem('userInformation').phoneNo,
-    //   email: localStorage.getItem('userInformation').email,
-    //
-    //   // Some appointments
-    //   appointments: [
-    //     {
-    //       date: "2021-03-25",
-    //       startTime: "09:25",
-    //       endTime: "10:38",
-    //       serviceType: "Study arts",
-    //       price: "$100",
-    //       isPaid: false
-    //     },
-    //     {
-    //       date: "2021-03-24",
-    //       startTime: "09:25",
-    //       endTime: "10:38",
-    //       serviceType: "Study arts",
-    //       price: "$100",
-    //       isPaid: false
-    //     }
-    //   ]
-    // }
-    // if (!localStorage.getItem('userInformation'))
-    //   localStorage.setItem('userInformation', JSON.stringify(userInformation))
+    this.$router.push('/user/welcome') // The default login page is the welcome page.
   }
 }
 </script>

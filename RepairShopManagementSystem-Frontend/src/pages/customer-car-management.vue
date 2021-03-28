@@ -1,13 +1,11 @@
 <template>
   <div class="root">
     <div class="container">
-
       <section class="section">
         <section-title title="Your cars" sub-title="You look great!"></section-title>
         <car-table :customer-info="this.customerInfo" :selecting="false"></car-table>
       </section>
-
-      <div class="section">
+      <div class="section" style="margin-bottom: 150px">
         <section-title title="Got new cars?" sub-title="Amaze us."></section-title>
         <div class="view-info-row">
           <div class="view-info-row-description">PlateNo:</div>
@@ -42,8 +40,6 @@
             </div>
           </transition>
         </div>
-
-
         <div
             style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%">
           <div style="width: max-content">
@@ -53,7 +49,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>

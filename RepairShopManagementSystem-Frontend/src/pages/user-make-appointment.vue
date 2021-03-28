@@ -65,8 +65,7 @@
         </transition>
       </div>
     </div>
-
-    <div style="width: max-content; margin-bottom: 50px; margin-left: auto; margin-right: auto;">
+    <div style="width: max-content; margin-bottom: 100px; margin-left: auto; margin-right: auto;">
       <action-button background-color="black" text="Book!" style="width: 200px"
                      @click="onMakeAppointment"></action-button>
     </div>
