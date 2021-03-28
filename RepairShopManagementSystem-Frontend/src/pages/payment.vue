@@ -43,10 +43,7 @@
 </template>
 
 <script>
-import axios from "axios"
-var AXIOS = axios.create({
-  baseURL: "http://localhost:8080",
-})
+
 export default {
   name: "payment",
   data: function () {

@@ -1,0 +1,278 @@
+<template>
+  <div class="root">
+
+
+
+    <section-title title="Manage your working time" sub-title="Decide when to work!"></section-title>
+    <div>
+      <div class="view-info-row">
+
+        <div class="view-info-row-description">Shift selected</div>
+        <transition name="fade" mode="out-in">
+          <div v-if="!this.selectedShift" key="shiftSelected" class="order-info-row-information">Not selected.</div>
+          <div v-else class="order-info-row-information" key="shiftNotSelected">{{ this.selectedShift.startTime}} - {{ this.selectedShift.endTime}}</div>
+        </transition>
+      </div>
+    <div class="view-info-row">
+
+      <div class="view-info-row-description">Start Date (yyyy-mm-dd):</div>
+      <div class="view-info-row-information">
+        <input class="form-input" v-model="startDate" key="input">
+      </div>
+    </div>
+    <div class="view-info-row">
+      <div class="view-info-row-description">Start Time (HH:mm:ss):</div>
+      <transition name="fade" mode="out-in">
+
+        <div class="view-info-row-information" >
+          <input class="form-input" v-model="startTime" key="input">
+        </div>
+      </transition>
+    </div>
+    <div class="view-info-row">
+      <div class="view-info-row-description">EndT Time (HH:mm:ss):</div>
+      <transition name="fade" mode="out-in">
+
+        <div class="view-info-row-information" >
+          <input class="form-input" v-model="endTime" key="input">
+        </div>
+      </transition>
+
+    </div>
+      <div
+          style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%">
+        <div style="width: max-content">
+          <action-button background-color="black" text="Add"
+                         v-on:clicked="addShiftClicked"
+                         style="width: 150px"></action-button>
+        </div>
+        <div style="width: max-content">
+          <action-button background-color="black" text="Update" style="width: 150px" v-on:clicked="updateShiftClicked"></action-button>
+        </div>
+      </div>
+    </div>
+    <section-title title="Your shifts" ></section-title>
+    <div class="date-picking-container">
+
+      <div class="date-picking-shifts">
+        <shifts-table :shifts="this.shifts" v-on:selected="onShiftSelected"></shifts-table>
+      </div>
+
+    </div>
+
+
+
+
+  </div>
+</template>
+
+<script>
+export default {
+  name: "shift-management-page",
+  data: function () {
+    return {
+
+     startDate:"",
+      startTime:"",
+      endTime:"",
+      shifts: [
+        {
+          date: "2021-03-27",
+          startTime: "09:35",
+          endTime: "10:35",
+          shiftId: "1"
+        },
+        {
+          date: "2021-03-26",
+          startTime: "09:35",
+          endTime: "10:35",
+          shiftId: "2"
+        },
+        {
+          date: "2021-03-24",
+          startTime: "09:35",
+          endTime: "10:35",
+          shiftId: "3"
+        }
+      ],
+      selectedShift: null,
+      days: []
+    }
+  },
+  computed: {
+    dates() {
+      return this.days.map(day => day.date);
+    },
+    attributes() {
+      return this.dates.map(date => ({
+        highlight: true,
+        dates: date,
+      }));
+    },
+  },
+  methods: {
+    onDayClick(day) {
+      const idx = this.days.findIndex(d => d.id === day.id);
+      if (idx >= 0) {
+        this.days.splice(idx, 1);
+      } else {
+        this.days.push({
+          id: day.id,
+          date: day.date,
+        });
+      }
+    },
+    onServiceSelected(event) {
+      this.selectedService = event
+    },
+    onShiftSelected(event) {
+      for (let i = 0; i < this.shifts.length; i++)
+        if (this.shifts[i].shiftId === event)
+          this.selectedShift = this.shifts[i];
+    }
+  },
+}
+</script>
+
+<style scoped>
+.root {
+  width: 100%;
+  height: max-content;
+  padding-left: 0;
+}
+.welcome-title-section {
+  width: 100%;
+  height: max-content;
+  display: flex;
+  margin-top: 180px;
+  margin-bottom: 40px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+.welcome-title {
+  font-family: 'Train One', cursive;
+  text-align: center;
+  font-size: 4em;
+}
+.welcome-subtitle {
+  font-family: "Playfair Display SC", serif;
+  font-size: 1.7em;
+}
+.show-selected-service {
+  width: max-content;
+  height: 2.5em;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 70px;
+  font-family: Roboto, sans-serif;
+  font-size: 30px;
+  transition: .5s ease;
+}
+.show-selected-service span {
+  font-size: 35px;
+  font-weight: 600;
+  font-style: italic;
+}
+.welcome-title-section-divider {
+  margin-top: 80px;
+  height: 1px;
+  width: 85%;
+  background-color: gray;
+}
+.date-picking-container {
+  width: 90%;
+  height: max-content;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 40px;
+  margin-bottom: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.date-picking-calendar {
+  width: 20%;
+  padding-left: 10%;
+}
+.date-picking-shifts {
+  width: 80%;
+}
+.order-preview {
+  margin-bottom: 50px;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.order-info-row {
+  height: 2.7em;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+.order-info-row-description {
+  height: 100%;
+  display: table-cell;
+  text-align: right;
+  line-height: 2em;
+  font-size: 20px;
+  font-family: Roboto, sans-serif;
+}
+.order-info-row-information {
+  width: 60%;
+  height: 100%;
+  padding-left: 10px;
+  display: table-cell;
+  text-align: left;
+  line-height: 2em;
+  font-size: 20px;
+  font-family: "Times New Roman", serif;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease-in-out;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+{
+  opacity: 0;
+}
+.view-info-row {
+  width: 100%;
+  height: 2.7em;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: table;
+}
+.view-info-row-description {
+  height: 100%;
+  display: table-cell;
+  text-align: right;
+  line-height: 2em;
+  font-size: 20px;
+  font-family: Roboto, sans-serif;
+}
+.view-info-row-information {
+  width: 60%;
+  height: 100%;
+  padding-left: 10px;
+  display: table-cell;
+  text-align: left;
+  line-height: 2em;
+  font-size: 20px;
+  font-family: "Times New Roman", serif;
+}
+.form-input {
+  display: block;
+  height: 1.5em;
+  padding: 5px 10px;
+  background-color: white;
+  outline: none;
+  border: gray solid 1px;
+  font-family: sans-serif;
+  font-size: 18px;
+  text-decoration: none;
+  transition: border-color .4s ease, box-shadow .4s ease;
+}
+
+</style>
