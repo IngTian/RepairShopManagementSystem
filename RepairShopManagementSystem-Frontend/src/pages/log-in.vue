@@ -57,8 +57,10 @@
 <script>
 import axios from "axios"
 
+var config = require("../configuration")
+
 var AXIOS = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: config.springServer.baseUrl,
 })
 export default {
   name: "log-in",
@@ -143,6 +145,7 @@ export default {
             let password = ownerInformation.password;
             if (this.password === password) {
               localStorage.setItem('userInformation', JSON.stringify(ownerInformation));
+              localStorage.setItem('userRole', userType)
               this.$router.push("/user")
             } else {
               console.error("Password entered is incorrect.")
@@ -160,6 +163,7 @@ export default {
             let password = assistantInformation.password;
             if (this.password === password) {
               localStorage.setItem('userInformation', JSON.stringify(assistantInformation));
+              localStorage.setItem('userRole', userType)
               this.$router.push("/user")
             } else {
               console.error("Password entered is incorrect.")
@@ -176,7 +180,13 @@ export default {
             let customerInformation = resp.data;
             let password = customerInformation.password;
             if (this.password === password) {
+              let appointments = customerInformation.appointments;
+              for (let i = 0; i < appointments.length; i++) {
+                appointments[i].isPaid = false;
+                appointments[i].isDeletable = false;
+              }
               localStorage.setItem('userInformation', JSON.stringify(customerInformation));
+              localStorage.setItem('userRole', userType)
               this.$router.push("/user")
             } else {
               console.error("Password entered is incorrect.")

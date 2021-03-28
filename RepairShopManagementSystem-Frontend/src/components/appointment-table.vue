@@ -8,43 +8,106 @@
         <div class="service-type-column title-font">SERVICE TYPE</div>
         <div class="price-column title-font">PRICE</div>
         <div class="select-column title-font">PAY</div>
+        <div class="select-column title-font">Cancel</div>
       </div>
-
-      <transition-group name="list-complete" tag="div">
-        <div class="shift-row" v-for="appointment in this.appointments" :key="getAppointmentDate(appointment)">
-          <div class="date-column">{{ getAppointmentDate(appointment) }}</div>
-          <div class="start-time-column">{{ getAppointmentStartTime(appointment) }}</div>
-          <div class="end-time-column">{{ getAppointmentEndTime(appointment) }}</div>
-          <div class="service-type-column">{{ getAppointmentServiceType(appointment) }}</div>
-          <div class="price-column">{{ getAppointmentPrice(appointment) }}</div>
-          <transition name="fade" mode="out-in">
-            <div class="select-column select-button" v-if="!getAppointmentIsPaid(appointment)"
-                 @click="makePayment(appointment)">
-              Pay
-            </div>
-            <div class="select-column" v-else>
-              Paid
-            </div>
-          </transition>
+      <transition name="fade" mode="out-in">
+        <div v-if="this.appointments.length === 0"
+             style="width: 100%; height: 2em; font-size: 30px; text-align: center; margin-top: 40px">
+          Sorry, you do not have any appointment yet.
         </div>
-      </transition-group>
+        <transition-group name="list-complete" tag="div" v-else>
+          <div class="shift-row" v-for="appointment in this.appointments" :key="getAppointmentDate(appointment)">
+            <div class="date-column">{{ getAppointmentDate(appointment) }}</div>
+            <div class="start-time-column">{{ getAppointmentStartTime(appointment) }}</div>
+            <div class="end-time-column">{{ getAppointmentEndTime(appointment) }}</div>
+            <div class="service-type-column">{{ getAppointmentServiceType(appointment) }}</div>
+            <div class="price-column">{{ getAppointmentPrice(appointment) }}</div>
+            <transition name="pay" mode="out-in">
+              <div class="select-column select-button" v-if="!appointment.isPaid"
+                   @click="makePayment(appointment)">
+                Pay
+              </div>
+              <div class="select-column" v-else>
+                Paid
+              </div>
+            </transition>
+            <transition name="delete" mode="out-in">
+              <div class="select-column select-button" v-if="appointment.isDeletable"
+                   @click="deleteAppointment(appointment)">
+                Cancel
+              </div>
+              <div class="select-column" v-else>
+                Over
+              </div>
+            </transition>
+          </div>
+        </transition-group>
+      </transition>
     </div>
   </div>
 </template>
 
 <script>
+
+import axios from "axios"
+
+var config = require("../configuration")
+
+var AXIOS = axios.create({
+  baseURL: config.springServer.baseUrl,
+})
+
 export default {
   name: "appointment-table",
+  data: function () {
+    return {
+      appointments: Array
+    }
+  },
   props: {
-    appointments: Array
+    customerInfo: Object,
+  },
+  created() {
+
+    // Setting up
+    let appointments = this.customerInfo.appointments;
+    this.appointments = appointments
+    for (let i = 0; i < appointments.length; i++) {
+      let appointment = appointments[i];
+      appointment.isPaid = this.getAppointmentIsPaid(appointment.bill);
+      appointment.isDeletable = this.isAppointmentDeletable(appointment.shift);
+    }
   },
   methods: {
     makePayment: function (appointment) {
-      console.log(appointment)
-      appointment.isPaid = true
-    }
-  },
-  computed: {
+      let bill = appointment.bill;
+      for (let i = 0; i < bill.length; i++)
+        if (!bill[i].isPaid)
+          AXIOS.post("/appointment/make_payment", {}, {
+            params: {
+              id: bill[i].billNo
+            }
+          }).then(resp => {
+                console.debug(resp.toString())
+                let paidBillNo = resp.data.billNo
+                for (let i = 0; i < this.customerInfo.appointments.length; i++) {
+                  let app = this.customerInfo.appointments[i];
+                  let appBills = app.bill;
+                  for (let j = 0; j < appBills.length; j++)
+                    if (appBills[j].billNo === paidBillNo) {
+                      appBills[j].isPaid = true;
+                      app.isPaid = true;
+                      appointment.isPaid = true;
+                      localStorage.setItem('userInformation', JSON.stringify(this.customerInfo))
+                      return;
+                    }
+                }
+              }
+          ).catch(e => {
+            console.error(e.toString())
+          })
+
+    },
     getAppointmentDate: function (appointment) {
       let shift = appointment.shift;
       return shift.date;
@@ -69,13 +132,41 @@ export default {
           totalBillPrice += bills[i].price;
       return totalBillPrice;
     },
-    getAppointmentIsPaid: function (appointment) {
-      let bills = appointment.bill;
-      for (let i = 0; i < bills.length; i++)
-        if (!bills[i].isPaid)
+    deleteAppointment: function (appointment) {
+      AXIOS.post("/appointment/delete", {}, {
+        params: {
+          id: appointment.appointmentId
+        }
+      }).then(resp => {
+        console.debug(JSON.stringify(resp.data))
+        let index = -1;
+        let appointments = this.customerInfo.appointments
+        for (let i = 0; i < appointments.length && index === -1; i++)
+          if (appointments[i].appointmentId === appointment.appointmentId)
+            index = i;
+        appointments.splice(index, 1);
+
+        localStorage.setItem('userInformation', JSON.stringify(this.customerInfo))
+      }).catch(e => {
+        console.error(e.toString())
+      })
+    },
+    getAppointmentIsPaid: function (appointmentBills) {
+      for (let i = 0; i < appointmentBills.length; i++)
+        if (!appointmentBills[i].isPaid)
           return false;
       return true;
-    }
+    },
+    isAppointmentDeletable: function (appointmentShift) {
+      let date = new Date(appointmentShift.date + "T00:00:00Z");
+      let today = new Date();
+      return today < date;
+    },
+  },
+  computed: {
+    getUserAppointments: function () {
+      return this.customerInfo.appointments
+    },
   }
 }
 </script>
@@ -101,7 +192,7 @@ export default {
 
 .date-column {
   display: table-cell;
-  width: 20%;
+  width: 17%;
   height: 100%;
   font-size: 20px;
   line-height: 2.7em;
@@ -110,7 +201,7 @@ export default {
 
 .start-time-column {
   display: table-cell;
-  width: 20%;
+  width: 17%;
   height: 100%;
   font-size: 20px;
   line-height: 2.7em;
@@ -119,7 +210,7 @@ export default {
 
 .end-time-column {
   display: table-cell;
-  width: 20%;
+  width: 17%;
   height: 100%;
   font-family: Roboto, sans-serif;
   font-size: 20px;
@@ -129,7 +220,7 @@ export default {
 
 .service-type-column {
   display: table-cell;
-  width: 20%;
+  width: 17%;
   height: 100%;
   font-size: 20px;
   line-height: 2.7em;
@@ -181,11 +272,31 @@ export default {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.4s ease;
+  transition: opacity 0.7s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
+  opacity: 0;
+}
+
+.pay-enter-active,
+.pay-leave-active {
+  transition: opacity 0.7s ease;
+}
+
+.pay-enter-from,
+.pay-leave-to {
+  opacity: 0;
+}
+
+.delete-enter-active,
+.delete-leave-active {
+  transition: opacity 0.7s ease;
+}
+
+.delete-enter-from,
+.delete-leave-to {
   opacity: 0;
 }
 </style>
