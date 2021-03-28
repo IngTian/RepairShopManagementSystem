@@ -1,6 +1,11 @@
 <template>
   <div class="root">
     <div class="container">
+
+      <section class="section">
+        <car-table :customer-info="this.customerInfo"></car-table>
+      </section>
+
       <div class="section">
         <section-title title="Car Management" sub-title="Add or update!"></section-title>
         <div class="view-info-row">
@@ -13,7 +18,7 @@
           <div class="view-info-row-description">Model:</div>
           <transition name="fade" mode="out-in">
 
-            <div class="view-info-row-information" >
+            <div class="view-info-row-information">
               <input class="form-input" v-model="model" key="input">
             </div>
           </transition>
@@ -22,16 +27,16 @@
           <div class="view-info-row-description">Manufacturer:</div>
           <transition name="fade" mode="out-in">
 
-            <div class="view-info-row-information" >
+            <div class="view-info-row-information">
               <input class="form-input" v-model="manufacturer" key="input">
             </div>
           </transition>
         </div>
         <div class="view-info-row">
-          <div class="view-info-row-description">YearOfProduction:</div>
+          <div class="view-info-row-description">Year:</div>
           <transition name="fade" mode="out-in">
 
-            <div class="view-info-row-information" >
+            <div class="view-info-row-information">
               <input class="form-input" v-model="year" key="input">
             </div>
           </transition>
@@ -45,9 +50,6 @@
                            v-on:clicked="addCarClicked"
                            style="width: 150px"></action-button>
           </div>
-          <div style="width: max-content">
-            <action-button background-color="black" text="Update" style="width: 150px" v-on:clicked="updateCarClicked"></action-button>
-          </div>
         </div>
       </div>
 
@@ -57,6 +59,7 @@
 
 <script>
 import axios from "axios"
+
 var AXIOS = axios.create({
   baseURL: "http://localhost:8080",
 })
@@ -66,7 +69,7 @@ export default {
     return {
       customerInfo: Object,
       isUpdatingBasicInformation: false,
-      plateNo:"",
+      plateNo: "",
       model: "",
       manufacturer: "",
       year: "",
@@ -74,68 +77,47 @@ export default {
       updatedName: "",
     }
   },
-  methods :{
-    updateCarClicked: function(){
+  methods: {
+    addCarClicked: function () {
       let plateNo = this.plateNo;
       let model = this.model;
       let manufacturer = this.manufacturer;
       let year = this.year;
-      let username = this.username;
-      let response = Object
-      AXIOS.post("users/cars/update",
-          {
-              username:username,
-              model: model,
-              year: year,
-              manufacturer: manufacturer,
-          },
+      let username = this.customerInfo.username;
+      AXIOS.post("/users/cars/create",
           {
             // Request body
+            plateNo: plateNo,
+            model: model,
+            manufacturer: manufacturer,
+            year: year
+          },
+          {
             params: {
-              plateNo:plateNo,
-              model:model,
-              manufacturer:manufacturer,
-              year:year
+              username: username,
             }
           },
       ).then(resp => {
-        response = resp;
-        console.log(response)
-      }).catch(e => {
-        console.error(e.toString())
-      })
-
-    },
-    addCarClicked :function(){
-      let plateNo = this.plateNo;
-      let model = this.model;
-      let manufacturer = this.manufacturer;
-      let year = this.year;
-      let username = this.username;
-      let response = Object
-      AXIOS.post("users/cars/create",
-          {
-            // Request body
-            plateNo:plateNo,
-            model:model,
-            manufacturer:manufacturer,
-            year:year
-          },
-          {
-            params:{
-              username:username,
-            }
-          },
-      ).then(resp => {
-        response = resp;
-        console.log(response)
+        let cars = this.customerInfo.cars;
+        cars.push({
+          plateNo: plateNo,
+          model: model,
+          manufacturer: manufacturer,
+          year: year
+        });
+        localStorage.setItem('userInformation', JSON.stringify(this.customerInfo));
+        this.plateNo = "";
+        this.model = "";
+        this.manufacturer = "";
+        this.year = "";
+        console.debug(resp.data)
       }).catch(e => {
         console.error(e.toString())
       })
     }
   },
 
-  mounted() {
+  created() {
     // Load user info from local storage.
     this.customerInfo = JSON.parse(localStorage.getItem('userInformation'));
   },

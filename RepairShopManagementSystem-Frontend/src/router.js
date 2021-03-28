@@ -12,7 +12,7 @@ Related to user operations.
 import UserWelcomePage from "@/pages/user-welcome-page"
 import UserAccountPage from "@/pages/user-account-page"
 import UserMakeAppointment from "@/pages/user-make-appointment"
-import UserManageCar from "@/pages/car-page"
+import UserManageCar from "@/pages/customer-car-management"
 import AssistantManageShift from "@/pages/shift-management-page"
 import AssistantCreateSpace from "@/pages/space-page"
 
