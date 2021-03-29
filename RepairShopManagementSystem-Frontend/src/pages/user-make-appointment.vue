@@ -31,7 +31,7 @@
                        style="margin-top: 40px; margin-left: 15%;" v-on:clicked="onViewShiftsClicked"></action-button>
       </div>
       <div class="date-picking-shifts">
-        <shifts-table :shifts="this.shifts" v-on:selected="onShiftSelected"></shifts-table>
+        <shifts-table :shifts="this.shifts" :allow-deletable="false" v-on:selected="onShiftSelected"></shifts-table>
       </div>
     </div>
     <section-title title="Almost there..." sub-title="Double check your order."></section-title>
