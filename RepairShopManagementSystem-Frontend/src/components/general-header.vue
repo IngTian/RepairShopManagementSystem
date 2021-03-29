@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <div class="logo"><p>US<span> of </span>SG</p></div>
+    <div class="logo"><p>McGill<span> ian </span>Repair</p></div>
     <ul class="navigation">
       <router-link to="/about" class="navigation-link">
         <li>About</li>
@@ -22,44 +22,38 @@ export default {
 </script>
 
 <style scoped>
-
 .main-container {
   width: 100%;
   height: 4.5em;
   margin-top: 0;
   background-color: black;
-
+  top: 0;
+  position: sticky;
+  z-index: 5;
   font-family: Arial, sans-serif;
   font-style: normal;
   font-size: 20px;
   font-weight: 500;
 }
-
 .logo {
   float: left;
   display: table;
-
   width: max-content;
   height: 100%;
   padding-left: 4em;
 }
-
 .logo p {
   display: table-cell;
-
   vertical-align: middle;
   horiz-align: center;
-
   color: white;
 }
-
 .logo span {
   font-family: "Times New Roman", cursive;
   font-size: 18px;
   font-weight: 100;
   font-style: italic;
 }
-
 .navigation {
   margin-top: 0;
   margin-bottom: 0;
@@ -70,7 +64,6 @@ export default {
   width: 50%;
   padding-right: 1.5em;
 }
-
 .navigation-link {
   display: table;
   height: 100%;
@@ -78,17 +71,14 @@ export default {
   padding-left: 1em;
   text-decoration: none;
 }
-
 .navigation-link:hover {
   background-color: white;
   transition: 0.4s;
 }
-
 .navigation-link:hover li {
   color: black;
   transition: 0.4s;
 }
-
 .navigation-link li {
   display: table-cell;
   vertical-align: middle;

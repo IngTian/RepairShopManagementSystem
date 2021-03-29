@@ -16,17 +16,32 @@ public class ShiftDto {
     public ShiftDto() {
     }
 
-    public ShiftDto(Date date, Time startTime, Time endTime){
+    public ShiftDto(Date date, Time startTime, Time endTime) {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
-    public ShiftDto(Date date, Time startTime, Time endTime, AssistantDto assistant){
+    public ShiftDto(Date date, Time startTime, Time endTime, Integer shiftId) {
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.shiftId = shiftId;
+    }
+
+    public ShiftDto(Date date, Time startTime, Time endTime, AssistantDto assistant) {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.assistant = assistant;
+    }
+
+    public ShiftDto(Date date, Time startTime, Time endTime, AssistantDto assistant, Integer shiftId) {
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.assistant = assistant;
+        this.shiftId = shiftId;
     }
 
     public ShiftDto(ScheduleDto schedule, Date date, Time startTime, Time endTime, AssistantDto assistant, Integer shiftID) {

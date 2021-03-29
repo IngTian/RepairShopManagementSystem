@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -20,6 +22,12 @@ public class AccountController {
 
     @Autowired
     private SystemService systemService;
+
+
+    @GetMapping(value = "get_user_info")
+    public String getUserInformation(@RequestParam String username) {
+        return accountService.getUserType(username);
+    }
 
     /*
     ----------------------------------------------------------------------------
@@ -45,6 +53,11 @@ public class AccountController {
         return convertToDto(newOwner);
     }
 
+    @GetMapping(value = "owners/get_by_username")
+    public OwnerDto getOwnerByUsername(String username) {
+        return convertToDto(accountService.getOwner(username));
+    }
+
     /*
     ----------------------------------------------------------------------------
     --------------------------------Assistant-----------------------------------
@@ -56,11 +69,13 @@ public class AccountController {
         List<Assistant> assistantList = accountService.getAllAssistants();
         return convertToDtoListForAssistant(assistantList);
     }
-    @GetMapping(value = "assistants/get_By_AssistantName")
-    public AssistantDto getOneAssistant(@RequestParam String userName) {
-     Assistant assistant = accountService.getAssistant(userName);
+
+    @GetMapping(value = "assistants/get_by_username")
+    public AssistantDto getAssistantByUsername(@RequestParam String username) {
+        Assistant assistant = accountService.getAssistant(username);
         return convertToDto(assistant);
     }
+
     @PostMapping(value = "assistants/create_to_most_recent_system")
     public AssistantDto createAssistantToMostRecentSystem(@RequestBody AssistantDto a) {
         Assistant assistant = accountService.createAssistant(a.getUsername(), a.getPassword(), a.getName(), systemService.getMostRecentSystem());
@@ -84,9 +99,10 @@ public class AccountController {
         List<Customer> customerList = accountService.getAllCustomers();
         return convertToDtoListForCustomer(customerList);
     }
-    @GetMapping(value = "customers/get_By_Username")
-    public CustomerDto getOneCustomer(@RequestParam String userName) {
-      Customer customer = accountService.getCustomer(userName);
+
+    @GetMapping(value = "customers/get_by_username")
+    public CustomerDto getCustomerByUsername(@RequestParam String username) {
+        Customer customer = accountService.getCustomer(username);
         return convertToDto(customer);
     }
 
@@ -126,11 +142,72 @@ public class AccountController {
     }
 
     private AssistantDto convertToDto(Assistant a) {
-        return new AssistantDto(a.getUsername(), a.getPassword(), a.getName(), convertToDto(a.getRepairShopManagementSystem()));
+        return new AssistantDto(
+                a.getUsername(),
+                a.getPassword(),
+                a.getName(),
+                convertToDtoListForShift(a.getShift())
+        );
     }
 
     private CustomerDto convertToDto(Customer a) {
-        return new CustomerDto(convertToDto(a.getRepairShopManagementSystem()), a.getUsername(), a.getPassword(), a.getName(), a.getPhoneNo(), a.getHomeAddress(), a.getEmail());
+        return new CustomerDto(
+                a.getUsername(),
+                a.getPassword(),
+                a.getName(),
+                a.getPhoneNo(),
+                a.getHomeAddress(),
+                a.getEmail(),
+                convertToDtoListForCar(a.getCar()),
+                convertToDtoListForAppointment(a.getAppointment())
+        );
+    }
+
+    private ServiceDto convertToDto(Service service) {
+        return new ServiceDto(service.getServiceType());
+    }
+
+    private Set<AppointmentDto> convertToDtoListForAppointment(Iterable<Appointment> appointments) {
+        Set<AppointmentDto> appointmentDtos = new HashSet<>();
+        for (Appointment appointment : appointments)
+            appointmentDtos.add(new AppointmentDto(
+                    appointment.getAppointmentId(),
+                    convertToDtoListForBill(appointment.getBill()),
+                    convertToDto(appointment.getShift()),
+                    new ArrayList<>(convertToDtoListForCar(appointment.getCar())),
+                    convertToDto(appointment.getSpace()),
+                    convertToDto(appointment.getService())
+            ));
+        return appointmentDtos;
+    }
+
+    private List<BillDto> convertToDtoListForBill(Iterable<Bill> bills) {
+        List<BillDto> billDtos = new ArrayList<>();
+        for (Bill bill : bills)
+            billDtos.add(new BillDto(bill.getBillNo(), bill.getPrice(), bill.getIsPaid()));
+        return billDtos;
+    }
+
+    private Set<CarDto> convertToDtoListForCar(Iterable<Car> cars) {
+        Set<CarDto> carDtos = new HashSet<>();
+        for (Car car : cars)
+            carDtos.add(new CarDto(car.getPlateNo(), car.getModel(), car.getManufacturer(), car.getYear()));
+        return carDtos;
+    }
+
+    private ShiftDto convertToDto(Shift shift) {
+        return new ShiftDto(shift.getDate(), shift.getStartTime(), shift.getEndTime(), shift.getShiftId());
+    }
+
+    private Set<ShiftDto> convertToDtoListForShift(Iterable<Shift> shifts) {
+        Set<ShiftDto> shiftDtos = new HashSet<>();
+        for (Shift shift : shifts)
+            shiftDtos.add(convertToDto(shift));
+        return shiftDtos;
+    }
+
+    private SpaceDto convertToDto(Space space) {
+        return new SpaceDto(space.getSpaceId(), space.getMaxWeightLoad());
     }
 
     private CarDto convertToDto(Car c) {

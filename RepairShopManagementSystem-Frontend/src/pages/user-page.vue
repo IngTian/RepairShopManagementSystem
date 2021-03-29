@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <user-navigation-panel></user-navigation-panel>
+    <user-navigation-panel :user-role="this.userRole"></user-navigation-panel>
     <transition name="fade" mode="out-in">
       <router-view class="content"></router-view>
     </transition>
@@ -10,37 +10,16 @@
 <script>
 export default {
   name: "user-page",
-  mounted() {
-    let userInformation = {
-      name: "Carl Von Schneider",
-      username: "aUsername",
-      password: "aPassword",
-      address: "1234 Ile Street, Palm Beach, Florida",
-      phoneNo: "1123345566",
-      email: "hello@world.edu",
-
-      // Some appointments
-      appointments: [
-        {
-          date: "2021-03-25",
-          startTime: "09:25",
-          endTime: "10:38",
-          serviceType: "Study arts",
-          price: "$100",
-          isPaid: false
-        },
-        {
-          date: "2021-03-24",
-          startTime: "09:25",
-          endTime: "10:38",
-          serviceType: "Study arts",
-          price: "$100",
-          isPaid: false
-        }
-      ]
+  data: function () {
+    return {
+      userRole: ""
     }
-    if (!localStorage.getItem('userInformation'))
-      localStorage.setItem('userInformation', JSON.stringify(userInformation))
+  },
+  created() {
+    this.userRole = localStorage.getItem('userRole')
+  },
+  mounted() {
+    this.$router.push('/user/welcome') // The default login page is the welcome page.
   }
 }
 </script>

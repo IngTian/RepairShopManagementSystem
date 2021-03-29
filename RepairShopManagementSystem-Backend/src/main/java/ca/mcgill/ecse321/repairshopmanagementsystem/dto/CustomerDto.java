@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.repairshopmanagementsystem.dto;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CustomerDto extends UserDto {
@@ -52,6 +53,24 @@ public class CustomerDto extends UserDto {
         this.cars = new HashSet<>();
         this.appointments = new HashSet<>();
 
+    }
+
+    public CustomerDto(
+            String username,
+            String password,
+            String name,
+            String phoneNo,
+            String homeAddress,
+            String email,
+            Set<CarDto> cars,
+            Set<AppointmentDto> appointments
+    ) {
+        super(username, password, name);
+        this.phoneNo = phoneNo;
+        this.homeAddress = homeAddress;
+        this.email = email;
+        this.cars = cars;
+        this.appointments = appointments;
     }
 
     public String getPhoneNo() {

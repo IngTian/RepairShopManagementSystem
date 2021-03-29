@@ -9,12 +9,20 @@ import SectionTitle from "@/components/section-title";
 import RedButton from "@/components/button";
 import HorizontalGallery from "@/components/horizontal-gallery";
 import vueCustomScrollbar from 'vue-custom-scrollbar';
-import UserNavigationPanel from "@/components/user-navigation-panel"
-import ActionButton from "@/components/action-button"
-import AppointmentTable from "@/components/appointment-table"
+import UserNavigationPanel from "@/components/user-navigation-panel";
+import ActionButton from "@/components/action-button";
+import AppointmentTable from "@/components/appointment-table";
+import ShiftsTable from "@/components/shifts-table";
+import CarTable from "@/components/car-table";
+import SpaceTable from "@/components/space-table";
+
+import Calendar from 'v-calendar/lib/components/calendar.umd'
+import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 
 Vue.config.productionTip = false
 
+Vue.component('calendar', Calendar)
+Vue.component('date-picker', DatePicker)
 Vue.component("general-header", Header)
 Vue.component('general-footer', Footer)
 Vue.component('section-title', SectionTitle)
@@ -24,7 +32,9 @@ Vue.component('vue-custom-scroll-bar', vueCustomScrollbar)
 Vue.component('user-navigation-panel', UserNavigationPanel)
 Vue.component('action-button', ActionButton)
 Vue.component('appointment-table', AppointmentTable)
-
+Vue.component('shifts-table', ShiftsTable)
+Vue.component('car-table', CarTable)
+Vue.component('space-table', SpaceTable)
 new Vue({
     router: router,
     render: h => h(App),

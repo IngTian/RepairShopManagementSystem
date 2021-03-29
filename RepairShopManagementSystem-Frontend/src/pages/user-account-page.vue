@@ -31,7 +31,7 @@
             </div>
           </transition>
         </div>
-        <div class="view-info-row">
+        <div class="view-info-row" v-if="this.userRole === 'customer'">
           <div class="view-info-row-description">Address:</div>
           <transition name="fade" mode="out-in">
             <div class="view-info-row-information" v-if="!isUpdatingBasicInformation" key="display">{{
@@ -43,7 +43,7 @@
             </div>
           </transition>
         </div>
-        <div class="view-info-row">
+        <div class="view-info-row" v-if="this.userRole === 'customer'">
           <div class="view-info-row-description">Phone No:</div>
           <transition name="fade" mode="out-in">
             <div class="view-info-row-information" v-if="!isUpdatingBasicInformation" key="display">{{
@@ -55,7 +55,7 @@
             </div>
           </transition>
         </div>
-        <div class="view-info-row">
+        <div class="view-info-row" v-if="this.userRole === 'customer'">
           <div class="view-info-row-description">Email:</div>
           <transition name="fade" mode="out-in">
             <div class="view-info-row-information" v-if="!isUpdatingBasicInformation" key="display">{{
@@ -68,35 +68,54 @@
           </transition>
         </div>
         <div
-            style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%">
+            style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%"
+            v-if="isCustomer">
           <div style="width: max-content">
             <action-button background-color="black" :text="getEditInfoButtonText"
                            v-on:clicked="isUpdatingBasicInformation=!isUpdatingBasicInformation"
                            style="width: 150px"></action-button>
           </div>
           <div style="width: max-content">
-            <action-button background-color="black" text="Update" style="width: 150px" v-on:clicked="updateUserInfomationClicked"></action-button>
+            <action-button background-color="black" text="Update" style="width: 150px"
+                           v-on:clicked="updateUserInformationClicked"></action-button>
+          </div>
+        </div>
+        <div
+            style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%; margin-bottom: 150px"
+            v-else>
+          <div style="width: max-content">
+            <action-button background-color="black" :text="getEditInfoButtonText"
+                           v-on:clicked="isUpdatingBasicInformation=!isUpdatingBasicInformation"
+                           style="width: 150px"></action-button>
+          </div>
+          <div style="width: max-content">
+            <action-button background-color="black" text="Update" style="width: 150px"
+                           v-on:clicked="updatePasswordAndName"></action-button>
           </div>
         </div>
       </div>
-      <div class="section">
-        <section-title title="Appointments" sub-title="see booked appointments"></section-title>
-        <appointment-table v-bind:appointments="getAppointments"></appointment-table>
-      </div>
+    </div>
+    <div class="section" style="margin-bottom: 150px" v-if="this.userRole === 'customer'">
+      <section-title title="Appointments" sub-title="see booked appointments"></section-title>
+      <appointment-table v-bind:appointments="getAppointments" :customer-info="this.userInfo"></appointment-table>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios"
+
+var config = require("../configuration")
+
 var AXIOS = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: config.springServer.baseUrl,
 })
 export default {
   name: "user-account-page",
   data: function () {
     return {
-      customerInfo: Object,
+      userInfo: Object,
+      userRole: String,
       isUpdatingBasicInformation: false,
       updatedPassword: "",
       updatedEmail: "",
@@ -105,17 +124,16 @@ export default {
       updatedName: "",
     }
   },
-  methods:{
-    updateUserInfomationClicked:function(){
-     let password=this.updatedPassword;
-     let name=this.updatedName;
-     let address=this.updatedAddress;
-     let phoneNo=this.updatedPhoneNo;
-     let email=this.email;
-      let response = Object
+  methods: {
+    updateUserInformationClicked: function () {
+      let password = this.updatedPassword;
+      let name = this.updatedName;
+      let address = this.updatedAddress;
+      let phoneNo = this.updatedPhoneNo;
+      let email = this.updatedEmail;
       AXIOS.post("users/customers/update_info",
           {
-           //request body
+            //request body
             username: this.getUsername,
             password: this.getPassword,
             name: this.getName,
@@ -124,66 +142,101 @@ export default {
             email: this.getEmail,
           },
           {
-            params:{
-            newUsername:this.getUsername,
-              newPassword:password,
-              newName:name,
-              newPhoneNo:phoneNo,
-              newAddress:address,
-              newEmail:email,
-
-
-
-
+            params: {
+              newUsername: this.getUsername,
+              newPassword: password,
+              newName: name,
+              newPhoneNo: phoneNo,
+              newAddress: address,
+              newEmail: email,
             }
-      }
-
-      ).then(resp => {
-        response = resp;
-        console.log(response)
+          }).then(resp => {
+        this.userInfo.password = password;
+        this.userInfo.name = name;
+        if (this.userRole === "customer") {
+          this.userInfo.address = address;
+          this.userInfo.phoneNo = phoneNo;
+          this.userInfo.email = email;
+        }
+        this.updatedPassword = '';
+        this.updatedName = '';
+        this.updatedAddress = '';
+        this.updatedPhoneNo = '';
+        this.updatedEmail = '';
+        this.isUpdatingBasicInformation = false;
+        localStorage.setItem('userInformation', JSON.stringify(this.userInfo))
+        console.debug(resp.toString())
       }).catch(e => {
         console.error(e.toString())
       })
-
-
+    },
+    updatePasswordAndName() {
+      let password = this.updatedPassword;
+      let name = this.updatedName;
+      let username = this.userInfo.username;
+      let oldPassword = this.userInfo.password;
+      let oldName = this.userInfo.name;
+      let url = this.userRole === "owner" ? "/users/owners/update_info" : "/users/assistants/update_info";
+      AXIOS.post(url, {
+            username: username,
+            password: oldPassword,
+            name: oldName
+          },
+          {
+            params: {
+              newUsername: username,
+              newPassword: password,
+              newName: name
+            }
+          }).then(resp => {
+        this.userInfo = resp.data;
+        localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
+      }).catch(e => {
+        console.error(e.toString());
+      });
     }
   },
 
   mounted() {
     // Load user info from local storage.
-    this.customerInfo = JSON.parse(localStorage.getItem('userInformation'));
+    this.userInfo = JSON.parse(localStorage.getItem('userInformation'));
+    this.userRole = localStorage.getItem('userRole')
   },
   computed: {
     getUsername: function () {
-      return this.customerInfo.username;
+      return this.userInfo.username;
     },
 
     getPassword: function () {
-      return this.customerInfo.password;
+      return this.userInfo.password;
     },
 
     getName: function () {
-      return this.customerInfo.name;
+      return this.userInfo.name;
     },
 
     getAddress: function () {
-      return this.customerInfo.address;
+      return this.userInfo.homeAddress;
     },
 
     getEmail: function () {
-      return this.customerInfo.email;
+      return this.userInfo.email;
     },
 
     getPhoneNo: function () {
-      return this.customerInfo.phoneNo;
+      return this.userInfo.phoneNo;
     },
 
     getAppointments: function () {
-      return this.customerInfo.appointments;
+      return this.userInfo.appointments;
     },
 
     getEditInfoButtonText: function () {
       return this.isUpdatingBasicInformation ? "Abort" : "Edit";
+    },
+
+    isCustomer: function () {
+      return this.userRole === "customer";
     }
   }
 }
@@ -209,8 +262,7 @@ export default {
 
 .section {
   width: 90%;
-  margin-top: 50px;
-  margin-bottom: 20px;
+  margin-top: 40px;
 }
 
 .view-info-row {

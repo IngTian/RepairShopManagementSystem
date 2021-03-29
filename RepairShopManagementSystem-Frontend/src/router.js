@@ -12,7 +12,9 @@ Related to user operations.
 import UserWelcomePage from "@/pages/user-welcome-page"
 import UserAccountPage from "@/pages/user-account-page"
 import UserMakeAppointment from "@/pages/user-make-appointment"
-
+import UserManageCar from "@/pages/customer-car-management"
+import AssistantShiftManagement from "@/pages/assistant-shift-management"
+import AssistantSpaceManagement from "@/pages/assistant-space-management"
 
 const routes = [
     {path: '/', name: '/', component: HomePage},
@@ -32,10 +34,19 @@ const routes = [
             },
             {
                 path: "make-appointment",
-                component: UserMakeAppointment,
-                children: [
-
-                ]
+                component: UserMakeAppointment
+            },
+            {
+                path: "car",
+                component: UserManageCar
+            },
+            {
+                path: "shift",
+                component: AssistantShiftManagement
+            },
+            {
+                path: "space",
+                component: AssistantSpaceManagement
             }
         ]
     },

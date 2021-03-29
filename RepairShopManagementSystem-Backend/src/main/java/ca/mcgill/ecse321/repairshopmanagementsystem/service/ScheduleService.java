@@ -125,6 +125,7 @@ public class ScheduleService {
         shift.setStartTime(startTime);
         shift.setEndTime(endTime);
         shift.setSchedule(schedule);
+        shift.setShiftId(shift.hashCode());
         schedule.getTimeSlot().add(shift);
 
         Set<Shift> shifts = shiftRepository.findShiftsByAssistant(assistant);
@@ -136,6 +137,11 @@ public class ScheduleService {
         shiftRepository.save(shift);
 
         return shift;
+    }
+
+    @Transactional
+    public Set<Shift> getShiftsForDates(List<Date> dates) {
+        return shiftRepository.findShiftsByDateIn(dates);
     }
 
     @Transactional

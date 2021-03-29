@@ -3,7 +3,10 @@
     <div class="nav-container">
       <router-link to="/user/welcome" class="link">Welcome</router-link>
       <router-link to="/user/account" class="link">Account</router-link>
-      <router-link to="/user/make-appointment" class="link">Booking</router-link>
+      <router-link to="/user/make-appointment" class="link" v-if="isCustomer">Booking</router-link>
+      <router-link to="/user/car" class="link" v-if="isCustomer">Cars</router-link>
+      <router-link to="/user/shift" class="link" v-if="isAssistant">Shifts</router-link>
+      <router-link to="/user/space" class="link" v-if="isAssistant">Space</router-link>
     </div>
   </div>
 </template>
@@ -11,19 +14,35 @@
 <script>
 export default {
   name: "user-navigation-panel",
+  props: {
+    userRole: String
+  },
+  computed: {
+    isCustomer: function () {
+      return this.userRole === "customer";
+    },
+    isAssistant: function () {
+      return this.userRole === "assistant";
+    },
+    isOwner: function () {
+      return this.userRole === "owner";
+    }
+  }
 }
 </script>
 
 <style scoped>
-.root{
+.root {
   grid-area: nav;
 }
-.nav-container{
+
+.nav-container {
   width: 100%;
   height: 100%;
   background-color: #191919;
 }
-.link{
+
+.link {
   padding-left: 20px;
   padding-right: 10px;
   padding-top: 10px;
@@ -39,7 +58,8 @@ export default {
   text-align: left;
   transition: ease .5s;
 }
-.link:hover{
+
+.link:hover {
   color: midnightblue;
   font-weight: 800;
   background-color: whitesmoke;

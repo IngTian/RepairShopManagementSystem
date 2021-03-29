@@ -48,7 +48,7 @@
 
     <div style="position: absolute; bottom: -50px; width: 100%; height: max-content">
       <div class="logo">
-        CARPE VINUM
+        AUCTA NON VERBA
       </div>
     </div>
   </div>
@@ -56,16 +56,19 @@
 
 <script>
 import axios from "axios"
+
+var config = require("../configuration")
+
 var AXIOS = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: config.springServer.baseUrl,
 })
 export default {
   name: "log-in",
   data: function () {
     return {
       title: "Sign Up Now!",
-      displaySignUp: true,
-      displayLogIn: false,
+      displaySignUp: false,
+      displayLogIn: true,
       firstName: "",
       lastName: "",
       email: "",
@@ -122,26 +125,80 @@ export default {
     },
     LoginButtonClicked: function () {
 
-      let username = this.username;
-     // let password = this.password;
-     let CustomerInfo= Object;
-      AXIOS.get("users/customers/get_By_Username",
-          {
 
-        params:{
-        name: username
-        }},
-
-      ).then(respo => {
-      CustomerInfo= respo;
-
-
-
-        console.log(CustomerInfo)
+      AXIOS.get("users/get_user_info", {
+        params: {
+          username: this.username
+        }
+      }).then(resp => {
+        let userType = resp.data;
+        if (userType === "notExist") {
+          // The username entered does not exist in the database.
+          console.error("Username entered is not correct.")
+        } else if (userType === "owner") {
+          AXIOS.get("/users/owners/get_by_username", {
+            params: {
+              username: this.username
+            }
+          }).then(resp => {
+            let ownerInformation = resp.data;
+            let password = ownerInformation.password;
+            if (this.password === password) {
+              localStorage.setItem('userInformation', JSON.stringify(ownerInformation));
+              localStorage.setItem('userRole', userType)
+              this.$router.push("/user")
+            } else {
+              console.error("Password entered is incorrect.")
+            }
+          }).catch(e => {
+            console.error(`ERROR: ${e.toString()}`)
+          })
+        } else if (userType === "assistant") {
+          AXIOS.get("/users/assistants/get_by_username", {
+            params: {
+              username: this.username
+            }
+          }).then(resp => {
+            let assistantInformation = resp.data;
+            let password = assistantInformation.password;
+            if (this.password === password) {
+              localStorage.setItem('userInformation', JSON.stringify(assistantInformation));
+              localStorage.setItem('userRole', userType)
+              this.$router.push("/user")
+            } else {
+              console.error("Password entered is incorrect.")
+            }
+          }).catch(e => {
+            console.error(`ERROR: ${e.toString()}`)
+          })
+        } else if (userType === "customer") {
+          AXIOS.get("/users/customers/get_by_username", {
+            params: {
+              username: this.username
+            }
+          }).then(resp => {
+            let customerInformation = resp.data;
+            let password = customerInformation.password;
+            if (this.password === password) {
+              let appointments = customerInformation.appointments;
+              for (let i = 0; i < appointments.length; i++) {
+                appointments[i].isPaid = false;
+                appointments[i].isDeletable = false;
+              }
+              localStorage.setItem('userInformation', JSON.stringify(customerInformation));
+              localStorage.setItem('userRole', userType)
+              this.$router.push("/user")
+            } else {
+              console.error("Password entered is incorrect.")
+            }
+          }).catch(e => {
+            console.error(`ERROR: ${e.toString()}`)
+          })
+        }
       }).catch(e => {
-        console.error(e.toString())
+        console.error(`ERROR: ${e.toString()}`)
       })
-    }
+    },
   }
 }
 </script>
@@ -161,6 +218,7 @@ export default {
   align-content: space-around;
   justify-content: flex-start;
 }
+
 .log-in-sign-up-selector {
   width: 80%;
   height: 5em;
@@ -170,6 +228,7 @@ export default {
   display: table;
   vertical-align: center;
 }
+
 .selector {
   display: table-cell;
   vertical-align: middle;
@@ -177,6 +236,7 @@ export default {
   color: white;
   width: 50%;
 }
+
 .selector-box {
   height: 100%;
   width: 100%;
@@ -186,16 +246,20 @@ export default {
   font-family: Roboto, sans-serif;
   transition: ease .5s;
 }
+
 .selector-box:hover {
   background-color: darkgray;
 }
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s ease-in-out;
 }
+
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
 {
   opacity: 0;
 }
+
 .title {
   width: 80%;
   height: 80px;
@@ -207,6 +271,7 @@ export default {
   font-size: 40px;
   font-family: Roboto, sans-serif;
 }
+
 .form-container {
   width: 80%;
   height: max-content;
@@ -216,6 +281,7 @@ export default {
   align-items: center;
   justify-content: space-around;
 }
+
 .form-input {
   display: block;
   height: 1.5em;
@@ -228,10 +294,12 @@ export default {
   text-decoration: none;
   transition: border-color .4s ease, box-shadow .4s ease;
 }
+
 .form-input:focus {
   border: red 1px solid;
   transition: border-color .4s ease, box-shadow .4s ease;
 }
+
 .logo {
   width: 30em;
   height: 100px;

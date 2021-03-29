@@ -1,8 +1,10 @@
 <template>
   <div class="container">
     <div class="item">
-      <p id="brand">United States <span>of</span> a Study Group</p>
-      <p id="disclaimer">®Ing Tian All Rights Reserved</p>
+      <p id="brand">McGill <span>ian</span> Repair</p>
+      <p id="disclaimer">
+        845 Rue Sherbrooke, Montreal QC
+      </p>
     </div>
   </div>
 </template>

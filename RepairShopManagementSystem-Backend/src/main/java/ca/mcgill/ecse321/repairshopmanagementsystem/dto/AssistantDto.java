@@ -20,6 +20,11 @@ public class AssistantDto extends UserDto {
         this.shifts = new HashSet<>();
     }
 
+    public AssistantDto(String username, String password, String name, Set<ShiftDto> shifts) {
+        super(username, password, name);
+        this.shifts = shifts;
+    }
+
     public AssistantDto(String username, String password, String name, RepairShopManagementSystemDto system, Set<ServiceDto> services, Set<ShiftDto> shifts) {
         super(username, password, name, system);
         this.services = services;

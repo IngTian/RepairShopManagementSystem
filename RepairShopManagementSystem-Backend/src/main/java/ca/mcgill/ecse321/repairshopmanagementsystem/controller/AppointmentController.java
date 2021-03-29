@@ -105,6 +105,18 @@ public class AppointmentController {
         return convertToDto(appointmentService.createSpace(weight, systemService.getMostRecentSystem()));
     }
 
+    @GetMapping(value = "space/get_all")
+    public List<SpaceDto> getAllSpace() {
+        return converToDtoListForSpace(appointmentService.getAllSpace());
+    }
+
+    private List<SpaceDto> converToDtoListForSpace(Iterable<Space> spaces) {
+        List<SpaceDto> result = new ArrayList<>();
+        for (Space s : spaces)
+            result.add(convertToDto(s));
+        return result;
+    }
+
     private List<ServiceDto> convertToDtoListForService(List<Service> service) {
         List<ServiceDto> result = new ArrayList<>();
         for (Service s : service) {

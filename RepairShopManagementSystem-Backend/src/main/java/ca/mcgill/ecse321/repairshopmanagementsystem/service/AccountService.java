@@ -30,6 +30,21 @@ public class AccountService {
     @Autowired
     private CarRepository carRepository;
 
+    @Transactional
+    public String getUserType(String username) {
+        Owner o = ownerRepository.findOwnerByUsername(username);
+        if (o != null)
+            return "owner";
+        Assistant a = assistantRepository.findAssistantByUsername(username);
+        if (a != null)
+            return "assistant";
+        Customer c = customerRepository.findCustomerByUsername(username);
+        if (c != null)
+            return "customer";
+
+        return "";
+    }
+
     /*----------------------------------------------------------------
     ------------------------------ Owner -----------------------------
     ----------------------------------------------------------------*/
@@ -133,6 +148,8 @@ public class AccountService {
         assistant.setUsername(username);
         assistant.setPassword(password);
         assistant.setName(name);
+        assistant.setService(new HashSet<>());
+        assistant.setShift(new HashSet<>());
         assistant.setRepairShopManagementSystem(system);
         system.getUser().add(assistant);
         assistantRepository.save(assistant);
@@ -195,13 +212,13 @@ public class AccountService {
         customerRepository.save(customer);
         return customer;
     }
-   
+
     @Transactional
     public Customer getCustomer(String username) {
-    	
-       Customer customer=customerRepository.findCustomerByUsername(username);
-       if(customer==null) throw new IllegalArgumentException("no customer find");
-       return customer;
+
+        Customer customer = customerRepository.findCustomerByUsername(username);
+        if (customer == null) throw new IllegalArgumentException("no customer find");
+        return customer;
     }
 
     @Transactional
