@@ -36,6 +36,8 @@
         </transition-group>
       </transition>
     </div>
+
+    <slideout-panel></slideout-panel>
   </div>
 </template>
 
@@ -46,7 +48,8 @@ export default {
   data: function () {
     return {
       cars: Array,
-      carSelected: ""
+      carSelected: "",
+      panelResult: null,
     }
   },
   props: {
@@ -59,7 +62,19 @@ export default {
   },
   methods: {
     updateCar: function (car) {
-      console.debug(JSON.stringify(car));
+      this.panelResult = this.$showPanel({
+        component: 'car-update-form',
+        openOn: "right",
+        props: {
+          username: this.customerInfo.username,
+          plateNo: car.plateNo
+        }
+      })
+
+      this.panelResult.promise.then(resp => {
+        console.debug(resp.data);
+        this.panelResult.hide();
+      })
     },
     isSelected: function (plateNo) {
       return this.carSelected === plateNo

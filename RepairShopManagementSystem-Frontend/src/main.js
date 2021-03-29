@@ -15,12 +15,16 @@ import AppointmentTable from "@/components/appointment-table";
 import ShiftsTable from "@/components/shifts-table";
 import CarTable from "@/components/car-table";
 import SpaceTable from "@/components/space-table";
+import UpdateCarForm from "@/components/update-car-form";
 
 import Calendar from 'v-calendar/lib/components/calendar.umd'
 import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+import VueSlideoutPanel from 'vue2-slideout-panel';
 
 Vue.config.productionTip = false
 
+Vue.use(VueSlideoutPanel);
+Vue.component('car-update-form', UpdateCarForm);
 Vue.component('calendar', Calendar)
 Vue.component('date-picker', DatePicker)
 Vue.component("general-header", Header)
