@@ -16,6 +16,10 @@ public class CarDto {
     public CarDto() {
     }
 
+    public CarDto(String plateNo) {
+        this.plateNo = plateNo;
+    }
+
     public CarDto(String plateNo, String model, String manufacturer, String year) {
         this.plateNo = plateNo;
         this.model = model;
