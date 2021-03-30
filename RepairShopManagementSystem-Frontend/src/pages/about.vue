@@ -1,16 +1,23 @@
 <template>
   <div class="about">
-    <h1>{{ msg }}</h1>
-    <h3>{{getBusinessName}} </h3>
-    <h3>Contact Number</h3>
-    <ul>
-        {{getBusinessPhoneNo}}
-    </ul>
-    <h3>Address</h3>
-    <ul>
-        {{getBusinessAddress}}
-    </ul>
-    <button @click="handleAlert">alert</button>
+
+    <div class="background">
+      <div class="page-title">
+        Best team in the world
+      </div>
+    </div>
+
+    <section-title title="Meet our teams" sub-title="Look how handsome we are!"></section-title>
+    <horizontal-gallery :images="this.people" :maximum-length="this.people.length"
+                        style="margin-bottom: 100px" v-on:image-selected="personSelected"></horizontal-gallery>
+
+    <div v-if="this.selectedPerson">
+      <section-title title="Details" sub-title="More"></section-title>
+      <transition mode="out-in" name="fade">
+        <team-description :filename="this.selectedPerson.fileName"
+                          :personDescription="this.selectedPerson.detail"></team-description>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -18,56 +25,106 @@
 
 export default {
   name: 'about',
-  props: {
-    msg: String
-  },
+  props: {},
   data: function () {
     return {
-      businessInfo: Object,
+      people: [
+        {
+          fileName: "byron.jpg",
+          title: "Byron Chen",
+          description: "Please donate.",
+          detail: "Please donate. That's it.",
+          id: 1
+        },
+        {
+          fileName: "kevin.jpg",
+          title: "Kevin Li",
+          description: "Vegetable dog.",
+          detail: "321, being a human means having limits. I've learned something... The more carefully you scheme, the more unexpected events come along. As long as you're human... I REJECT MY HUMANITY, 321!",
+          id: 2
+        },
+        {
+          fileName: "ztian.jpg",
+          title: "Ing Tian",
+          description: "Homo Sapiens",
+          detail: "I am watching you.",
+          id: 3
+        },
+        {
+          fileName: "max.jpg",
+          title: "Max Shen",
+          description: "Our diplomat",
+          detail: "Please do not donate to that guy. ",
+          id: 4
+        },
+        {
+          fileName: "xli.jpg",
+          title: "Xiang Li",
+          description: "A soccer amateur.",
+          detail: "I have never used a debugger in my life since my code never go wrong—-Xiang li",
+          id: 5
+        },
+      ],
+
+      selectedPerson: null
     }
   },
   mounted() {
-    this.businessInfo = JSON.parse(localStorage.getItem('businessInfo'))
   },
   methods: {
-    handleAlert() {
-      this.$alert('测试')
-    },
+    personSelected(event) {
+      for (let i = 0; i < this.people.length; i++)
+        if (this.people[i].title === event)
+          this.selectedPerson = this.people[i];
+    }
   },
-  computed: {
-    getBusinessName: function () {
-      return this.businessInfo.businessName;
-    },
-
-    getBusinessAddress: function () {
-      return this.businessInfo.businessAddress;
-    },
-
-    getBusinessPhoneNo: function () {
-      return this.businessInfo.businessPhoneNo;
-    },
-  }
+  computed: {}
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-h3 {
-  margin: 40px 0 0;
+.about {
+  width: 100%;
+  height: max-content;
+  font-family: Roboto, sans-serif;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
+.background {
+  width: 100%;
+  height: 80vh;
+
+  background-image: url(".././assets/img/rainy_road.png");
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-li {
-  display: inline-block;
-  margin: 0 10px;
+.page-title {
+  color: white;
+  font-family: "Playfair Display SC", serif;
+  font-size: 3.5em;
+  width: 100%;
+  height: max-content;
+  text-align: center;
 }
 
-a {
-  color: #42b983;
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.3s;
+  transition-property: opacity;
+  transition-timing-function: ease;
 }
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0
+}
+
 </style>

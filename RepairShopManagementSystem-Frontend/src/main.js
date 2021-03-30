@@ -16,6 +16,7 @@ import ShiftsTable from "@/components/shifts-table";
 import CarTable from "@/components/car-table";
 import SpaceTable from "@/components/space-table";
 import UpdateCarForm from "@/components/update-car-form";
+import TeamDescription from "@/components/team-description";
 import alert from './modules/alert'
 
 import Calendar from 'v-calendar/lib/components/calendar.umd'
@@ -26,6 +27,7 @@ Vue.config.productionTip = false
 
 Vue.use(alert)
 Vue.use(VueSlideoutPanel);
+Vue.component('team-description', TeamDescription)
 Vue.component('car-update-form', UpdateCarForm);
 Vue.component('calendar', Calendar)
 Vue.component('date-picker', DatePicker)
