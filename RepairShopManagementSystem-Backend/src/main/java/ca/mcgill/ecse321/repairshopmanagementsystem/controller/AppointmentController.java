@@ -107,10 +107,10 @@ public class AppointmentController {
 
     @GetMapping(value = "space/get_all")
     public List<SpaceDto> getAllSpace() {
-        return converToDtoListForSpace(appointmentService.getAllSpace());
+        return convertToDtoListForSpace(appointmentService.getAllSpace());
     }
 
-    private List<SpaceDto> converToDtoListForSpace(Iterable<Space> spaces) {
+    private List<SpaceDto> convertToDtoListForSpace(Iterable<Space> spaces) {
         List<SpaceDto> result = new ArrayList<>();
         for (Space s : spaces)
             result.add(convertToDto(s));

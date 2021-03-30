@@ -165,7 +165,8 @@ public class Util {
      * @author Ing Tian
      */
     public static boolean isAppointmentTimeCoveredByShift(Shift s, Time t1, Time t2) {
-        return s.getStartTime().before(t1) && s.getEndTime().after(t2);
+        return (s.getStartTime().equals(t1) || s.getStartTime().before(t1))
+                && (s.getEndTime().equals(t2) || s.getEndTime().after(t2));
     }
 
     /**
@@ -223,6 +224,7 @@ public class Util {
 
     /**
      * Get the week and year no of a date.
+     *
      * @param date A date.
      * @return Return the weekNo.
      */
