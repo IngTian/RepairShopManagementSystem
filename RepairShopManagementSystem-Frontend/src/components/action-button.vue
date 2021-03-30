@@ -28,6 +28,7 @@ export default {
   transition-property: all;
   transition-duration: .6s;
   transition-timing-function: ease;
+  width: 100%;
 }
 
 .button {

@@ -1,34 +1,72 @@
 <template>
   <div class="root">
     <div class="container">
-      <div class="shift-row">
-        <div class="date-column title-font">DATE</div>
-        <div class="start-time-column title-font">START TIME</div>
-        <div class="end-time-column title-font">END TIME</div>
-        <div class="select-column title-font">SELECT</div>
-      </div>
-
-      <transition-group name="list-complete" tag="div">
-        <div class="shift-row" v-for="shift in this.shifts" :key="shift.date">
-          <div class="date-column">{{ shift.date }}</div>
-          <div class="start-time-column">{{ shift.startTime }}</div>
-          <div class="end-time-column">{{ shift.endTime }}</div>
-          <transition name="fade" mode="out-in">
-            <div class="select-column select-button" v-if="!isSelected(shift.shiftId)"
-                 @click="selectAShift(shift.shiftId); $emit('selected', shift.shiftId)">
-              Select
-            </div>
-            <div class="select-column" v-else>
-              Selected
-            </div>
-          </transition>
+      <div v-if="this.allowDeletable">
+        <div class="shift-row">
+          <div class="date-column title-font" style="width: 20%">DATE</div>
+          <div class="start-time-column title-font" style="width: 20%">START TIME</div>
+          <div class="end-time-column title-font" style="width: 20%">END TIME</div>
+          <div class="select-column title-font" style="width: 20%">SELECT</div>
+          <div class="select-column title-font" style="width: 20%">DELETE</div>
         </div>
-      </transition-group>
+        <transition-group name="list-complete" tag="div">
+          <div class="shift-row" v-for="shift in this.shifts" :key="shift.date">
+            <div class="date-column" style="width: 20%">{{ shift.date }}</div>
+            <div class="start-time-column" style="width: 20%">{{ shift.startTime }}</div>
+            <div class="end-time-column" style="width: 20%">{{ shift.endTime }}</div>
+            <transition name="fade" mode="out-in">
+              <div class="select-column select-button" style="width: 20%" v-if="!isSelected(shift.shiftId)"
+                   @click="selectAShift(shift.shiftId); $emit('selected', shift.shiftId)">
+                Select
+              </div>
+              <div class="select-column" style="width: 20%" v-else>
+                Selected
+              </div>
+            </transition>
+            <div class="select-column select-button" style="width: 20%" @click="deleteShift(shift.shiftId)">
+              Delete
+            </div>
+          </div>
+        </transition-group>
+      </div>
+      <div v-else>
+        <div class="shift-row">
+          <div class="date-column title-font">DATE</div>
+          <div class="start-time-column title-font">START TIME</div>
+          <div class="end-time-column title-font">END TIME</div>
+          <div class="select-column title-font">SELECT</div>
+        </div>
+        <transition-group name="list-complete" tag="div">
+          <div class="shift-row" v-for="shift in this.shifts" :key="shift.date">
+            <div class="date-column">{{ shift.date }}</div>
+            <div class="start-time-column">{{ shift.startTime }}</div>
+            <div class="end-time-column">{{ shift.endTime }}</div>
+            <transition name="fade" mode="out-in">
+              <div class="select-column select-button" v-if="!isSelected(shift.shiftId)"
+                   @click="selectAShift(shift.shiftId); $emit('selected', shift.shiftId)">
+                Select
+              </div>
+              <div class="select-column" v-else>
+                Selected
+              </div>
+            </transition>
+          </div>
+        </transition-group>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+
+import axios from "axios"
+
+var config = require("../configuration")
+
+var AXIOS = axios.create({
+  baseURL: config.springServer.baseUrl,
+})
+
 export default {
   name: "shifts-table",
   data: function () {
@@ -37,7 +75,8 @@ export default {
     }
   },
   props: {
-    shifts: Array
+    shifts: Array,
+    allowDeletable: Boolean
   },
   methods: {
     isSelected: function (shiftId) {
@@ -45,6 +84,25 @@ export default {
     },
     selectAShift: function (shiftId) {
       this.selectedShiftId = shiftId;
+    },
+    deleteShift: function (shiftId) {
+      AXIOS.post("/schedules/shifts/delete", {}, {
+        params: {
+          shiftId: shiftId
+        }
+      }).then(resp => {
+        console.debug(resp.data);
+        let userInfo = JSON.parse(localStorage.getItem('userInformation'));
+        let shiftArray = userInfo.shifts;
+        for (let i = 0; i < shiftArray.length; i++)
+          if (shiftArray[i].shiftId === shiftId) {
+            shiftArray.splice(i, 1);
+            localStorage.setItem('userInformation', JSON.stringify(userInfo));
+            return;
+          }
+      }).catch(e => {
+        console.error(e.toString())
+      })
     }
   }
 }

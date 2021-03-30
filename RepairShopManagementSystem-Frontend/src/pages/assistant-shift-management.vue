@@ -57,7 +57,7 @@
     <section-title title="Your shifts" sub-title="Select and edit above."></section-title>
     <div class="date-picking-container">
       <div class="date-picking-shifts">
-        <shifts-table :shifts="this.shifts" v-on:selected="onShiftSelected"></shifts-table>
+        <shifts-table :shifts="this.shifts" :allow-deletable="true" v-on:selected="onShiftSelected"></shifts-table>
       </div>
     </div>
   </div>
@@ -123,7 +123,7 @@ export default {
       let startTime = this.startTime;
       let endTime = this.endTime;
       let shiftId = this.selectedShift.shiftId;
-      AXIOS.post("/schedules/shifts/create", {}, {
+      AXIOS.post("/schedules/shifts/change", {}, {
         params: {
           date: date,
           startTime: startTime,
