@@ -27,7 +27,7 @@ public class RepairShopManagementSystemController {
 
     @GetMapping(value = "GutenTag")
     public String sayHello() {
-        return "Salve! Quid Agis?";
+        return "Salve, quis agis?";
     }
 
     private RepairShopManagementSystemDto convertToDto(RepairShopManagementSystem system) {
