@@ -83,7 +83,7 @@ export default {
       let bill = appointment.bill;
       for (let i = 0; i < bill.length; i++)
         if (!bill[i].isPaid)
-          AXIOS.post("/appointment/make_payment", {}, {
+          AXIOS.put("/appointment/make_payment", {}, {
             params: {
               id: bill[i].billNo
             }

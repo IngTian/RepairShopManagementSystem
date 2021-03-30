@@ -47,7 +47,7 @@ public class AccountController {
         return convertToDto(owner);
     }
 
-    @PostMapping(value = "owners/update_info")
+    @PutMapping(value = "owners/update_info")
     public OwnerDto updateOwnerInfo(@RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newName, @RequestBody OwnerDto o) {
         Owner newOwner = (Owner) accountService.updateUserInformation(accountService.getOwner(o.getUsername()), newUsername, newPassword, newName);
         return convertToDto(newOwner);
@@ -82,7 +82,7 @@ public class AccountController {
         return convertToDto(assistant);
     }
 
-    @PostMapping(value = "assistants/update_info")
+    @PutMapping(value = "assistants/update_info")
     public AssistantDto updateAssistantInfo(@RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newName, @RequestBody AssistantDto o) {
         Assistant newAssistant = (Assistant) accountService.updateUserInformation(accountService.getAssistant(o.getUsername()), newUsername, newPassword, newName);
         return convertToDto(newAssistant);
@@ -106,7 +106,7 @@ public class AccountController {
         return convertToDto(customer);
     }
 
-    @PostMapping(value = "customers/update_info")
+    @PutMapping(value = "customers/update_info")
     public CustomerDto updateCustomerInfo(@RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newName, @RequestParam String newPhoneNo, @RequestParam String newAddress, @RequestParam String newEmail, @RequestBody CustomerDto o) {
         Customer newCustomer = (Customer) accountService.updateUserInformation(accountService.getCustomer(o.getUsername()), newUsername, newPassword, newName);
         accountService.updateCustomer(newCustomer, newEmail, newAddress, newPhoneNo);
@@ -133,7 +133,7 @@ public class AccountController {
         return convertToDto(c);
     }
 
-    @PostMapping(value = "cars/update")
+    @PutMapping(value = "cars/update")
     public CarDto updateCarInfo(@RequestParam String newUsername, @RequestParam String newModel, @RequestParam String newYear, @RequestParam String newManufacturer, @RequestBody CarDto car) {
         Car c = accountService.updateCar(accountService.getCar(car.getPlateNo()), newModel, newYear, newManufacturer, accountService.getCustomer(newUsername));
         return convertToDto(c);

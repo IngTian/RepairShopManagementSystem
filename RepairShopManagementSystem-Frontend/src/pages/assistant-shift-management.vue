@@ -131,7 +131,7 @@ export default {
       let startTime = this.startTime;
       let endTime = this.endTime;
       let shiftId = this.selectedShift.shiftId;
-      AXIOS.post("/schedules/shifts/change", {}, {
+      AXIOS.put("/schedules/shifts/change", {}, {
         params: {
           newDate: date,
           newStartTime: startTime,

@@ -92,13 +92,13 @@ public class ScheduleController {
         return convertToDto(newShift);
     }
 
-    @PostMapping(value = "shifts/delete")
+    @PostMapping( "shifts/delete")
     public ShiftDto deleteShift(@RequestParam Integer shiftId) {
         Shift s = scheduleService.deleteShift(scheduleService.getShiftById(shiftId));
         return convertToDto(s);
     }
 
-    @PostMapping(value = "shifts/change")
+    @PutMapping(value = "shifts/change")
     public ShiftDto changeShift(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate newDate,
                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime newStartTime,
                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm") LocalTime newEndTime,
