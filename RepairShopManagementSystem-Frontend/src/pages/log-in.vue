@@ -98,6 +98,7 @@ export default {
       this.displayLogIn = true;
       this.displaySignUp = false;
     },
+
     signUpButtonClicked: function () {
       let name = this.firstName + " " + this.lastName;
       let username = this.username;
@@ -105,7 +106,6 @@ export default {
       let email = this.email;
       let address = this.address;
       let phoneNo = this.phoneNo;
-      let response = Object
       AXIOS.post("users/customers/create_to_most_recent_system",
           {
             // Request body
@@ -117,21 +117,27 @@ export default {
             email: email
           },
       ).then(resp => {
-        response = resp;
-        console.log(response)
+        let response = resp.data;
+        if (response.hasError) {
+          throw new Error(response.error);
+        }
       }).catch(e => {
-        console.error(e.toString())
+        console.error(e.toString());
+        this.$alert(e.toString());
       })
     },
+
     LoginButtonClicked: function () {
-
-
       AXIOS.get("users/get_user_info", {
         params: {
           username: this.username
         }
       }).then(resp => {
         let userType = resp.data;
+
+        if (userType.hasError)
+          throw new Error(userType.error);
+
         if (userType === "notExist") {
           // The username entered does not exist in the database.
           console.error("Username entered is not correct.")
@@ -142,6 +148,10 @@ export default {
             }
           }).then(resp => {
             let ownerInformation = resp.data;
+
+            if (ownerInformation.hasError)
+              throw new Error(ownerInformation.error);
+
             let password = ownerInformation.password;
             if (this.password === password) {
               localStorage.setItem('userInformation', JSON.stringify(ownerInformation));
@@ -151,7 +161,8 @@ export default {
               console.error("Password entered is incorrect.")
             }
           }).catch(e => {
-            console.error(`ERROR: ${e.toString()}`)
+            console.error(`ERROR: ${e.toString()}`);
+            this.$alert(e.toString());
           })
         } else if (userType === "assistant") {
           AXIOS.get("/users/assistants/get_by_username", {
@@ -160,6 +171,10 @@ export default {
             }
           }).then(resp => {
             let assistantInformation = resp.data;
+
+            if (assistantInformation.hasError)
+              throw new Error(assistantInformation.error);
+
             let password = assistantInformation.password;
             if (this.password === password) {
               localStorage.setItem('userInformation', JSON.stringify(assistantInformation));
@@ -170,6 +185,7 @@ export default {
             }
           }).catch(e => {
             console.error(`ERROR: ${e.toString()}`)
+            this.$alert(e.toString());
           })
         } else if (userType === "customer") {
           AXIOS.get("/users/customers/get_by_username", {
@@ -178,6 +194,10 @@ export default {
             }
           }).then(resp => {
             let customerInformation = resp.data;
+
+            if (customerInformation.hasError)
+              throw new Error(customerInformation.error);
+
             let password = customerInformation.password;
             if (this.password === password) {
               let appointments = customerInformation.appointments;
@@ -193,10 +213,12 @@ export default {
             }
           }).catch(e => {
             console.error(`ERROR: ${e.toString()}`)
+            this.$alert(e.toString());
           })
         }
       }).catch(e => {
         console.error(`ERROR: ${e.toString()}`)
+        this.$alert(e.toString());
       })
     },
   }

@@ -44,7 +44,8 @@ export default {
           newManufacturer: this.manufacturer
         }
       }).then(resp => {
-        console.debug(resp.data)
+        if (resp.data.hasError)
+          throw new Error(resp.data.error);
         let userInfo = JSON.parse(localStorage.getItem('userInformation'))
         let cars = userInfo.cars;
         for (let i = 0; i < cars.length; i++)
@@ -58,6 +59,7 @@ export default {
           }
       }).catch(err => {
         console.error(err.toString());
+        this.$alert(err.toString());
       })
     }
   }

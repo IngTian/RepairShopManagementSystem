@@ -88,8 +88,12 @@ export default {
               id: bill[i].billNo
             }
           }).then(resp => {
-                console.debug(resp.toString())
-                let paidBillNo = resp.data.billNo
+
+                let paymentData = resp.data;
+                if (paymentData.hasError)
+                  throw new Error(paymentData.error);
+
+                let paidBillNo = paymentData.billNo
                 for (let i = 0; i < this.customerInfo.appointments.length; i++) {
                   let app = this.customerInfo.appointments[i];
                   let appBills = app.bill;
@@ -104,7 +108,8 @@ export default {
                 }
               }
           ).catch(e => {
-            console.error(e.toString())
+            console.error(e.toString());
+            this.$alert(e.toString());
           })
 
     },
@@ -138,7 +143,8 @@ export default {
           id: appointment.appointmentId
         }
       }).then(resp => {
-        console.debug(JSON.stringify(resp.data))
+        if (resp.data.hasError)
+          throw new Error(resp.data.error);
         let index = -1;
         let appointments = this.customerInfo.appointments
         for (let i = 0; i < appointments.length && index === -1; i++)
@@ -148,7 +154,8 @@ export default {
 
         localStorage.setItem('userInformation', JSON.stringify(this.customerInfo))
       }).catch(e => {
-        console.error(e.toString())
+        console.error(e.toString());
+        this.$alert(e.toString());
       })
     },
     getAppointmentIsPaid: function (appointmentBills) {

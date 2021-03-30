@@ -189,7 +189,13 @@ export default {
               newName: name
             }
           }).then(resp => {
-        this.userInfo = resp.data;
+
+        let newUserInfo = resp.data;
+        if (newUserInfo.hasError)
+          throw new Error(newUserInfo.error);
+
+        this.userInfo = newUserInfo;
+
         localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
         this.updatedName = "";
         this.updatedPassword = "";

@@ -109,15 +109,21 @@ export default {
           username: username
         }
       }).then(resp => {
+
+        let shiftData = resp.data;
+        if (shiftData.hasError)
+          throw new Error(shiftData.error);
+
         this.userInfo = JSON.parse(localStorage.getItem('userInformation'));
         this.shifts = this.userInfo.shifts;
-        this.shifts.push(resp.data);
+        this.shifts.push(shiftData);
         localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
         this.date = "";
         this.startTime = "";
         this.endTime = "";
       }).catch(e => {
         console.error(e.toString())
+        this.$alert(e.toString());
       });
     },
     updateShiftClicked() {
@@ -133,11 +139,16 @@ export default {
           shiftId: shiftId
         }
       }).then(resp => {
+
+        let shiftData = resp.data;
+        if (shiftData.hasError)
+          throw new Error(shiftData.error);
+
         this.userInfo = JSON.parse(localStorage.getItem('userInformation'));
         this.shifts = this.userInfo.shifts;
         for (let i = 0; i < this.shifts.length; i++)
           if (this.shifts[i].shiftId === shiftId) {
-            this.shifts[i] = resp.data;
+            this.shifts[i] = shiftData;
             break;
           }
         localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
@@ -146,7 +157,8 @@ export default {
         this.endTime = "";
         this.selectedShift = null;
       }).catch(e => {
-        console.error(e.toString())
+        console.error(e.toString());
+        this.$alert(e.toString());
       });
     }
   },

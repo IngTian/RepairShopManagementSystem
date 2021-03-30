@@ -61,9 +61,14 @@ export default {
             }
           }
       ).then(resp => {
-        this.allSpace.push(resp.data);
+        let spaceData = resp.data;
+        if (spaceData.hasError)
+          throw new Error(spaceData.error);
+
+        this.allSpace.push(spaceData);
       }).catch(e => {
-        console.error(e.toString())
+        console.error(e.toString());
+        this.$alert(e.toString());
       })
 
     }

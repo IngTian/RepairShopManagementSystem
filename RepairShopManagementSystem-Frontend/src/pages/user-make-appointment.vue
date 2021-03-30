@@ -199,9 +199,15 @@ export default {
           dates: datesArray.join(',')
         }
       }).then(resp => {
-        this.shifts = resp.data;
+
+        let shiftData = resp.data;
+        if (shiftData.hasError)
+          throw new Error(shiftData.error);
+
+        this.shifts = shiftData;
       }).catch(e => {
-        console.error(e.toString())
+        console.error(e.toString());
+        this.$alert(e.toString());
       })
     },
     onMakeAppointment() {
@@ -217,10 +223,16 @@ export default {
           operatorUsername: this.userInfo.username
         }
       }).then(resp => {
+
+        let appointmentData = resp.data;
+        if (appointmentData.hasError)
+          throw new Error(appointmentData.error);
+
         this.userInfo.appointments.push(resp.data);
         localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
       }).catch(e => {
-        console.error(e.toString())
+        console.error(e.toString());
+        this.$alert(e.toString());
       });
     }
   },

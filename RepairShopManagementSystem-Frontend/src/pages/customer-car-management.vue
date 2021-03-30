@@ -95,6 +95,11 @@ export default {
             }
           },
       ).then(resp => {
+
+        let carData = resp.data;
+        if (carData.hasError)
+          throw new Error(carData.error);
+
         let cars = this.customerInfo.cars;
         cars.push({
           plateNo: plateNo,
@@ -107,9 +112,9 @@ export default {
         this.model = "";
         this.manufacturer = "";
         this.year = "";
-        console.debug(resp.data)
       }).catch(e => {
-        console.error(e.toString())
+        console.error(e.toString());
+        this.$alert(e.toString());
       })
     }
   },

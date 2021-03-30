@@ -1,20 +1,16 @@
 <template>
-  <!-- 初始状态下隐藏提示框 -->
   <div v-show="isShow" class="root">
     <div class="alert" :class="type">
       <div class="flex">{{ msg }}</div>
-      <!-- alert插件只显示确定按钮 -->
       <div class="space-around" v-if="type === 'alert'">
         <div class="btnCommon success" @click="close">Confirm</div>
       </div>
-      <!-- confirm插件显示取消和确定按钮 -->
       <div class="space-around" v-else-if="type === 'confirm'">
         <div class="btnCommon cancel" @click="cancelEvent">Cancel</div>
         <div class="btnCommon success" @click="successEvent">Confirm</div>
       </div>
 
     </div>
-    <!-- 背景遮罩 -->
     <div class="mask" @click="closeMask" v-if="type !== 'msg'"></div>
   </div>
 </template>
@@ -85,20 +81,14 @@ export default {
   }
 }
 
-
-// 调用实例
-//    this.$alert('测试')
-//    this.$confirm('测试Confirm', () => {
-//      console.log('这是确定事件');
-//    }, () => {
-//      console.log('这是取消事件');
-//    })
-//    this.$msg('测试')
-
 </script>
-<style lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus" scoped>
 
 .root {
+
+  position: fixed;
+  top: 50%;
+
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -147,6 +137,8 @@ export default {
   justify-content: center;
   padding: 40px 30px;
   word-break: break-all;
+  max-width 400px;
+  overflow: word-wrap ;
   line-height: 40px;
 }
 

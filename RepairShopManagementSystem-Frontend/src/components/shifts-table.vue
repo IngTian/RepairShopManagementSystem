@@ -97,7 +97,8 @@ export default {
           shiftId: shiftId
         }
       }).then(resp => {
-        console.debug(resp.data);
+        if (resp.data.hasError)
+          throw new Error(resp.data.error);
         let userInfo = JSON.parse(localStorage.getItem('userInformation'));
         let shiftArray = userInfo.shifts;
         for (let i = 0; i < shiftArray.length; i++)
@@ -108,7 +109,8 @@ export default {
             return;
           }
       }).catch(e => {
-        console.error(e.toString())
+        console.error(e.toString());
+        this.$alert(e.toString());
       })
     }
   }
