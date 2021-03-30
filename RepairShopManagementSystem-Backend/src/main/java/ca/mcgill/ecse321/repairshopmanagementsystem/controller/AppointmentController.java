@@ -54,12 +54,12 @@ public class AppointmentController {
         return convertToDto(appointmentService.getAppointmentById(aps.getAppointmentId()));
     }
 
-    @PostMapping(value = "update_service_type")
+    @PutMapping(value = "update_service_type")
     public AppointmentDto updateServiceType(@RequestParam Integer appointmentId, @RequestParam String newServiceType) {
         return convertToDto(appointmentService.changeServiceType(appointmentService.getAppointmentById(appointmentId), newServiceType));
     }
 
-    @PostMapping(value = "delete")
+    @DeleteMapping(value = "delete")
     public AppointmentDto deleteAppointment(@RequestParam Integer id) {
         Appointment a = appointmentService.deleteAppointment(appointmentService.getAppointmentById(id));
         return new AppointmentDto(a.getAppointmentId());
@@ -71,7 +71,7 @@ public class AppointmentController {
     ----------------------------------------------------------------------------
     */
 
-    @PostMapping(value = "make_payment")
+    @PutMapping(value = "make_payment")
     public BillDto makePayment(@RequestParam Integer id) {
         Bill newBill = appointmentService.makePayment(appointmentService.makePayment(appointmentService.getBillByBillNo(id)));
         return convertToDto(newBill);

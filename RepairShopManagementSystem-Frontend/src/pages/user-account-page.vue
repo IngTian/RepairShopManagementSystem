@@ -131,7 +131,7 @@ export default {
       let address = this.updatedAddress;
       let phoneNo = this.updatedPhoneNo;
       let email = this.updatedEmail;
-      AXIOS.post("users/customers/update_info",
+      AXIOS.put("users/customers/update_info",
           {
             //request body
             username: this.getUsername,
@@ -177,7 +177,7 @@ export default {
       let oldPassword = this.userInfo.password;
       let oldName = this.userInfo.name;
       let url = this.userRole === "owner" ? "/users/owners/update_info" : "/users/assistants/update_info";
-      AXIOS.post(url, {
+      AXIOS.put(url, {
             username: username,
             password: oldPassword,
             name: oldName

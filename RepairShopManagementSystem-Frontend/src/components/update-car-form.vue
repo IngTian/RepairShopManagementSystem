@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     updateCar() {
-      AXIOS.post("/users/cars/update", {
+      AXIOS.put("/users/cars/update", {
         plateNo: this.plateNo
       }, {
         params: {
