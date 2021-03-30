@@ -10,6 +10,8 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "stylus": "^0.54.8",
+    "stylus-loader": "^3.0.2",
     "v-calendar": "^2.3.0",
     "vue": "^2.6.11",
     "vue-custom-scrollbar": "^1.4.0",

@@ -10,6 +10,7 @@
     <ul>
         {{getBusinessAddress}}
     </ul>
+    <button @click="handleAlert">alert</button>
   </div>
 </template>
 
@@ -27,6 +28,11 @@ export default {
   },
   mounted() {
     this.businessInfo = JSON.parse(localStorage.getItem('businessInfo'))
+  },
+  methods: {
+    handleAlert() {
+      this.$alert('测试')
+    },
   },
   computed: {
     getBusinessName: function () {
