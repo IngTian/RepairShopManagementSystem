@@ -115,6 +115,8 @@ public class AccountController {
 
     @PostMapping(value = "customers/create_to_most_recent_system")
     public CustomerDto createCustomerToMostRecentSystem(@RequestBody CustomerDto a) {
+        if (!accountService.getUserType(a.getUsername()).equals(""))
+            throw new IllegalArgumentException("The username entered has already been used.");
         Customer customer = accountService.createCustomer(a.getUsername(), a.getPassword(), a.getName(), systemService.getMostRecentSystem(), a.getPhoneNo(), a.getHomeAddress(), a.getEmail());
         return convertToDto(customer);
     }
