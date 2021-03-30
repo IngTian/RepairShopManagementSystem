@@ -67,7 +67,7 @@
     </div>
     <div style="width: max-content; margin-bottom: 100px; margin-left: auto; margin-right: auto;">
       <action-button background-color="black" text="Book!" style="width: 200px"
-                     @click="onMakeAppointment"></action-button>
+                     v-on:clicked="onMakeAppointment"></action-button>
     </div>
   </div>
 </template>
@@ -211,14 +211,14 @@ export default {
           username: this.userInfo.username,
           plateNo: this.selectedCar,
           date: this.selectedShift.date,
-          startTime: this.selectedShift.startTime,
-          endTime: this.selectedShift.endTime,
+          startTime: this.selectedShift.startTime.substr(0, 5),
+          endTime: this.selectedShift.endTime.substr(0, 5),
           weight: 1000,
           operatorUsername: this.userInfo.username
         }
       }).then(resp => {
         this.userInfo.appointments.push(resp.data);
-        localStorage.setItem('userInformation', this.userInfo);
+        localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
       }).catch(e => {
         console.error(e.toString())
       });

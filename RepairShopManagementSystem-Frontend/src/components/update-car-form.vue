@@ -4,7 +4,8 @@
     <input class="form-input" v-model="model" placeholder="Model" style="float: left; width: 150px">
     <input class="form-input" v-model="year" placeholder="Year" style="float: left; width: 150px">
     <input class="form-input" v-model="manufacturer" placeholder="Manufacturer" style="float: left; width: 150px">
-    <action-button background-color="black" text="Update Car" v-on:clicked="updateCar" style="margin-left: 50px; width: 200px; margin-top: 30px"></action-button>
+    <action-button background-color="black" text="Update Car" v-on:clicked="updateCar"
+                   style="margin-left: 50px; width: 200px; margin-top: 30px"></action-button>
   </div>
 </template>
 
@@ -51,8 +52,9 @@ export default {
             cars[i].model = this.model;
             cars[i].year = this.year;
             cars[i].manufacturer = this.manufacturer;
-            localStorage.setItem('userInformation', userInfo)
-            this.$emit('closePanel')
+            localStorage.setItem('userInformation', JSON.stringify(userInfo));
+            this.$emit('closePanel');
+            break;
           }
       }).catch(err => {
         console.error(err.toString());
@@ -64,14 +66,14 @@ export default {
 
 <style scoped>
 
-.root{
+.root {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
 }
 
-.title{
+.title {
   font-family: Roboto, sans-serif;
   font-size: 30px;
   padding-left: 50px;

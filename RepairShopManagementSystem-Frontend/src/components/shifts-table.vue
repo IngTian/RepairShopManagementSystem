@@ -9,6 +9,12 @@
           <div class="select-column title-font" style="width: 20%">SELECT</div>
           <div class="select-column title-font" style="width: 20%">DELETE</div>
         </div>
+
+        <div v-if="this.shifts.length === 0"
+             style="width: 100%; height: 2em; font-size: 30px; text-align: center; margin-top: 40px">
+          Sorry, you do not have any shift yet.
+        </div>
+
         <transition-group name="list-complete" tag="div">
           <div class="shift-row" v-for="shift in this.shifts" :key="shift.date">
             <div class="date-column" style="width: 20%">{{ shift.date }}</div>
@@ -98,6 +104,7 @@ export default {
           if (shiftArray[i].shiftId === shiftId) {
             shiftArray.splice(i, 1);
             localStorage.setItem('userInformation', JSON.stringify(userInfo));
+            this.shifts = shiftArray;
             return;
           }
       }).catch(e => {

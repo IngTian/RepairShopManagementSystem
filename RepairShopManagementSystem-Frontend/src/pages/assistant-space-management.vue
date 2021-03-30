@@ -38,7 +38,7 @@ export default {
   name: "space-page",
   data: function () {
     return {
-      customerInfo: Object,
+      userInfo: Object,
       weightLoad: "",
       allSpace: []
     }
@@ -53,9 +53,7 @@ export default {
   methods: {
 
     addSpaceClicked: function () {
-      let maxWeightLoad = this.weightload;
-      // let password = this.password;
-      let response = Object
+      let maxWeightLoad = this.weightLoad;
       AXIOS.post("appointment/space/create", {},
           {
             params: {
@@ -63,8 +61,7 @@ export default {
             }
           }
       ).then(resp => {
-        response = resp.data;
-        console.log(response)
+        this.allSpace.push(resp.data);
       }).catch(e => {
         console.error(e.toString())
       })
@@ -74,7 +71,7 @@ export default {
 
   mounted() {
     // Load user info from local storage.
-    this.customerInfo = JSON.parse(localStorage.getItem('userInformation'));
+    this.userInfo = JSON.parse(localStorage.getItem('userInformation'));
   },
 }
 </script>

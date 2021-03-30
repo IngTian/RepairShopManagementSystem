@@ -191,6 +191,9 @@ export default {
           }).then(resp => {
         this.userInfo = resp.data;
         localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
+        this.updatedName = "";
+        this.updatedPassword = "";
+        this.isUpdatingBasicInformation = false;
       }).catch(e => {
         console.error(e.toString());
       });

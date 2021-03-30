@@ -62,6 +62,7 @@ export default {
   },
   methods: {
     updateCar: function (car) {
+
       this.panelResult = this.$showPanel({
         component: 'car-update-form',
         openOn: "right",

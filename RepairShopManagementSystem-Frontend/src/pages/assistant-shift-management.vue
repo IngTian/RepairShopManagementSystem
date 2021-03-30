@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="view-info-row">
-        <div class="view-info-row-description">Start Time (HH:mm:ss):</div>
+        <div class="view-info-row-description">Start Time (HH:mm):</div>
         <transition name="fade" mode="out-in">
 
           <div class="view-info-row-information">
@@ -30,7 +30,7 @@
         </transition>
       </div>
       <div class="view-info-row">
-        <div class="view-info-row-description">EndT Time (HH:mm:ss):</div>
+        <div class="view-info-row-description">EndT Time (HH:mm):</div>
         <transition name="fade" mode="out-in">
 
           <div class="view-info-row-information">
@@ -109,6 +109,8 @@ export default {
           username: username
         }
       }).then(resp => {
+        this.userInfo = JSON.parse(localStorage.getItem('userInformation'));
+        this.shifts = this.userInfo.shifts;
         this.shifts.push(resp.data);
         localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
         this.date = "";
@@ -125,12 +127,14 @@ export default {
       let shiftId = this.selectedShift.shiftId;
       AXIOS.post("/schedules/shifts/change", {}, {
         params: {
-          date: date,
-          startTime: startTime,
-          endTime: endTime,
+          newDate: date,
+          newStartTime: startTime,
+          newEndTime: endTime,
           shiftId: shiftId
         }
       }).then(resp => {
+        this.userInfo = JSON.parse(localStorage.getItem('userInformation'));
+        this.shifts = this.userInfo.shifts;
         for (let i = 0; i < this.shifts.length; i++)
           if (this.shifts[i].shiftId === shiftId) {
             this.shifts[i] = resp.data;
@@ -140,6 +144,7 @@ export default {
         this.date = "";
         this.startTime = "";
         this.endTime = "";
+        this.selectedShift = null;
       }).catch(e => {
         console.error(e.toString())
       });
