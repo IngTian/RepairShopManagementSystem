@@ -50,7 +50,7 @@ public class TestAccountService {
     private static final Integer TEST_USER_ID = 1;
     private static final String TEST_CUSTOMER_PHONE_NO = "1002003000";
     private static final String TEST_CUSTOMER_ADDRESS = "1234 Sunshine Street, Palm Beach, Florida";
-    private static final String TEST_CUSTOMER_EMAIL = "someone@123.com";
+    private static final String TEST_CUSTOMER_EMAIL = "hello.world@someone.mail.com";
 
     private static final Integer TEST_SYSTEM_ID = 1;
     private static final String TEST_SYSTEM_NAME = "A test shop";

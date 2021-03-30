@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class Util {
 
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("(^[a-zA-Z0-9]+)@([a-zA-Z0-9]+)[.]([a-zA-Z]+)");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("(^[a-zA-Z0-9.]+)@([a-zA-Z0-9.]+)[.]([a-zA-Z]+)");
 
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9]{8,16}");
 
