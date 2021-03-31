@@ -34,8 +34,8 @@
           </div>
           <input class="form-input" v-model="username" placeholder="Username" style="width: 76%; margin-bottom: 20px">
           <input class="form-input" v-model="password" placeholder="Password" style="width: 76%; margin-bottom: 40px">
-          <action-button background-color="black" text="LOG IN"
-                         style="width: 200px; height: 60px" v-on:clicked="LoginButtonClicked"></action-button>
+          <my-button background-color="black" text="log in" :is-loading="isLoading" style="width: 200px; height: 60px"
+                     @button-clicked="LoginButtonClicked"></my-button>
         </div>
       </transition>
 
@@ -56,6 +56,7 @@
 
 <script>
 import axios from "axios"
+
 var config = require("../configuration")
 var AXIOS = axios.create({
   baseURL: config.springServer.baseUrl,
@@ -78,6 +79,7 @@ export default {
       selectedStyle: {
         backgroundColor: "black"
       },
+      isLoading: false
     }
   },
   computed: {
@@ -133,11 +135,15 @@ export default {
     },
 
     LoginButtonClicked: function () {
+      this.isLoading = true;
       AXIOS.get("users/get_user_info", {
         params: {
           username: this.username
         }
       }).then(resp => {
+
+        this.isLoading = false;
+
         let userType = resp.data;
 
         if (userType.hasError)

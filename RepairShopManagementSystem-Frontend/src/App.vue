@@ -14,7 +14,9 @@ import Header from "@/components/general-header";
 import Footer from "@/components/general-footer"
 export default {
   name: 'App',
-  components: {Header, Footer},
+  components: {
+    Header, Footer
+  },
 }
 </script>
 

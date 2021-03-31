@@ -1,24 +1,24 @@
 <template>
   <div class="root">
     <div class="container">
-      <button style="text-decoration: none" class="button" :style="{'background': backgroundColor}"
-              @click="$emit('clicked')">
+      <div class="button" :style="{'background': backgroundColor}" @click="$emit('button-clicked')">
         <svg>
           <rect x="0" y="0" fill="none" width="100%" height="100%"></rect>
         </svg>
         <div>{{ text }}</div>
-      </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
-  name: "action-button",
+  name: "general-button",
   props: {
     text: String,
-    backgroundColor: String,
-  }
+    backgroundColor: String
+  },
 }
 </script>
 
@@ -28,7 +28,6 @@ export default {
   transition-property: all;
   transition-duration: .6s;
   transition-timing-function: ease;
-  width: 100%;
 }
 
 .button {
@@ -40,6 +39,7 @@ export default {
   line-height: 45px;
   margin: 0 0 2em;
   max-width: 160px;
+  min-width: 100px;
   position: relative;
   text-decoration: none;
   text-transform: uppercase;

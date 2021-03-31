@@ -19,6 +19,9 @@ import UpdateCarForm from "@/components/update-car-form";
 import TeamDescription from "@/components/team-description";
 import alert from './modules/alert'
 
+import ButtonWrapper from "@/components/button/button-wrapper"
+import InputBox from "@/components/input-box/input-box"
+
 import Calendar from 'v-calendar/lib/components/calendar.umd'
 import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 import VueSlideoutPanel from 'vue2-slideout-panel';
@@ -27,6 +30,8 @@ Vue.config.productionTip = false
 
 Vue.use(alert)
 Vue.use(VueSlideoutPanel);
+Vue.component('MyInput', InputBox)
+Vue.component("MyButton", ButtonWrapper)
 Vue.component('team-description', TeamDescription)
 Vue.component('car-update-form', UpdateCarForm);
 Vue.component('calendar', Calendar)

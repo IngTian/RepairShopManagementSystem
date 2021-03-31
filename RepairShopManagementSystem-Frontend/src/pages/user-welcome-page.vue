@@ -1,7 +1,7 @@
 <template>
   <div class="root">
     <div class="txt">
-      Hello! Dear friend.
+      Salve! Quid Agis?
     </div>
   </div>
 </template>
@@ -34,9 +34,10 @@ export default {
 .txt {
   text-align: center;
   font-family: 'Roboto', sans-serif;
-  font-size: 12vmin;
+  font-size: 10vmin;
   font-weight: 700;
   animation: netflix_style 3.5s;
+  color: #e90418;
   outline: none;
   white-space: nowrap;
 }
@@ -64,13 +65,14 @@ export default {
     opacity: 1;
   }
   80% {
-    opacity: 0;
+    opacity: 1;
     color: #e90418;
     transform: scale(0.85, 0.9);
   }
 
   100% {
-    opacity: 0;
+    opacity: 1;
+    color: #e90418;
   }
 }
 
