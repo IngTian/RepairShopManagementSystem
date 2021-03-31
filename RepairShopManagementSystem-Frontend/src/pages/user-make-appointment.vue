@@ -15,9 +15,13 @@
                           v-on:image-selected="onServiceSelected"></horizontal-gallery>
     </div>
     <transition name="fade" mode="out-in">
-      <div v-if="this.selectedService" class="show-selected-service">You have selected <span>{{
-          this.selectedService
-        }}</span></div>
+      <transition v-if="this.selectedService" name="slide-fade" mode="out-in">
+        <div class="show-selected-service" :key="this.selectedService">You have selected
+          <span>
+                    {{ this.selectedService }}
+        </span>
+        </div>
+      </transition>
     </transition>
     <section-title title="Which car?" sub-title="Always a pleasure to see one."></section-title>
     <div style="width: 85%; margin-left: auto; margin-right: auto">
@@ -149,11 +153,11 @@ export default {
         }
       ],
       selectedShift: null,
-      days: []
+      days: [],
     }
   },
   created() {
-    this.userInfo = JSON.parse(localStorage.getItem('userInformation'))
+    this.userInfo = JSON.parse(localStorage.getItem('userInformation'));
   },
   computed: {
     dates() {
@@ -276,13 +280,14 @@ export default {
   margin-top: 70px;
   font-family: Roboto, sans-serif;
   font-size: 30px;
-  transition: .5s ease;
 }
 
 .show-selected-service span {
   font-size: 35px;
   font-weight: 600;
   font-style: italic;
+  width: max-content;
+  transition: width .5s;
 }
 
 .welcome-title-section-divider {
@@ -351,12 +356,4 @@ export default {
   font-family: "Times New Roman", serif;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s ease-in-out;
-}
-
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
-{
-  opacity: 0;
-}
 </style>

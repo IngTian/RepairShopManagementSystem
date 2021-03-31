@@ -11,33 +11,35 @@
       </div>
       <transition name="fade" mode="out-in">
         <div v-if="this.cars.length === 0"
-             style="width: 100%; height: 2em; font-size: 30px; text-align: center; margin-top: 40px">
+             style="width: 100%; height: 2em; font-size: 30px; text-align: center; margin-top: 40px" key="no-car">
           Sorry, you do not have any car yet.
         </div>
-        <transition-group name="list-complete" tag="div" v-else>
-          <div class="car-row" v-for="car in cars" :key="car.year">
-            <div class="plate-column">{{ car.plateNo }}</div>
-            <div class="model-column">{{ car.model }}</div>
-            <div class="year-column">{{ car.year }}</div>
-            <div class="manufacturer-column">{{ car.manufacturer }}</div>
-            <div class="select-column select-button" @click="updateCar(car)" v-if="!selecting">
-              Update
+        <div v-else key="has-car">
+          <transition-group name="slide-fade" tag="div">
+            <div class="car-row" v-for="car of cars" :key="car.plateNo">
+              <div class="plate-column">{{ car.plateNo }}</div>
+              <div class="model-column">{{ car.model }}</div>
+              <div class="year-column">{{ car.year }}</div>
+              <div class="manufacturer-column">{{ car.manufacturer }}</div>
+              <div class="select-column select-button" @click="updateCar(car)" v-if="!selecting">
+                Update
+              </div>
+              <transition name="fade" mode="out-in" v-else>
+                <div class="select-column" v-if="isSelected(car.plateNo)" key="selected">
+                  Selected
+                </div>
+                <div v-else class="select-column select-button"
+                     @click="selectACar(car.plateNo); $emit('carSelected', `${car.plateNo}`);" key="select">
+                  Select
+                </div>
+              </transition>
             </div>
-            <transition name="fade" mode="out-in" v-else>
-              <div class="select-column" v-if="isSelected(car.plateNo)">
-                Selected
-              </div>
-              <div v-else class="select-column select-button"
-                   @click="selectACar(car.plateNo); $emit('carSelected', `${car.plateNo}`);">
-                Select
-              </div>
-            </transition>
-          </div>
-        </transition-group>
+          </transition-group>
+        </div>
       </transition>
     </div>
 
-    <slideout-panel></slideout-panel>
+    <slideout-panel v-on:updated="carUpdated"></slideout-panel>
   </div>
 </template>
 
@@ -47,18 +49,13 @@ export default {
   name: "appointment-table",
   data: function () {
     return {
-      cars: Array,
       carSelected: "",
       panelResult: null,
     }
   },
   props: {
     customerInfo: Object,
-    selecting: Boolean
-  },
-  created() {
-    // Setting up
-    this.cars = this.customerInfo.cars;
+    selecting: Boolean,
   },
   methods: {
     updateCar: function (car) {
@@ -66,6 +63,7 @@ export default {
       this.panelResult = this.$showPanel({
         component: 'car-update-form',
         openOn: "right",
+        width: '350px',
         props: {
           username: this.customerInfo.username,
           plateNo: car.plateNo
@@ -80,11 +78,18 @@ export default {
     isSelected: function (plateNo) {
       return this.carSelected === plateNo
     },
+    carUpdated: function (event) {
+      console.log(event);
+    },
     selectACar: function (plateNo) {
       this.carSelected = plateNo;
     }
   },
-  computed: {}
+  computed: {
+    cars: function () {
+      return this.customerInfo.cars;
+    }
+  }
 }
 </script>
 
@@ -123,6 +128,8 @@ export default {
   font-size: 20px;
   line-height: 2.7em;
   text-align: center;
+
+  transition: ease .4s;
 }
 
 .year-column {
@@ -133,6 +140,8 @@ export default {
   font-size: 20px;
   line-height: 2.7em;
   text-align: center;
+
+  transition: ease .4s;
 }
 
 .manufacturer-column {
@@ -142,6 +151,8 @@ export default {
   font-size: 20px;
   line-height: 2.7em;
   text-align: center;
+
+  transition: ease .4s;
 }
 
 .select-column {
@@ -167,44 +178,5 @@ export default {
 .select-button:hover {
   color: blue;
   transition: .5s ease;
-}
-
-.list-complete-enter-from,
-.list-complete-leave-to {
-  opacity: 0;
-}
-
-.list-complete-leave-active {
-  position: absolute;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.7s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.pay-enter-active,
-.pay-leave-active {
-  transition: opacity 0.7s ease;
-}
-
-.pay-enter-from,
-.pay-leave-to {
-  opacity: 0;
-}
-
-.delete-enter-active,
-.delete-leave-active {
-  transition: opacity 0.7s ease;
-}
-
-.delete-enter-from,
-.delete-leave-to {
-  opacity: 0;
 }
 </style>

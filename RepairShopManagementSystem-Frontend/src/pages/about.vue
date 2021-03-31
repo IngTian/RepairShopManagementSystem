@@ -11,13 +11,12 @@
     <horizontal-gallery :images="this.people" :maximum-length="this.people.length"
                         style="margin-bottom: 100px" v-on:image-selected="personSelected"></horizontal-gallery>
 
-    <div v-if="this.selectedPerson">
-      <section-title title="Details" sub-title="More"></section-title>
-      <transition mode="out-in" name="fade">
-        <team-description :filename="this.selectedPerson.fileName"
-                          :personDescription="this.selectedPerson.detail"></team-description>
-      </transition>
-    </div>
+    <section-title title="Details" sub-title="More"></section-title>
+    <transition name="fade" mode="out-in">
+      <team-description :filename="this.selectedPerson.fileName"
+                        :personDescription="this.selectedPerson.detail" v-if="this.selectedPerson"></team-description>
+      <div style="width: 100%; text-align: center; font-size: 3em; font-style: italic; margin-bottom: 2em" v-else>Select one perhaps?</div>
+    </transition>
   </div>
 </template>
 
@@ -113,18 +112,6 @@ export default {
   width: 100%;
   height: max-content;
   text-align: center;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition-duration: 0.3s;
-  transition-property: opacity;
-  transition-timing-function: ease;
-}
-
-.fade-enter,
-.fade-leave-active {
-  opacity: 0
 }
 
 </style>

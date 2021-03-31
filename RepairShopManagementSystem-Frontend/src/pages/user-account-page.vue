@@ -68,9 +68,9 @@
           </transition>
         </div>
         <div
-            style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%"
+            style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; margin-top: 30px; margin-left: 33%"
             v-if="isCustomer">
-          <div style="width: max-content">
+          <div style="width: max-content; margin-right: 1.5em">
             <action-button background-color="black" :text="getEditInfoButtonText"
                            v-on:clicked="isUpdatingBasicInformation=!isUpdatingBasicInformation"
                            style="width: 150px"></action-button>
@@ -94,10 +94,10 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="section" style="margin-bottom: 150px" v-if="this.userRole === 'customer'">
-      <section-title title="Appointments" sub-title="see booked appointments"></section-title>
-      <appointment-table v-bind:appointments="getAppointments" :customer-info="this.userInfo"></appointment-table>
+      <div class="section" style="margin-bottom: 150px" v-if="this.userRole === 'customer'">
+        <section-title title="Appointments" sub-title="see booked appointments"></section-title>
+        <appointment-table v-bind:appointments="getAppointments" :customer-info="this.userInfo"></appointment-table>
+      </div>
     </div>
   </div>
 </template>
@@ -151,6 +151,11 @@ export default {
               newEmail: email,
             }
           }).then(resp => {
+
+        let updatedInfo = resp.data;
+        if (updatedInfo.hasError)
+          throw new Error(updatedInfo.error);
+
         this.userInfo.password = password;
         this.userInfo.name = name;
         if (this.userRole === "customer") {
@@ -164,8 +169,9 @@ export default {
         this.updatedPhoneNo = '';
         this.updatedEmail = '';
         this.isUpdatingBasicInformation = false;
-        localStorage.setItem('userInformation', JSON.stringify(this.userInfo))
-        console.debug(resp.toString())
+        localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
+
+        this.$alert("Done!");
       }).catch(e => {
         console.error(e.toString())
       })

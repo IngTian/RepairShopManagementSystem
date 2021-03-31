@@ -70,8 +70,6 @@ export default {
       model: "",
       manufacturer: "",
       year: "",
-      updatedAddress: "",
-      updatedName: "",
     }
   },
   methods: {
@@ -100,8 +98,7 @@ export default {
         if (carData.hasError)
           throw new Error(carData.error);
 
-        let cars = this.customerInfo.cars;
-        cars.push({
+        this.cars.push({
           plateNo: plateNo,
           model: model,
           manufacturer: manufacturer,
@@ -112,6 +109,9 @@ export default {
         this.model = "";
         this.manufacturer = "";
         this.year = "";
+
+        this.$alert("Done!");
+
       }).catch(e => {
         console.error(e.toString());
         this.$alert(e.toString());
@@ -122,6 +122,7 @@ export default {
   created() {
     // Load user info from local storage.
     this.customerInfo = JSON.parse(localStorage.getItem('userInformation'));
+    this.cars = this.customerInfo.cars;
   },
   computed: {
     getUsername: function () {

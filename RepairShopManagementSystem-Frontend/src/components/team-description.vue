@@ -12,10 +12,9 @@ export default {
     filename: String,
     personDescription: String,
   },
-  methods: {
-  },
-  computed:{
-    imageUrl: function (){
+  methods: {},
+  computed: {
+    imageUrl: function () {
       return require(".././assets/img/" + this.filename);
     }
   }
@@ -39,13 +38,17 @@ export default {
   background-position: center;
   margin-right: 100px;
   margin-left: 20%;
+
+  transition: ease .3s;
 }
 
-.description{
+.description {
   max-width: 600px;
   height: max-content;
   font-size: 30px;
   text-align: left;
   font-family: Roboto, sans-serif;
+
+  transition: width 2s, height 3s, transform 2s;
 }
 </style>

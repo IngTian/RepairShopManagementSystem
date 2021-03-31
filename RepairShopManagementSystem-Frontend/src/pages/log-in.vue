@@ -56,12 +56,11 @@
 
 <script>
 import axios from "axios"
-
 var config = require("../configuration")
-
 var AXIOS = axios.create({
   baseURL: config.springServer.baseUrl,
 })
+
 export default {
   name: "log-in",
   data: function () {
@@ -121,6 +120,12 @@ export default {
         if (response.hasError) {
           throw new Error(response.error);
         }
+        this.displaySignUp = false;
+        this.displayLogIn = true;
+        this.email = "";
+        this.address = "";
+        this.phoneNo = "";
+        this.$alert("Done!");
       }).catch(e => {
         console.error(e.toString());
         this.$alert(e.toString());
@@ -231,6 +236,7 @@ export default {
   height: max-content;
   padding-bottom: 40px;
   background-color: whitesmoke;
+  border-radius: 10px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 100px;
@@ -323,7 +329,7 @@ export default {
 }
 
 .logo {
-  width: 30em;
+  width: 100%;
   height: 100px;
   margin-left: auto;
   margin-right: auto;

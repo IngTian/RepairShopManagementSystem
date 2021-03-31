@@ -55,6 +55,7 @@ export default {
             cars[i].manufacturer = this.manufacturer;
             localStorage.setItem('userInformation', JSON.stringify(userInfo));
             this.$emit('closePanel');
+            this.$alert("Done!");
             break;
           }
       }).catch(err => {
