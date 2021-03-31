@@ -1,11 +1,11 @@
 module.exports = {
     // For local testing.
-    springServer:{
-        baseUrl: "http://localhost:8080"
-    }
+    // springServer:{
+    //     baseUrl: "http://localhost:8080"
+    // }
 
     // Heroku Backend url.
-    // springServer:{
-    //     baseUrl: "https://rsms-backend-5232.herokuapp.com"
-    // }
+    springServer:{
+        baseUrl: "https://rsms-backend-5232.herokuapp.com"
+    }
 }
