@@ -30,8 +30,10 @@
 <script>
 import axios from "axios"
 
+var config = require("../configuration")
+
 var AXIOS = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: config.springServer.baseUrl,
 })
 export default {
   name: "space-page",
