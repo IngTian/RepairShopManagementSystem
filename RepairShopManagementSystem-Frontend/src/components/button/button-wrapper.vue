@@ -54,6 +54,7 @@ export default {
 .root{
   max-width: 160px;
   max-height: 2em;
+  margin-top: 0;
 }
 
 .component-fade-enter-active, .component-fade-leave-active {

@@ -10,7 +10,6 @@
     <section-title title="Meet our teams" sub-title="Look how handsome we are!"></section-title>
     <horizontal-gallery :images="this.people" :maximum-length="this.people.length"
                         style="margin-bottom: 100px" v-on:image-selected="personSelected"></horizontal-gallery>
-
     <section-title title="Details" sub-title="More"></section-title>
     <transition name="fade" mode="out-in">
       <team-description :filename="this.selectedPerson.fileName"

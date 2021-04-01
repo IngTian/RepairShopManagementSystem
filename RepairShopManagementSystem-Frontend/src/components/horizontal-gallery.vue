@@ -114,7 +114,7 @@ export default {
   position: absolute;
   width: 40px;
   height: 40px;
-  background-color: whitesmoke;
+  background-color: white;
   top: 30%;
 }
 .prev span, .next span {

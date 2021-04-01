@@ -1,5 +1,5 @@
 <template>
-  <div class="root" style="height: 1000px; width: 100%; position: relative;">
+  <div class="root" style="height: 1200px; width: 100%; position: relative;">
     <div class="login-form">
       <div class="log-in-sign-up-selector">
         <div class="selector" v-bind:style="getSignUpSelectorStyle" @click="signUpSelectorClicked">
@@ -16,34 +16,30 @@
             Sign Up For Free!
           </div>
 
-          <div style="height: 3em; width: 80%; margin-bottom: 10px">
-            <input class="form-input" v-model="firstName" placeholder="First Name" style="float: left; width: 150px">
-            <input class="form-input" v-model="lastName" placeholder="Last Name" style="float: right; width: 150px">
+          <div style="height: max-content; width: 375px;">
+            <my-input class="form-input" @input-received="firstName=$event;" place-holder="First Name" box-width="150px"
+                      style="float: left"></my-input>
+            <my-input class="form-input" @input-received="lastName=$event;" place-holder="Last Name" box-width="150px"
+                      style="float: right"></my-input>
           </div>
-          <input class="form-input" v-model="email" placeholder="Email" style="width: 76%; margin-bottom: 20px">
-          <input class="form-input" v-model="phoneNo" placeholder="Phone No" style="width: 76%; margin-bottom: 20px">
-          <input class="form-input" v-model="address" placeholder="Address" style="width: 76%; margin-bottom: 20px">
-          <input class="form-input" v-model="username" placeholder="Username" style="width: 76%; margin-bottom: 20px">
-          <input class="form-input" v-model="password" placeholder="Password" style="width: 76%; margin-bottom: 40px">
-          <action-button background-color="black" text="SIGN UP"
-                         style="width: 200px; height: 60px" v-on:clicked="signUpButtonClicked"></action-button>
+          <my-input class="form-input" @input-received="email=$event;" place-holder="Email"></my-input>
+          <my-input class="form-input" @input-received="phoneNo=$event;" place-holder="Phone No"></my-input>
+          <my-input class="form-input" @input-received="address=$event;" place-holder="Address"></my-input>
+          <my-input class="form-input" @input-received="username=$event;" place-holder="Username"></my-input>
+          <my-input class="form-input" @input-received="password=$event;" place-holder="Password"></my-input>
+          <my-button background-color="black" text="sign up" :is-loading="isLoading" style="width: 200px; height: 60px"
+                     @button-clicked="signUpButtonClicked"></my-button>
         </div>
         <div v-else class="form-container" key="logInForm">
           <div class="title">
             Log In Now!
           </div>
-          <input class="form-input" v-model="username" placeholder="Username" style="width: 76%; margin-bottom: 20px">
-          <input class="form-input" v-model="password" placeholder="Password" style="width: 76%; margin-bottom: 40px">
+          <my-input class="form-input" @input-received="username=$event;" place-holder="Username"></my-input>
+          <my-input class="form-input" @input-received="password=$event;" place-holder="Password"></my-input>
           <my-button background-color="black" text="log in" :is-loading="isLoading" style="width: 200px; height: 60px"
                      @button-clicked="LoginButtonClicked"></my-button>
         </div>
       </transition>
-
-      <div style="display: table">
-        <div style="display: table-cell"></div>
-        <div style="display: table-cell"></div>
-      </div>
-
     </div>
 
     <div style="position: absolute; bottom: -50px; width: 100%; height: max-content">
@@ -129,6 +125,7 @@ export default {
         this.phoneNo = "";
         this.$alert("Done!");
       }).catch(e => {
+        this.isLoading = false;
         console.error(e.toString());
         this.$alert(e.toString());
       })
@@ -168,9 +165,8 @@ export default {
               localStorage.setItem('userInformation', JSON.stringify(ownerInformation));
               localStorage.setItem('userRole', userType)
               this.$router.push("/user")
-            } else {
-              console.error("Password entered is incorrect.")
-            }
+            } else
+              throw new Error("Password is incorrect.")
           }).catch(e => {
             console.error(`ERROR: ${e.toString()}`);
             this.$alert(e.toString());
@@ -191,9 +187,8 @@ export default {
               localStorage.setItem('userInformation', JSON.stringify(assistantInformation));
               localStorage.setItem('userRole', userType)
               this.$router.push("/user")
-            } else {
-              console.error("Password entered is incorrect.")
-            }
+            } else
+              throw new Error("Password is incorrect.")
           }).catch(e => {
             console.error(`ERROR: ${e.toString()}`)
             this.$alert(e.toString());
@@ -219,15 +214,15 @@ export default {
               localStorage.setItem('userInformation', JSON.stringify(customerInformation));
               localStorage.setItem('userRole', userType)
               this.$router.push("/user")
-            } else {
-              console.error("Password entered is incorrect.")
-            }
+            } else
+              throw new Error("Password is incorrect.")
           }).catch(e => {
             console.error(`ERROR: ${e.toString()}`)
             this.$alert(e.toString());
           })
         }
       }).catch(e => {
+        this.isLoading = false;
         console.error(`ERROR: ${e.toString()}`)
         this.$alert(e.toString());
       })
@@ -285,15 +280,6 @@ export default {
   background-color: darkgray;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease-in-out;
-}
-
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
-{
-  opacity: 0;
-}
-
 .title {
   width: 80%;
   height: 80px;
@@ -317,21 +303,7 @@ export default {
 }
 
 .form-input {
-  display: block;
-  height: 1.5em;
-  padding: 5px 10px;
-  background-color: white;
-  outline: none;
-  border: gray solid 1px;
-  font-family: sans-serif;
-  font-size: 18px;
-  text-decoration: none;
-  transition: border-color .4s ease, box-shadow .4s ease;
-}
-
-.form-input:focus {
-  border: red 1px solid;
-  transition: border-color .4s ease, box-shadow .4s ease;
+  margin-bottom: 15px;
 }
 
 .logo {

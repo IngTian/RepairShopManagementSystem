@@ -9,7 +9,6 @@
       </div>
     </div>
 
-
     <div class="Shop-Information">
       <section-title title="Got troubles?" sub-title="We got it. Chill"></section-title>
       <horizontal-gallery :images="serviceImages" :maximum-length="galleryMaxLength"></horizontal-gallery>

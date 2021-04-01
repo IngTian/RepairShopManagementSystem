@@ -3,8 +3,6 @@ import App from './App.vue'
 import router from "./router"
 
 // Local imports.
-import Footer from "@/components/general-footer";
-import Header from "@/components/general-header";
 import SectionTitle from "@/components/section-title";
 import RedButton from "@/components/button";
 import HorizontalGallery from "@/components/horizontal-gallery";
@@ -36,8 +34,6 @@ Vue.component('team-description', TeamDescription)
 Vue.component('car-update-form', UpdateCarForm);
 Vue.component('calendar', Calendar)
 Vue.component('date-picker', DatePicker)
-Vue.component("general-header", Header)
-Vue.component('general-footer', Footer)
 Vue.component('section-title', SectionTitle)
 Vue.component('red-button', RedButton)
 Vue.component('horizontal-gallery', HorizontalGallery)

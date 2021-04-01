@@ -68,29 +68,16 @@
           </transition>
         </div>
         <div
-            style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; margin-top: 30px; margin-left: 33%"
-            v-if="isCustomer">
+            style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; margin-top: 30px; margin-left: 32%">
           <div style="width: max-content; margin-right: 1.5em">
-            <action-button background-color="black" :text="getEditInfoButtonText"
-                           v-on:clicked="isUpdatingBasicInformation=!isUpdatingBasicInformation"
-                           style="width: 150px"></action-button>
+            <my-button background-color="black" @button-clicked="isUpdatingBasicInformation=!isUpdatingBasicInformation"
+                       :text="getEditInfoButtonText" style="width: 150px">
+            </my-button>
           </div>
           <div style="width: max-content">
-            <action-button background-color="black" text="Update" style="width: 150px"
-                           v-on:clicked="updateUserInformationClicked"></action-button>
-          </div>
-        </div>
-        <div
-            style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%; margin-bottom: 150px"
-            v-else>
-          <div style="width: max-content">
-            <action-button background-color="black" :text="getEditInfoButtonText"
-                           v-on:clicked="isUpdatingBasicInformation=!isUpdatingBasicInformation"
-                           style="width: 150px"></action-button>
-          </div>
-          <div style="width: max-content">
-            <action-button background-color="black" text="Update" style="width: 150px"
-                           v-on:clicked="updatePasswordAndName"></action-button>
+            <my-button background-color="black" @button-clicked="updateUserInformationClicked"
+                       text="Update" style="width: 150px">
+            </my-button>
           </div>
         </div>
       </div>
@@ -117,6 +104,7 @@ export default {
       userInfo: Object,
       userRole: String,
       isUpdatingBasicInformation: false,
+      isLoading: false,
       updatedPassword: "",
       updatedEmail: "",
       updatedPhoneNo: "",
@@ -126,32 +114,49 @@ export default {
   },
   methods: {
     updateUserInformationClicked: function () {
+      this.isLoading = true;
       let password = this.updatedPassword;
       let name = this.updatedName;
       let address = this.updatedAddress;
       let phoneNo = this.updatedPhoneNo;
       let email = this.updatedEmail;
-      AXIOS.put("users/customers/update_info",
-          {
-            //request body
-            username: this.getUsername,
-            password: this.getPassword,
-            name: this.getName,
-            phoneNo: this.getPhoneNo,
-            homeAddress: this.getAddress,
-            email: this.getEmail,
-          },
-          {
-            params: {
-              newUsername: this.getUsername,
-              newPassword: password,
-              newName: name,
-              newPhoneNo: phoneNo,
-              newAddress: address,
-              newEmail: email,
-            }
-          }).then(resp => {
 
+      let requestBody = Object;
+      let requestParams = Object;
+
+      if (this.userRole === "customer") {
+        requestBody = {
+          //request body
+          username: this.getUsername,
+          password: this.getPassword,
+          name: this.getName,
+          phoneNo: this.getPhoneNo,
+          homeAddress: this.getAddress,
+          email: this.getEmail,
+        };
+        requestParams = {
+          newUsername: this.getUsername,
+          newPassword: password,
+          newName: name,
+          newPhoneNo: phoneNo,
+          newAddress: address,
+          newEmail: email,
+        };
+      } else {
+        requestBody = {
+          username: this.getUsername,
+          password: this.getPassword,
+          name: this.getName,
+        };
+        requestParams = {
+          newUsername: this.getUsername,
+          newPassword: password,
+          newName: name
+        };
+      }
+
+      AXIOS.put("users/customers/update_info", requestBody, {params: requestParams}).then(resp => {
+        this.isLoading = false;
         let updatedInfo = resp.data;
         if (updatedInfo.hasError)
           throw new Error(updatedInfo.error);
@@ -170,46 +175,13 @@ export default {
         this.updatedEmail = '';
         this.isUpdatingBasicInformation = false;
         localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
-
         this.$alert("Done!");
       }).catch(e => {
-        console.error(e.toString())
+        this.isLoading = false;
+        this.$alert(e.toString());
+        console.error(e.toString());
       })
     },
-    updatePasswordAndName() {
-      let password = this.updatedPassword;
-      let name = this.updatedName;
-      let username = this.userInfo.username;
-      let oldPassword = this.userInfo.password;
-      let oldName = this.userInfo.name;
-      let url = this.userRole === "owner" ? "/users/owners/update_info" : "/users/assistants/update_info";
-      AXIOS.put(url, {
-            username: username,
-            password: oldPassword,
-            name: oldName
-          },
-          {
-            params: {
-              newUsername: username,
-              newPassword: password,
-              newName: name
-            }
-          }).then(resp => {
-
-        let newUserInfo = resp.data;
-        if (newUserInfo.hasError)
-          throw new Error(newUserInfo.error);
-
-        this.userInfo = newUserInfo;
-
-        localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
-        this.updatedName = "";
-        this.updatedPassword = "";
-        this.isUpdatingBasicInformation = false;
-      }).catch(e => {
-        console.error(e.toString());
-      });
-    }
   },
 
   mounted() {
@@ -313,10 +285,11 @@ export default {
   height: 1.5em;
   padding: 5px 10px;
   background-color: white;
+  border-radius: 5px;
   outline: none;
   border: gray solid 1px;
 
-  font-family: sans-serif;
+  font-family: Roboto, sans-serif;
   font-size: 18px;
   text-decoration: none;
 
@@ -327,15 +300,5 @@ export default {
   border: red 1px solid;
   transition: border-color .4s ease, box-shadow .4s ease;
 }
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease-in-out;
-}
-
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
-{
-  opacity: 0;
-}
-
 
 </style>
