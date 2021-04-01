@@ -12,9 +12,8 @@
         <div
             style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%;">
           <div style="width: max-content">
-            <action-button background-color="black" text="Add"
-                           v-on:clicked="addSpaceClicked"
-                           style="width: 150px"></action-button>
+            <my-button background-color="black" text="Add" @button-clicked="addSpaceClicked" style="width: 150px"
+                       :is-loading="isLoading"></my-button>
           </div>
 
         </div>
@@ -40,7 +39,8 @@ export default {
     return {
       userInfo: Object,
       weightLoad: "",
-      allSpace: []
+      allSpace: [],
+      isLoading: false,
     }
   },
   created() {
@@ -53,6 +53,7 @@ export default {
   methods: {
 
     addSpaceClicked: function () {
+      this.isLoading = true;
       let maxWeightLoad = this.weightLoad;
       AXIOS.post("appointment/space/create", {},
           {
@@ -61,12 +62,14 @@ export default {
             }
           }
       ).then(resp => {
+        this.isLoading = false;
         let spaceData = resp.data;
         if (spaceData.hasError)
           throw new Error(spaceData.error);
 
         this.allSpace.push(spaceData);
       }).catch(e => {
+        this.isLoading = false;
         console.error(e.toString());
         this.$alert(e.toString());
       })

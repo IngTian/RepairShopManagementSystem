@@ -34,7 +34,6 @@
         <div class="view-info-row">
           <div class="view-info-row-description">Year:</div>
           <transition name="fade" mode="out-in">
-
             <div class="view-info-row-information">
               <input class="form-input" v-model="year" key="input">
             </div>
@@ -43,9 +42,8 @@
         <div
             style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%">
           <div style="width: max-content">
-            <action-button background-color="black" text="Add"
-                           v-on:clicked="addCarClicked"
-                           style="width: 150px"></action-button>
+            <my-button background-color="black" text="Add" @button-clicked="addCarClicked" :is-loading="isLoading"
+                       style="width: 150px"></my-button>
           </div>
         </div>
       </div>
@@ -70,10 +68,12 @@ export default {
       model: "",
       manufacturer: "",
       year: "",
+      isLoading: false
     }
   },
   methods: {
     addCarClicked: function () {
+      this.isLoading = true;
       let plateNo = this.plateNo;
       let model = this.model;
       let manufacturer = this.manufacturer;
@@ -93,7 +93,7 @@ export default {
             }
           },
       ).then(resp => {
-
+        this.isLoading = false;
         let carData = resp.data;
         if (carData.hasError)
           throw new Error(carData.error);
@@ -113,6 +113,7 @@ export default {
         this.$alert("Done!");
 
       }).catch(e => {
+        this.isLoading = false;
         console.error(e.toString());
         this.$alert(e.toString());
       })
@@ -217,8 +218,9 @@ export default {
   background-color: white;
   outline: none;
   border: gray solid 1px;
+  border-radius: 5px;
 
-  font-family: sans-serif;
+  font-family: Roboto, sans-serif;
   font-size: 18px;
   text-decoration: none;
 
@@ -229,15 +231,5 @@ export default {
   border: red 1px solid;
   transition: border-color .4s ease, box-shadow .4s ease;
 }
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease-in-out;
-}
-
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
-{
-  opacity: 0;
-}
-
 
 </style>

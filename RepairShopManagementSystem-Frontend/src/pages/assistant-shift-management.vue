@@ -40,15 +40,14 @@
 
       </div>
       <div
-          style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 15%">
+          style="display: flex; width: 30%; height: 100px; flex-direction: row; align-items: center; justify-content: space-around; margin-top: 30px; margin-left: 28%">
         <div style="width: max-content">
-          <action-button background-color="black" text="Add"
-                         v-on:clicked="addShiftClicked"
-                         style="width: 150px"></action-button>
+          <my-button background-color="black" text="Add" @button-clicked="addShiftClicked" style="width: 150px"
+                     :is-loading="isLoading"></my-button>
         </div>
         <div style="width: max-content">
-          <action-button background-color="black" text="Update" style="width: 150px"
-                         v-on:clicked="updateShiftClicked"></action-button>
+          <my-button background-color="black" text="Update" @button-clicked="updateShiftClicked" style="width: 150px"
+                     :is-loading="isLoading"></my-button>
         </div>
       </div>
     </div>
@@ -82,7 +81,8 @@ export default {
       endTime: "",
       shifts: [],
       selectedShift: null,
-      userInfo: Object
+      userInfo: Object,
+      isLoading: false,
     }
   },
   created() {
@@ -97,6 +97,7 @@ export default {
           this.selectedShift = this.shifts[i];
     },
     addShiftClicked() {
+      this.isLoading = true;
       let date = this.date;
       let startTime = this.startTime;
       let endTime = this.endTime;
@@ -109,7 +110,7 @@ export default {
           username: username
         }
       }).then(resp => {
-
+        this.isLoading = false;
         let shiftData = resp.data;
         if (shiftData.hasError)
           throw new Error(shiftData.error);
@@ -122,11 +123,13 @@ export default {
         this.startTime = "";
         this.endTime = "";
       }).catch(e => {
+        this.isLoading = false;
         console.error(e.toString())
         this.$alert(e.toString());
       });
     },
     updateShiftClicked() {
+      this.isLoading = true;
       let date = this.date;
       let startTime = this.startTime;
       let endTime = this.endTime;
@@ -139,7 +142,7 @@ export default {
           shiftId: shiftId
         }
       }).then(resp => {
-
+        this.isLoading = false;
         let shiftData = resp.data;
         if (shiftData.hasError)
           throw new Error(shiftData.error);
@@ -157,6 +160,7 @@ export default {
         this.endTime = "";
         this.selectedShift = null;
       }).catch(e => {
+        this.isLoading = false;
         console.error(e.toString());
         this.$alert(e.toString());
       });
