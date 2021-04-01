@@ -31,8 +31,8 @@
     <div class="date-picking-container">
       <div class="date-picking-calendar">
         <calendar :attributes="attributes" @dayclick="onDayClick"/>
-        <action-button text="View Shifts" background-color="black"
-                       style="margin-top: 40px; margin-left: 15%;" v-on:clicked="onViewShiftsClicked"></action-button>
+        <my-button text="View Shifts" background-color="black" style="margin-top: 40px; margin-left: 15%;"
+                   @button-clicked="onViewShiftsClicked" :is-loading="isLoading"></my-button>
       </div>
       <div class="date-picking-shifts">
         <shifts-table :shifts="this.shifts" :allow-deletable="false" v-on:selected="onShiftSelected"></shifts-table>
@@ -70,8 +70,8 @@
       </div>
     </div>
     <div style="width: max-content; margin-bottom: 100px; margin-left: auto; margin-right: auto;">
-      <action-button background-color="black" text="Book!" style="width: 200px"
-                     v-on:clicked="onMakeAppointment"></action-button>
+      <my-button text="Book!" background-color="black" style="width: 200px"
+                 @button-clicked="onMakeAppointment" :is-loading="isLoading"></my-button>
     </div>
   </div>
 </template>
@@ -91,6 +91,7 @@ export default {
   data: function () {
     return {
       userInfo: {},
+      isLoading: false,
       serviceImages: [
         {
           fileName: "clean_car.jpg",
@@ -132,26 +133,7 @@ export default {
       galleryMaxLength: 5,
       selectedService: null,
       selectedCar: null,
-      shifts: [
-        {
-          date: "2021-03-27",
-          startTime: "09:35",
-          endTime: "10:35",
-          shiftId: "1"
-        },
-        {
-          date: "2021-03-26",
-          startTime: "09:35",
-          endTime: "10:35",
-          shiftId: "2"
-        },
-        {
-          date: "2021-03-24",
-          startTime: "09:35",
-          endTime: "10:35",
-          shiftId: "3"
-        }
-      ],
+      shifts: [],
       selectedShift: null,
       days: [],
     }
@@ -195,6 +177,7 @@ export default {
       this.selectedCar = event;
     },
     onViewShiftsClicked() {
+      this.isLoading = true;
       let datesArray = [];
       for (let i = 0; i < this.days.length; i++)
         datesArray.push(this.days[i].id)
@@ -203,18 +186,20 @@ export default {
           dates: datesArray.join(',')
         }
       }).then(resp => {
-
+        this.isLoading = false;
         let shiftData = resp.data;
         if (shiftData.hasError)
           throw new Error(shiftData.error);
 
         this.shifts = shiftData;
       }).catch(e => {
+        this.isLoading = false;
         console.error(e.toString());
         this.$alert(e.toString());
       })
     },
     onMakeAppointment() {
+      this.isLoading = true;
       AXIOS.post("/appointment/make_appointment", {}, {
         params: {
           serviceType: this.selectedService,
@@ -227,7 +212,7 @@ export default {
           operatorUsername: this.userInfo.username
         }
       }).then(resp => {
-
+        this.isLoading = false;
         let appointmentData = resp.data;
         if (appointmentData.hasError)
           throw new Error(appointmentData.error);
@@ -235,6 +220,7 @@ export default {
         this.userInfo.appointments.push(resp.data);
         localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
       }).catch(e => {
+        this.isLoading = false;
         console.error(e.toString());
         this.$alert(e.toString());
       });
