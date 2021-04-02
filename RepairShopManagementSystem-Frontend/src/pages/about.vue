@@ -14,16 +14,23 @@
     <transition name="fade" mode="out-in">
       <team-description :filename="this.selectedPerson.fileName"
                         :personDescription="this.selectedPerson.detail" v-if="this.selectedPerson"></team-description>
-      <div style="width: 100%; text-align: center; font-size: 3em; font-style: italic; margin-bottom: 2em" v-else>Select one perhaps?</div>
+      <div style="width: 100%; text-align: center; font-size: 3em; font-style: italic; margin-bottom: 2em" v-else>Select
+        one perhaps?
+      </div>
     </transition>
   </div>
 </template>
 
 <script>
 
+import TeamDescription from ".././components/team-description"
+
 export default {
   name: 'about',
   props: {},
+  components: {
+    'TeamDescription': TeamDescription
+  },
   data: function () {
     return {
       people: [

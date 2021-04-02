@@ -68,7 +68,8 @@
           </transition>
         </div>
         <div
-            style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; margin-top: 30px; margin-left: 32%" :style="getAssistantBottomMargin">
+            style="display: flex; width: 60%; height: 100px; flex-direction: row; align-items: center; margin-top: 30px; margin-left: 32%"
+            :style="getAssistantBottomMargin">
           <div style="width: max-content; margin-right: 1.5em">
             <my-button background-color="black" @button-clicked="isUpdatingBasicInformation=!isUpdatingBasicInformation"
                        :text="getEditInfoButtonText" style="width: 150px">
@@ -90,13 +91,16 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from "axios";
 
-var config = require("../configuration")
+var config = require("../configuration");
 
 var AXIOS = axios.create({
   baseURL: config.springServer.baseUrl,
-})
+});
+
+import AppointmentTable from ".././components/appointment-table"
+
 export default {
   name: "user-account-page",
   data: function () {
@@ -111,6 +115,9 @@ export default {
       updatedAddress: "",
       updatedName: "",
     }
+  },
+  components: {
+    "AppointmentTable": AppointmentTable
   },
   methods: {
     updateUserInformationClicked: function () {
@@ -226,7 +233,7 @@ export default {
       return this.userRole === "customer";
     },
 
-    getAssistantBottomMargin(){
+    getAssistantBottomMargin() {
       return this.isCustomer ? null : {
         marginBottom: "100px"
       };

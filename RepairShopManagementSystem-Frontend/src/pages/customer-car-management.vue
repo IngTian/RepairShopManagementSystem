@@ -59,6 +59,9 @@ var config = require("../configuration")
 var AXIOS = axios.create({
   baseURL: config.springServer.baseUrl,
 })
+
+import CarTable from ".././components/car-table"
+
 export default {
   name: "car-page",
   data: function () {
@@ -70,6 +73,9 @@ export default {
       year: "",
       isLoading: false
     }
+  },
+  components: {
+    "CarTable": CarTable
   },
   methods: {
     addCarClicked: function () {

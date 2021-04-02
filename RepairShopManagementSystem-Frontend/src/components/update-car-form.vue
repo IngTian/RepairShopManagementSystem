@@ -4,8 +4,8 @@
     <input class="form-input" v-model="model" placeholder="Model" style="float: left; width: 150px">
     <input class="form-input" v-model="year" placeholder="Year" style="float: left; width: 150px">
     <input class="form-input" v-model="manufacturer" placeholder="Manufacturer" style="float: left; width: 150px">
-    <action-button background-color="black" text="Update Car" v-on:clicked="updateCar"
-                   style="margin-left: 50px; width: 200px; margin-top: 30px"></action-button>
+    <my-button background-color="black" text="Update Car" @button-clicked="updateCar"
+               style="margin-left: 50px; width: 200px; margin-top: 30px"></my-button>
   </div>
 </template>
 

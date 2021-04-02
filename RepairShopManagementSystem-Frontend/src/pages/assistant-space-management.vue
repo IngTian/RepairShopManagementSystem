@@ -34,7 +34,10 @@ var config = require("../configuration")
 
 var AXIOS = axios.create({
   baseURL: config.springServer.baseUrl,
-})
+});
+
+import SpaceTable from ".././components/space-table"
+
 export default {
   name: "space-page",
   data: function () {
@@ -51,6 +54,9 @@ export default {
     }).catch(e => {
       console.error(e.toString())
     });
+  },
+  components: {
+    "SpaceTable": SpaceTable
   },
   methods: {
 

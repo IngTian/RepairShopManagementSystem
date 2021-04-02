@@ -8,12 +8,18 @@
 </template>
 
 <script>
+
+import UserNavigationPanel from ".././components/user-navigation-panel"
+
 export default {
   name: "user-page",
   data: function () {
     return {
       userRole: ""
     }
+  },
+  components: {
+    "UserNavigationPanel": UserNavigationPanel
   },
   created() {
     this.userRole = localStorage.getItem('userRole')

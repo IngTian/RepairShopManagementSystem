@@ -72,6 +72,8 @@ var AXIOS = axios.create({
   baseURL: config.springServer.baseUrl,
 })
 
+import ShiftsTable from ".././components/shifts-table"
+
 export default {
   name: "shift-management-page",
   data: function () {
@@ -84,6 +86,9 @@ export default {
       userInfo: Object,
       isLoading: false,
     }
+  },
+  components: {
+    "ShiftsTable": ShiftsTable
   },
   created() {
     let userInfo = JSON.parse(localStorage.getItem('userInformation'));

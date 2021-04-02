@@ -86,6 +86,9 @@ var AXIOS = axios.create({
   baseURL: config.springServer.baseUrl,
 })
 
+import ShiftsTable from ".././components/shifts-table";
+import CarTable from ".././components/car-table"
+
 export default {
   name: "user-make-appointment",
   data: function () {
@@ -137,6 +140,10 @@ export default {
       selectedShift: null,
       days: [],
     }
+  },
+  components: {
+    "ShiftsTable": ShiftsTable,
+    "CarTable": CarTable
   },
   created() {
     this.userInfo = JSON.parse(localStorage.getItem('userInformation'));
