@@ -15,6 +15,7 @@ import UserMakeAppointment from "@/pages/user-make-appointment"
 import UserManageCar from "@/pages/customer-car-management"
 import AssistantShiftManagement from "@/pages/assistant-shift-management"
 import AssistantSpaceManagement from "@/pages/assistant-space-management"
+import OwnerEditingBusinessInfoPage from "@/pages/owner-editing-business-info-page"
 
 const routes = [
     {path: '/', name: '/', component: HomePage},
@@ -47,6 +48,10 @@ const routes = [
             {
                 path: "space",
                 component: AssistantSpaceManagement
+            },
+            {
+                path: "business",
+                component: OwnerEditingBusinessInfoPage
             }
         ]
     },

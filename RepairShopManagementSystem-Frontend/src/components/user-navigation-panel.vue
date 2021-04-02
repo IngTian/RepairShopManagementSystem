@@ -7,6 +7,7 @@
       <router-link to="/user/car" class="link" v-if="isCustomer">Cars</router-link>
       <router-link to="/user/shift" class="link" v-if="isAssistant">Shifts</router-link>
       <router-link to="/user/space" class="link" v-if="isAssistant">Space</router-link>
+      <router-link to="/user/business" class="link" v-if="isOwner">Business</router-link>
     </div>
   </div>
 </template>

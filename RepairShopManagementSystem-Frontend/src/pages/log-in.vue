@@ -53,8 +53,9 @@
 <script>
 import axios from "axios"
 
-var config = require("../configuration")
-var AXIOS = axios.create({
+const config = require("../configuration");
+
+const AXIOS = axios.create({
   baseURL: config.springServer.baseUrl,
 })
 

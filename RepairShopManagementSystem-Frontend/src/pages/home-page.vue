@@ -32,6 +32,14 @@
 
 <script>
 
+import axios from "axios"
+
+var config = require("../configuration")
+
+var AXIOS = axios.create({
+  baseURL: config.springServer.baseUrl,
+})
+
 export default {
   name: "home-page",
   data: function () {
@@ -101,6 +109,13 @@ export default {
         },
       ]
     };
+  },
+  created() {
+    AXIOS.get("/system/most_recent", {}).then(resp => {
+      localStorage.setItem('businessInfo', JSON.stringify(resp.data));
+    }).catch(e => {
+      console.error(e.toString());
+    });
   },
   methods: {
     getImagePath: function (imageFileName) {
