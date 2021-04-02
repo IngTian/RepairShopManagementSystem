@@ -5,7 +5,7 @@ module.exports = {
     // }
 
     // Heroku Backend url.
-    springServer:{
+    springServer: {
         baseUrl: "https://rsms-backend-5232.herokuapp.com"
     }
 }

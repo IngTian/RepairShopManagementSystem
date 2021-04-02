@@ -80,7 +80,7 @@ export default {
       return this.businessInfo.businessAddress;
     },
     businessPhoneNo() {
-      return this.businessInfo.businessPhoneNo;
+      return this.businessInfo.businessPhoneNumber;
     },
     switchButtonText() {
       return this.isUpdatingBasicInformation ? "Abort" : "Edit";
@@ -98,6 +98,7 @@ export default {
         localStorage.setItem('businessInfo', JSON.stringify(this.businessInfo));
         this.updatedPhoneNo = "";
         this.updatedAddress = "";
+        this.isUpdatingBasicInformation = false;
         this.$alert("Done!");
       }).catch(e => {
         console.error(e.toString());

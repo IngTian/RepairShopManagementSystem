@@ -57,10 +57,12 @@ public class SystemService {
 
     @Transactional
     public RepairShopManagementSystem update_most_recent(String address, String phoneNo) {
-        if(address == null || address.equals(""))
+        if (address == null || address.equals(""))
             throw new IllegalArgumentException("New address cannot be null!");
-        if(phoneNo == null || phoneNo.equals(""))
+        if (phoneNo == null || phoneNo.equals(""))
             throw new IllegalArgumentException("New phone no cannot be null!");
+        if (!Util.isPhoneNoCorrect(phoneNo))
+            throw new IllegalArgumentException("Phone number format is not correct. It must be a 10-digit number.");
         RepairShopManagementSystem system = systemRepository.findFirstByOrderByIdDesc();
         system.setBusinessAddress(address);
         system.setBusinessPhoneNumber(phoneNo);
