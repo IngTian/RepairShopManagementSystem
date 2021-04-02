@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <input v-model="input" :style="{width: boxWidth}" class="input-box" :placeholder="placeHolder"/>
+    <input v-model="input" :style="{width: boxWidth}" class="input-box" :placeholder="placeHolder" :type="inputType"/>
     <transition name="slide-fade" mode="out-in">
       <p class="place-holder" :key="indicatingPlaceHolder">{{ indicatingPlaceHolder }}</p>
     </transition>
@@ -24,11 +24,14 @@ export default {
     placeHolder: {
       required: true,
       type: String
+    },
+    inputType: {
+      required: false,
+      type: String,
+      default: "text"
     }
   },
-  methods: {
-
-  },
+  methods: {},
   computed: {
     indicatingPlaceHolder() {
       return this.input ? this.placeHolder : "";
@@ -85,11 +88,14 @@ export default {
 .slide-fade-enter-active {
   transition: all .2s ease;
 }
+
 .slide-fade-leave-active {
   transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
+
 .slide-fade-enter, .slide-fade-leave-to
-  /* .slide-fade-leave-active for <2.1.8 */ {
+  /* .slide-fade-leave-active for <2.1.8 */
+{
   transform: translateX(10px);
   opacity: 0;
 }

@@ -35,7 +35,7 @@
             Log In Now!
           </div>
           <my-input class="form-input" @input-received="username=$event;" place-holder="Username"></my-input>
-          <my-input class="form-input" @input-received="password=$event;" place-holder="Password"></my-input>
+          <my-input class="form-input" @input-received="password=$event;" place-holder="Password" input-type="password"></my-input>
           <my-button background-color="black" text="log in" :is-loading="isLoading" style="width: 200px; height: 60px"
                      @button-clicked="LoginButtonClicked"></my-button>
         </div>
