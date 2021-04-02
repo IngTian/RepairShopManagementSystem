@@ -19,7 +19,10 @@ public class RepairShopManagementSystemController {
         RepairShopManagementSystem s = systemService.createSystem(system.getBusinessName(), system.getBusinessPhoneNumber(), system.getBusinessAddress());
         return convertToDto(s);
     }
-
+   @PutMapping(value="update_most_recent")
+   public  RepairShopManagementSystemDto updateMostRecent(String updateAddress,String updatePhoneNo) {
+	   return convertToDto(systemService.update_most_recent(updateAddress, updatePhoneNo));
+   }
     @GetMapping(value = "most_recent")
     public RepairShopManagementSystemDto getMostRecentSystem() {
         return convertToDto(systemService.getMostRecentSystem());
@@ -34,3 +37,4 @@ public class RepairShopManagementSystemController {
         return new RepairShopManagementSystemDto(system.getBusinessName(), system.getBusinessPhoneNumber(), system.getBusinessAddress());
     }
 }
+

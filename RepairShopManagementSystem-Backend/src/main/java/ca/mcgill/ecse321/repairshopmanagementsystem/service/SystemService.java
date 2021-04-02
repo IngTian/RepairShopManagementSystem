@@ -54,7 +54,13 @@ public class SystemService {
         systemRepository.save(system);
         return system;
     }
-
+    @Transactional
+    public RepairShopManagementSystem update_most_recent(String address,String phoneNo) {
+    	 RepairShopManagementSystem system=systemRepository.findFirstByOrderByIdDesc();
+    	 system.setBusinessAddress(address);
+    	 system.setBusinessPhoneNumber(phoneNo);
+    	return system;
+    }
     @Transactional
     public RepairShopManagementSystem getMostRecentSystem() {
         return systemRepository.findFirstByOrderByIdDesc();
@@ -79,3 +85,4 @@ public class SystemService {
     }
 
 }
+
