@@ -94,7 +94,10 @@ export default {
           updatedPhoneNo: this.updatedPhoneNo
         }
       }).then(resp => {
-        this.businessInfo = resp.data;
+        let re = resp.data;
+        if (re.hasError)
+          this.$alert(re.error);
+        this.businessInfo = re;
         localStorage.setItem('businessInfo', JSON.stringify(this.businessInfo));
         this.updatedPhoneNo = "";
         this.updatedAddress = "";
