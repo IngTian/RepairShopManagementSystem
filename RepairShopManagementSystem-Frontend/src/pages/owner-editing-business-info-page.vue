@@ -96,7 +96,7 @@ export default {
       }).then(resp => {
         let re = resp.data;
         if (re.hasError)
-          this.$alert(re.error);
+          throw new Error(re.error);
         this.businessInfo = re;
         localStorage.setItem('businessInfo', JSON.stringify(this.businessInfo));
         this.updatedPhoneNo = "";
