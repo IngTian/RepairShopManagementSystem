@@ -456,43 +456,9 @@ public class TestAppointmentService {
         assertEquals(testShift.getAppointment().getCustomer().getName(), CUSTOMER_NAME);
     }
 
-    /**
-     * @author kevin li
-     * Test delete an appointment successfully
-     */
-    @Test
-    public void testDeleteAppointment() {
-        Appointment appointment = appointmentService.getAppointmentById(APPOINTMENT_ID);
-        try {
-            appointmentService.deleteAppointment(appointment);
-        } catch (IllegalArgumentException e) {
-            fail();
-        }
+  
 
-        assertEquals(appointment.getCar().size(), 0);
-
-
-    }
-
-    /**
-     * @author kevin Li
-     * Test delete an appointment unsuccessfully
-     */
-    @Test
-    public void testDeleteAppointmentFailed() {
-        String error = "";
-        Appointment appointment = appointmentService.getAppointmentById(APPOINTMENT_ID_2);
-        try {
-            appointmentService.deleteAppointment(appointment);
-        } catch (IllegalArgumentException e) {
-            error = e.getMessage();
-        }
-
-        assertEquals(appointment.getCar().size(), 1);
-        assertEquals(error, "This appointment will start in 1 day!");
-
-
-    }
+ 
 
     /**
      * test make payment

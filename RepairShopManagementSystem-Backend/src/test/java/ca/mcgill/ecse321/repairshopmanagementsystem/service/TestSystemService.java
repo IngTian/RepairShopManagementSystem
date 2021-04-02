@@ -47,6 +47,16 @@ public class TestSystemService {
                 return null;
             }
         });
+        lenient().when(systemDao.findFirstByOrderByIdDesc()).thenAnswer((InvocationOnMock invocation) -> {
+          
+                RepairShopManagementSystem system = new RepairShopManagementSystem();
+                system.setId(TEST_SYSTEM_ID);
+                system.setBusinessName(TEST_SYSTEM_NAME);
+                system.setBusinessAddress(TEST_SYSTEM_ADDRESS);
+                system.setBusinessPhoneNumber(TEST_SYSTEM_PHONE_NO);
+                return system;
+            
+        });
 
         // Whenever anything is saved, just return the parameter object
         Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
@@ -215,5 +225,49 @@ public class TestSystemService {
         assertNull(system);
         // check error
         assertEquals("Business address illegal! ", error);
+    }
+    @Test
+    public void testUpdateSystemInformation() {
+    	 RepairShopManagementSystem testSystem=null;
+    	String address="mcgill";
+    	String phoneNo="4185502012";
+    	try {
+    		  testSystem=service.update_most_recent(address, phoneNo);
+    	}catch (Exception e) {
+            fail();
+        }
+    	assertNotNull(testSystem);
+    	assertEquals(testSystem.getBusinessAddress(),address);
+    	assertEquals(testSystem.getBusinessPhoneNumber(),phoneNo);
+    }
+    @Test
+    public void testUpdateSystemInformationWithNullAddress() {
+    	 String error="";
+    	RepairShopManagementSystem testSystem=null;
+    	String address="mcgill";
+    	String phoneNo="4185502012";
+    	try {
+    		  testSystem=service.update_most_recent(null, phoneNo);
+    	}catch (Exception e) {
+           error=e.getMessage();
+        }
+    	assertNull(testSystem);
+    	assertEquals(error,"New address cannot be null!");
+    	
+    }
+    @Test
+    public void testUpdateSystemInformationWithNullPhoneNo() {
+    	 String error="";
+    	RepairShopManagementSystem testSystem=null;
+    	String address="mcgill";
+    	String phoneNo="4185502012";
+    	try {
+    		  testSystem=service.update_most_recent(address, null);
+    	}catch (Exception e) {
+           error=e.getMessage();
+        }
+    	assertNull(testSystem);
+    	assertEquals(error,"New phone no cannot be null!");
+    	
     }
 }
