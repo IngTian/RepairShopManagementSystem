@@ -96,6 +96,8 @@ export default {
       }).then(resp => {
         this.businessInfo = resp.data;
         localStorage.setItem('businessInfo', JSON.stringify(this.businessInfo));
+        this.updatedPhoneNo = "";
+        this.updatedAddress = "";
         this.$alert("Done!");
       }).catch(e => {
         console.error(e.toString());

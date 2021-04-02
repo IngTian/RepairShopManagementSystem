@@ -56,14 +56,18 @@ public class SystemService {
     }
 
     @Transactional
-    public RepairShopManagementSystem update_most_recent(String address,String phoneNo) {
-    	 RepairShopManagementSystem system = systemRepository.findFirstByOrderByIdDesc();
-    	 system.setBusinessAddress(address);
-    	 system.setBusinessPhoneNumber(phoneNo);
-    	 systemRepository.save(system);
-    	return system;
+    public RepairShopManagementSystem update_most_recent(String address, String phoneNo) {
+        if(address == null || address.equals(""))
+            throw new IllegalArgumentException("New address cannot be null!");
+        if(phoneNo == null || phoneNo.equals(""))
+            throw new IllegalArgumentException("New phone no cannot be null!");
+        RepairShopManagementSystem system = systemRepository.findFirstByOrderByIdDesc();
+        system.setBusinessAddress(address);
+        system.setBusinessPhoneNumber(phoneNo);
+        systemRepository.save(system);
+        return system;
     }
-    
+
     @Transactional
     public RepairShopManagementSystem getMostRecentSystem() {
         return systemRepository.findFirstByOrderByIdDesc();

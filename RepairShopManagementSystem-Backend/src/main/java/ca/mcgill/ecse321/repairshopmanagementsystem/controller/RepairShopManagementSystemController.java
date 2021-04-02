@@ -20,8 +20,8 @@ public class RepairShopManagementSystemController {
         return convertToDto(s);
     }
    @PutMapping(value="update_most_recent")
-   public  RepairShopManagementSystemDto updateMostRecent(@RequestParam String updateAddress, @RequestParam String updatePhoneNo) {
-	   return convertToDto(systemService.update_most_recent(updateAddress, updatePhoneNo));
+   public  RepairShopManagementSystemDto updateMostRecent(@RequestParam String updatedAddress, @RequestParam String updatedPhoneNo) {
+	   return convertToDto(systemService.update_most_recent(updatedAddress, updatedPhoneNo));
    }
     @GetMapping(value = "most_recent")
     public RepairShopManagementSystemDto getMostRecentSystem() {

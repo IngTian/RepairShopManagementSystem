@@ -130,6 +130,7 @@ export default {
 
       let requestBody = Object;
       let requestParams = Object;
+      let url = String;
 
       if (this.userRole === "customer") {
         requestBody = {
@@ -141,6 +142,7 @@ export default {
           homeAddress: this.getAddress,
           email: this.getEmail,
         };
+        url = "users/customers/update_info";
         requestParams = {
           newUsername: this.getUsername,
           newPassword: password,
@@ -160,9 +162,10 @@ export default {
           newPassword: password,
           newName: name
         };
+        url = this.userRole === "assistant" ? "users/assistants/update_info" : "users/owners/update_info";
       }
 
-      AXIOS.put("users/customers/update_info", requestBody, {params: requestParams}).then(resp => {
+      AXIOS.put(url, requestBody, {params: requestParams}).then(resp => {
         this.isLoading = false;
         let updatedInfo = resp.data;
         if (updatedInfo.hasError)
