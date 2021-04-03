@@ -3,7 +3,7 @@
     <div class="container">
       <div class="space-row">
         <div class="id-column title-font">ID</div>
-        <div class="max-load-column title-font">MAX LOAD</div>
+        <div class="max-load-column title-font">MAX LOAD(kg)</div>
       </div>
 
       <transition-group name="list-complete" tag="div">
