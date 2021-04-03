@@ -33,6 +33,9 @@ export default {
     username: String
   },
   methods: {
+    /**
+     * Update the car information.
+     */
     updateCar() {
       AXIOS.put("/users/cars/update", {
         plateNo: this.plateNo

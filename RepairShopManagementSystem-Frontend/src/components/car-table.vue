@@ -1,6 +1,7 @@
 <template>
   <div class="root">
     <div class="container">
+      <!--Table row.-->
       <div class="car-row">
         <div class="plate-column title-font">PLATE NO</div>
         <div class="model-column title-font">MODEL</div>
@@ -9,6 +10,8 @@
         <div class="select-column title-font" v-if="!selecting">Update</div>
         <div class="select-column title-font" v-else>Select</div>
       </div>
+
+      <!--Contents of the table. If there is no content, show message instead.-->
       <transition name="fade" mode="out-in">
         <div v-if="this.cars.length === 0"
              style="width: 100%; height: 2em; font-size: 30px; text-align: center; margin-top: 40px" key="no-car">
@@ -58,8 +61,12 @@ export default {
     selecting: Boolean,
   },
   methods: {
-    updateCar: function (car) {
 
+    /**
+     * Call the slide panel for car update.
+     * @param car
+     */
+    updateCar: function (car) {
       this.panelResult = this.$showPanel({
         component: 'car-update-form',
         openOn: "right",
@@ -68,19 +75,31 @@ export default {
           username: this.customerInfo.username,
           plateNo: car.plateNo
         }
-      })
-
+      });
       this.panelResult.promise.then(resp => {
         console.debug(resp.data);
         this.panelResult.hide();
       })
     },
+    /**
+     * Tell whether a car is selected.
+     * @param plateNo
+     * @returns {boolean}
+     */
     isSelected: function (plateNo) {
       return this.carSelected === plateNo
     },
+    /**
+     * Log the event when car is updated.
+     * @param event
+     */
     carUpdated: function (event) {
       console.log(event);
     },
+    /**
+     * Set the selected car as the plate No indicates.
+     * @param plateNo
+     */
     selectACar: function (plateNo) {
       this.carSelected = plateNo;
     }

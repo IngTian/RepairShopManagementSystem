@@ -1,11 +1,13 @@
 <template>
   <div class="root">
     <div class="container">
+      <!--Table row.-->
       <div class="space-row">
         <div class="id-column title-font">ID</div>
         <div class="max-load-column title-font">MAX LOAD(kg)</div>
       </div>
 
+      <!--Contents of the table. If there is no content, show message instead.-->
       <transition-group name="list-complete" tag="div">
         <div class="space-row" v-for="s in this.space" :key="s.maxWeightLoad">
           <div class="id-column">{{ s.spaceId }}</div>

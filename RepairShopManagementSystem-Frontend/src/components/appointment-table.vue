@@ -1,6 +1,8 @@
 <template>
   <div class="root">
     <div class="container">
+
+      <!--The title row.-->
       <div class="shift-row">
         <div class="date-column title-font">DATE</div>
         <div class="start-time-column title-font">START TIME</div>
@@ -10,6 +12,8 @@
         <div class="select-column title-font">PAY</div>
         <div class="select-column title-font">Cancel</div>
       </div>
+
+      <!--Contents of the table. If there is no content, show message instead.-->
       <transition name="fade" mode="out-in">
         <div v-if="this.appointments.length === 0"
              style="width: 100%; height: 2em; font-size: 30px; text-align: center; margin-top: 40px">
@@ -60,28 +64,52 @@ export default {
     customerInfo: Object,
   },
   created() {
-
     // Setting up
-    let appointments = this.customerInfo.appointments;
-    this.appointments = appointments
+    this.appointments = this.customerInfo.appointments
   },
   methods: {
+    /**
+     * Get the date of the appointment.
+     * @param appointment: An appointment object.
+     * @returns {*}
+     */
     getAppointmentDate: function (appointment) {
       let shift = appointment.shift;
       return shift.date;
     },
+    /**
+     * Get the start time of the appointment.
+     * @param appointment: An appointment object.
+     * @returns {*}
+     */
     getAppointmentStartTime: function (appointment) {
       let shift = appointment.shift;
       return shift.startTime;
     },
+    /**
+     * Get the end time of the appointment.
+     * @param appointment: An appointment object.
+     * @returns {*}
+     */
     getAppointmentEndTime: function (appointment) {
       let shift = appointment.shift;
       return shift.endTime;
     },
+
+    /**
+     * Get the service type of the appointment.
+     * @param appointment: An appointment object.
+     * @returns {default.methods.selectedService}
+     */
     getAppointmentServiceType: function (appointment) {
       let service = appointment.service;
       return service.serviceType;
     },
+    /**
+     * Return the total bill price of an appointment.
+     * @param appointment: An appointment object.
+     * @returns {number}
+     */
     getAppointmentPrice: function (appointment) {
       let totalBillPrice = 0;
       let bills = appointment.bill;
