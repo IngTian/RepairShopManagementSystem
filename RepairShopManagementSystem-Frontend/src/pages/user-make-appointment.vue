@@ -222,15 +222,35 @@ export default {
         let appointmentData = resp.data;
         if (appointmentData.hasError)
           throw new Error(appointmentData.error);
-
-        this.userInfo.appointments.push(resp.data);
+        appointmentData.isPaid = this.getAppointmentIsPaid(appointmentData.bill);
+        appointmentData.isDeletable = this.isAppointmentDeletable(appointmentData.shift);
+        this.userInfo.appointments.push(appointmentData);
+        this.$alert("Done!");
+        this.selectedService = null;
+        this.selectedCar = null;
+        this.selectedShift = null;
         localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
       }).catch(e => {
         this.isLoading = false;
         console.error(e.toString());
         this.$alert(e.toString());
       });
-    }
+    },
+
+
+    getAppointmentIsPaid: function (appointmentBills) {
+      for (let i = 0; i < appointmentBills.length; i++)
+        if (!appointmentBills[i].paid)
+          return false;
+      return true;
+    },
+
+    isAppointmentDeletable: function (appointmentShift) {
+      let date = new Date(appointmentShift.date + "T00:00:00Z");
+      let today = new Date();
+      return today < date;
+    },
+
   },
 }
 </script>
