@@ -84,7 +84,8 @@
       </div>
       <div class="section" style="margin-bottom: 150px" v-if="this.userRole === 'customer'">
         <section-title title="Appointments" sub-title="see booked appointments"></section-title>
-        <appointment-table v-bind:appointments="getAppointments" :customer-info="this.userInfo"></appointment-table>
+        <appointment-table v-bind:appointments="getAppointments" :customer-info="this.userInfo"
+                           @payment-made="makePaymentClicked"></appointment-table>
       </div>
     </div>
   </div>
@@ -192,8 +193,34 @@ export default {
         console.error(e.toString());
       })
     },
-  },
+    makePaymentClicked: function (event) {
+      let appointmentChosen = Object;
+      let appointments = this.getAppointments;
+      for (let i = 0; i < appointments.length; i++)
+        if (appointments[i].appointmentId === event) {
+          appointmentChosen = appointments[i];
+          break;
+        }
 
+      let billPaid = appointmentChosen.bill[0];
+      AXIOS.put("/appointment/make_payment", {}, {
+        params: {
+          id: billPaid.billNo
+        }
+      }).then(resp => {
+        let responseData = resp.data;
+        if (responseData.hasError)
+          throw new Error(responseData.error);
+        billPaid.isPaid = true;
+        localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
+        this.$alert("Done!");
+      }).catch(e => {
+        this.$alert(e.toString());
+        console.error(e.toString());
+      });
+
+    }
+  },
   mounted() {
     // Load user info from local storage.
     this.userInfo = JSON.parse(localStorage.getItem('userInformation'));

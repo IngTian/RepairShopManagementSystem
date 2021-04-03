@@ -191,6 +191,7 @@ export default {
           if (this.shifts[i].shiftId === deletedShiftId) {
             this.shifts.splice(i, 1);
             this.$alert("Done");
+            localStorage.setItem("userInformation", JSON.stringify(this.userInfo));
             break;
           }
       }).catch(e => {

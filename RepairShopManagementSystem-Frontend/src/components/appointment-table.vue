@@ -16,7 +16,7 @@
           Sorry, you do not have any appointment yet.
         </div>
         <transition-group name="list-complete" tag="div" v-else>
-          <div class="shift-row" v-for="appointment in this.appointments" :key="getAppointmentDate(appointment)">
+          <div class="shift-row" v-for="appointment in this.appointments" :key="appointment.appointmentId">
             <div class="date-column">{{ getAppointmentDate(appointment) }}</div>
             <div class="start-time-column">{{ getAppointmentStartTime(appointment) }}</div>
             <div class="end-time-column">{{ getAppointmentEndTime(appointment) }}</div>
@@ -24,7 +24,7 @@
             <div class="price-column">{{ getAppointmentPrice(appointment) }}</div>
             <transition name="pay" mode="out-in">
               <div class="select-column select-button" v-if="!appointment.isPaid"
-                   @click="makePayment(appointment)">
+                   @click="$emit('payment-made', `${appointment.appointmentId}`)">
                 Pay
               </div>
               <div class="select-column" v-else>
@@ -79,40 +79,6 @@ export default {
     }
   },
   methods: {
-    makePayment: function (appointment) {
-      let bill = appointment.bill;
-      for (let i = 0; i < bill.length; i++)
-        if (!bill[i].isPaid)
-          AXIOS.put("/appointment/make_payment", {}, {
-            params: {
-              id: bill[i].billNo
-            }
-          }).then(resp => {
-
-                let paymentData = resp.data;
-                if (paymentData.hasError)
-                  throw new Error(paymentData.error);
-
-                let paidBillNo = paymentData.billNo
-                for (let i = 0; i < this.customerInfo.appointments.length; i++) {
-                  let app = this.customerInfo.appointments[i];
-                  let appBills = app.bill;
-                  for (let j = 0; j < appBills.length; j++)
-                    if (appBills[j].billNo === paidBillNo) {
-                      appBills[j].isPaid = true;
-                      app.isPaid = true;
-                      appointment.isPaid = true;
-                      localStorage.setItem('userInformation', JSON.stringify(this.customerInfo))
-                      return;
-                    }
-                }
-              }
-          ).catch(e => {
-            console.error(e.toString());
-            this.$alert(e.toString());
-          })
-
-    },
     getAppointmentDate: function (appointment) {
       let shift = appointment.shift;
       return shift.date;
