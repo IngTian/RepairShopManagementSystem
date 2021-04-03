@@ -29,7 +29,7 @@
                 Selected
               </div>
             </transition>
-            <div class="select-column select-button" style="width: 20%" @click="deleteShift(shift.shiftId)">
+            <div class="select-column select-button" style="width: 20%" @click="$emit('delete-shift', shift.shiftId)">
               Delete
             </div>
           </div>
@@ -91,28 +91,6 @@ export default {
     selectAShift: function (shiftId) {
       this.selectedShiftId = shiftId;
     },
-    deleteShift: function (shiftId) {
-      AXIOS.post("/schedules/shifts/delete", {}, {
-        params: {
-          shiftId: shiftId
-        }
-      }).then(resp => {
-        if (resp.data.hasError)
-          throw new Error(resp.data.error);
-        let userInfo = JSON.parse(localStorage.getItem('userInformation'));
-        let shiftArray = userInfo.shifts;
-        for (let i = 0; i < shiftArray.length; i++)
-          if (shiftArray[i].shiftId === shiftId) {
-            shiftArray.splice(i, 1);
-            localStorage.setItem('userInformation', JSON.stringify(userInfo));
-            this.shifts = shiftArray;
-            return;
-          }
-      }).catch(e => {
-        console.error(e.toString());
-        this.$alert(e.toString());
-      })
-    }
   }
 }
 </script>

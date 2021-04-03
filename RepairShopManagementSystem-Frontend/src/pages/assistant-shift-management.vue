@@ -51,12 +51,11 @@
         </div>
       </div>
     </div>
-
-
     <section-title title="Your shifts" sub-title="Select and edit above."></section-title>
     <div class="date-picking-container">
       <div class="date-picking-shifts">
-        <shifts-table :shifts="this.shifts" :allow-deletable="true" v-on:selected="onShiftSelected"></shifts-table>
+        <shifts-table :shifts="this.shifts" :allow-deletable="true" v-on:selected="onShiftSelected"
+                      @delete-shift="deleteShiftClicked"></shifts-table>
       </div>
     </div>
   </div>
@@ -134,6 +133,12 @@ export default {
       });
     },
     updateShiftClicked() {
+
+      if (!this.selectedShift) {
+        this.$alert("Please select a shift first!");
+        return;
+      }
+
       this.isLoading = true;
       let date = this.date;
       let startTime = this.startTime;
@@ -166,6 +171,29 @@ export default {
         this.selectedShift = null;
       }).catch(e => {
         this.isLoading = false;
+        console.error(e.toString());
+        this.$alert(e.toString());
+      });
+    },
+    deleteShiftClicked(event) {
+
+      let deletedShiftId = event;
+
+      AXIOS.post("/schedules/shifts/delete", {}, {
+        params: {
+          shiftId: deletedShiftId
+        }
+      }).then(resp => {
+        if (resp.data.hasError)
+          throw new Error(resp.data.error);
+
+        for (let i = 0; i < this.shifts.length; i++)
+          if (this.shifts[i].shiftId === deletedShiftId) {
+            this.shifts.splice(i, 1);
+            this.$alert("Done");
+            break;
+          }
+      }).catch(e => {
         console.error(e.toString());
         this.$alert(e.toString());
       });

@@ -197,7 +197,6 @@ export default {
         let shiftData = resp.data;
         if (shiftData.hasError)
           throw new Error(shiftData.error);
-
         this.shifts = shiftData;
       }).catch(e => {
         this.isLoading = false;
