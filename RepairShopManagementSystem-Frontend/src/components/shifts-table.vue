@@ -64,15 +64,6 @@
 </template>
 
 <script>
-
-import axios from "axios"
-
-var config = require("../configuration")
-
-var AXIOS = axios.create({
-  baseURL: config.springServer.baseUrl,
-})
-
 export default {
   name: "shifts-table",
   data: function () {

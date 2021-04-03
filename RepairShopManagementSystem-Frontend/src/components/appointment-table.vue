@@ -24,19 +24,19 @@
             <div class="price-column">{{ getAppointmentPrice(appointment) }}</div>
             <transition name="pay" mode="out-in">
               <div class="select-column select-button" v-if="!appointment.isPaid"
-                   @click="$emit('payment-made', `${appointment.appointmentId}`)">
+                   @click="$emit('payment-made', `${appointment.appointmentId}`)" key="pay">
                 Pay
               </div>
-              <div class="select-column" v-else>
+              <div class="select-column" v-else key="paid">
                 Paid
               </div>
             </transition>
             <transition name="delete" mode="out-in">
               <div class="select-column select-button" v-if="appointment.isDeletable"
-                   @click="deleteAppointment(appointment)">
+                   @click="deleteAppointment(appointment)" key="cancel">
                 Cancel
               </div>
-              <div class="select-column" v-else>
+              <div class="select-column" v-else key="canceled">
                 Over
               </div>
             </transition>

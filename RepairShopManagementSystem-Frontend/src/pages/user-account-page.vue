@@ -197,7 +197,7 @@ export default {
       let appointmentChosen = Object;
       let appointments = this.getAppointments;
       for (let i = 0; i < appointments.length; i++)
-        if (appointments[i].appointmentId === event) {
+        if (appointments[i].appointmentId === parseInt(event)) {
           appointmentChosen = appointments[i];
           break;
         }
@@ -212,6 +212,7 @@ export default {
         if (responseData.hasError)
           throw new Error(responseData.error);
         billPaid.isPaid = true;
+        appointmentChosen.isPaid = true;
         localStorage.setItem('userInformation', JSON.stringify(this.userInfo));
         this.$alert("Done!");
       }).catch(e => {
