@@ -10,6 +10,7 @@
         </div>
       </div>
 
+      <!--Log in or Sign up form.-->
       <transition name="fade" mode="out-in">
         <div v-if="displaySignUp" class="form-container" key="signUpForm">
           <div class="title">
@@ -98,6 +99,9 @@ export default {
       this.displaySignUp = false;
     },
 
+    /**
+     * Sign up a customer.
+     */
     signUpButtonClicked: function () {
       let name = this.firstName + " " + this.lastName;
       let username = this.username;
@@ -133,6 +137,10 @@ export default {
       })
     },
 
+    /**
+     * Log in a customer.
+     * @constructor
+     */
     LoginButtonClicked: function () {
       this.isLoading = true;
       AXIOS.get("users/get_user_info", {

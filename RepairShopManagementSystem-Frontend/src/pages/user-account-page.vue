@@ -85,7 +85,7 @@
       <div class="section" style="margin-bottom: 150px" v-if="this.userRole === 'customer'">
         <section-title title="Appointments" sub-title="see booked appointments"></section-title>
         <appointment-table v-bind:appointments="getAppointments" :customer-info="this.userInfo"
-                           @payment-made="makePaymentClicked" @delete-made="deletePaymentClicked"></appointment-table>
+                           @payment-made="makePaymentClicked" @delete-made="onDeleteAppointment"></appointment-table>
       </div>
     </div>
   </div>
@@ -121,6 +121,10 @@ export default {
     "AppointmentTable": AppointmentTable
   },
   methods: {
+
+    /**
+     * Update the selected user information.
+     */
     updateUserInformationClicked: function () {
       this.isLoading = true;
       let password = this.updatedPassword;
@@ -193,6 +197,11 @@ export default {
         console.error(e.toString());
       })
     },
+
+    /**
+     * Make a payment to the appointment.
+     * @param event
+     */
     makePaymentClicked: function (event) {
       let appointmentChosen = Object;
       let appointments = this.getAppointments;
@@ -221,7 +230,12 @@ export default {
       });
 
     },
-    deletePaymentClicked: function (event) {
+
+    /**
+     * Delete an appointment.
+     * @param event
+     */
+    onDeleteAppointment: function (event) {
       let appointmentChosen = Object;
       let appointments = this.getAppointments;
       let index = 0;

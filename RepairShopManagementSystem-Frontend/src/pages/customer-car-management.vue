@@ -1,10 +1,12 @@
 <template>
   <div class="root">
     <div class="container">
+      <!--View all cars with the account.-->
       <section class="section">
         <section-title title="Your cars" sub-title="You look great!"></section-title>
         <car-table :customer-info="this.customerInfo" :selecting="false"></car-table>
       </section>
+      <!--Add car.-->
       <div class="section" style="margin-bottom: 150px">
         <section-title title="Got new cars?" sub-title="Amaze us."></section-title>
         <div class="view-info-row">
@@ -54,9 +56,9 @@
 <script>
 import axios from "axios"
 
-var config = require("../configuration")
+const config = require("../configuration")
 
-var AXIOS = axios.create({
+const AXIOS = axios.create({
   baseURL: config.springServer.baseUrl,
 })
 
@@ -78,6 +80,9 @@ export default {
     "CarTable": CarTable
   },
   methods: {
+    /**
+     * Add a car to the database.
+     */
     addCarClicked: function () {
       this.isLoading = true;
       let plateNo = this.plateNo;

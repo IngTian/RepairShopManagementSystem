@@ -87,6 +87,10 @@ export default {
     }
   },
   methods: {
+
+    /**
+     * Update the business information.
+     */
     updateBusinessInformation() {
       AXIOS.put("/system/update_most_recent", {}, {
         params: {

@@ -183,6 +183,10 @@ export default {
     onCarSelected(event) {
       this.selectedCar = event;
     },
+
+    /**
+     * Get all the shifts of those dates.
+     */
     onViewShiftsClicked() {
       this.isLoading = true;
       let datesArray = [];
@@ -204,6 +208,10 @@ export default {
         this.$alert(e.toString());
       })
     },
+
+    /**
+     * Actually make an appointment.
+     */
     onMakeAppointment() {
       this.isLoading = true;
       AXIOS.post("/appointment/make_appointment", {}, {

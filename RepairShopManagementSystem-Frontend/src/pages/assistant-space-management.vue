@@ -1,6 +1,8 @@
 <template>
   <div class="root">
     <div class="container">
+
+      <!--Space creation.-->
       <div class="section">
         <section-title title="Create a space" sub-title="after all, you need somewhere to work"></section-title>
         <div class="view-info-row">
@@ -19,6 +21,7 @@
         </div>
       </div>
 
+      <!--Space table. View all spaces registered.-->
       <div class="section" style="margin-bottom: 150px">
         <section-title title="All Spaces" sub-title="All space that exists now"></section-title>
         <space-table :space="this.allSpace"></space-table>
@@ -30,9 +33,9 @@
 <script>
 import axios from "axios"
 
-var config = require("../configuration")
+const config = require("../configuration")
 
-var AXIOS = axios.create({
+const AXIOS = axios.create({
   baseURL: config.springServer.baseUrl,
 });
 
@@ -59,7 +62,9 @@ export default {
     "SpaceTable": SpaceTable
   },
   methods: {
-
+    /**
+     * Add a space to the backend.
+     */
     addSpaceClicked: function () {
       this.isLoading = true;
       let maxWeightLoad = this.weightLoad;

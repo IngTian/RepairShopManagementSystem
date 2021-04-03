@@ -1,5 +1,6 @@
 <template>
   <div class="root">
+    <!--Add or update shift.-->
     <section-title title="Work 996?" sub-title="Let's roll."></section-title>
     <div>
       <div class="view-info-row">
@@ -51,6 +52,8 @@
         </div>
       </div>
     </div>
+
+    <!--View shifts.-->
     <section-title title="Your shifts" sub-title="Select and edit above."></section-title>
     <div class="date-picking-container">
       <div class="date-picking-shifts">
@@ -65,9 +68,9 @@
 
 import axios from "axios"
 
-var config = require("../configuration")
+const config = require("../configuration")
 
-var AXIOS = axios.create({
+const AXIOS = axios.create({
   baseURL: config.springServer.baseUrl,
 })
 
@@ -100,6 +103,9 @@ export default {
         if (this.shifts[i].shiftId === event)
           this.selectedShift = this.shifts[i];
     },
+    /**
+     * Add a shift to the backend.
+     */
     addShiftClicked() {
       this.isLoading = true;
       let date = this.date;
@@ -132,6 +138,11 @@ export default {
         this.$alert(e.toString());
       });
     },
+    /**
+     * Update a shift to the backend.
+     * A shift must be selected at
+     * first for this method to work.
+     */
     updateShiftClicked() {
 
       if (!this.selectedShift) {
@@ -175,6 +186,10 @@ export default {
         this.$alert(e.toString());
       });
     },
+    /**
+     * Delete a shift.
+     * @param event: shift ID.
+     */
     deleteShiftClicked(event) {
 
       let deletedShiftId = event;

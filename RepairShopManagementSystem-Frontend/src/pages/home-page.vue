@@ -1,5 +1,6 @@
 <template>
   <div class="root">
+    <!--The front page.-->
     <div class="main-info-section">
       <div class="blur">
         <div class="shade"></div>
@@ -9,11 +10,13 @@
       </div>
     </div>
 
+    <!--Gallery of our services.-->
     <div class="Shop-Information">
       <section-title title="Got troubles?" sub-title="We got it. Chill"></section-title>
       <horizontal-gallery :images="serviceImages" :maximum-length="galleryMaxLength"></horizontal-gallery>
     </div>
 
+    <!--A show of our advantages.-->
     <section-title title="Our advantages" sub-title="Sorry, we are no ordinary."></section-title>
     <div class="projects">
       <div class="project" v-for="activity in activities" :key="activity.id"
@@ -34,9 +37,9 @@
 
 import axios from "axios"
 
-var config = require("../configuration")
+const config = require("../configuration")
 
-var AXIOS = axios.create({
+const AXIOS = axios.create({
   baseURL: config.springServer.baseUrl,
 })
 
