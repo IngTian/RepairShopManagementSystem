@@ -59,7 +59,7 @@ public class AppointmentController {
         return convertToDto(appointmentService.changeServiceType(appointmentService.getAppointmentById(appointmentId), newServiceType));
     }
 
-    @DeleteMapping(value = "delete")
+    @PostMapping(value = "delete")
     public AppointmentDto deleteAppointment(@RequestParam Integer id) {
         Appointment a = appointmentService.deleteAppointment(appointmentService.getAppointmentById(id));
         return new AppointmentDto(a.getAppointmentId());

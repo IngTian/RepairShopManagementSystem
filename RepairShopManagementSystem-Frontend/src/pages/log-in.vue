@@ -209,9 +209,11 @@ export default {
             let password = customerInformation.password;
             if (this.password === password) {
               let appointments = customerInformation.appointments;
+              // eslint-disable-next-line no-debugger
+              debugger;
               for (let i = 0; i < appointments.length; i++) {
-                appointments[i].isPaid = false;
-                appointments[i].isDeletable = false;
+                appointments[i].isPaid = this.getAppointmentIsPaid(appointments[i].bill);
+                appointments[i].isDeletable = this.isAppointmentDeletable(appointments[i].shift);
               }
               localStorage.setItem('userInformation', JSON.stringify(customerInformation));
               localStorage.setItem('userRole', userType)
@@ -228,6 +230,19 @@ export default {
         console.error(`ERROR: ${e.toString()}`)
         this.$alert(e.toString());
       })
+    },
+
+    getAppointmentIsPaid: function (appointmentBills) {
+      for (let i = 0; i < appointmentBills.length; i++)
+        if (!appointmentBills[i].paid)
+          return false;
+      return true;
+    },
+
+    isAppointmentDeletable: function (appointmentShift) {
+      let date = new Date(appointmentShift.date + "T00:00:00Z");
+      let today = new Date();
+      return today < date;
     },
   }
 }

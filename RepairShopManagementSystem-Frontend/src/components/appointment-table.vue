@@ -33,7 +33,7 @@
             </transition>
             <transition name="delete" mode="out-in">
               <div class="select-column select-button" v-if="appointment.isDeletable"
-                   @click="deleteAppointment(appointment)" key="cancel">
+                   @click="$emit('delete-made', appointment.appointmentId)" key="cancel">
                 Cancel
               </div>
               <div class="select-column" v-else key="canceled">
@@ -48,14 +48,6 @@
 </template>
 
 <script>
-
-import axios from "axios"
-
-var config = require("../configuration")
-
-var AXIOS = axios.create({
-  baseURL: config.springServer.baseUrl,
-})
 
 export default {
   name: "appointment-table",
@@ -72,11 +64,6 @@ export default {
     // Setting up
     let appointments = this.customerInfo.appointments;
     this.appointments = appointments
-    for (let i = 0; i < appointments.length; i++) {
-      let appointment = appointments[i];
-      appointment.isPaid = this.getAppointmentIsPaid(appointment.bill);
-      appointment.isDeletable = this.isAppointmentDeletable(appointment.shift);
-    }
   },
   methods: {
     getAppointmentDate: function (appointment) {
@@ -102,38 +89,6 @@ export default {
         if (!bills[i].isPaid)
           totalBillPrice += bills[i].price;
       return totalBillPrice;
-    },
-    deleteAppointment: function (appointment) {
-      AXIOS.post("/appointment/delete", {}, {
-        params: {
-          id: appointment.appointmentId
-        }
-      }).then(resp => {
-        if (resp.data.hasError)
-          throw new Error(resp.data.error);
-        let index = -1;
-        let appointments = this.customerInfo.appointments
-        for (let i = 0; i < appointments.length && index === -1; i++)
-          if (appointments[i].appointmentId === appointment.appointmentId)
-            index = i;
-        appointments.splice(index, 1);
-
-        localStorage.setItem('userInformation', JSON.stringify(this.customerInfo))
-      }).catch(e => {
-        console.error(e.toString());
-        this.$alert(e.toString());
-      })
-    },
-    getAppointmentIsPaid: function (appointmentBills) {
-      for (let i = 0; i < appointmentBills.length; i++)
-        if (!appointmentBills[i].isPaid)
-          return false;
-      return true;
-    },
-    isAppointmentDeletable: function (appointmentShift) {
-      let date = new Date(appointmentShift.date + "T00:00:00Z");
-      let today = new Date();
-      return today < date;
     },
   },
   computed: {

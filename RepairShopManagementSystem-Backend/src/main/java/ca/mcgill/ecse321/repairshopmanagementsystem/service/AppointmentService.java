@@ -215,7 +215,8 @@ public class AppointmentService {
     @Transactional
     public Appointment deleteAppointment(Appointment appointment) {
         Date now = new Date(System.currentTimeMillis());
-        if (appointment.getShift().getDate().compareTo(now) > 0)
+        long timeDifference = appointment.getShift().getDate().getTime() - now.getTime();
+        if (timeDifference < 24 * 3600 * 1000)
             throw new IllegalArgumentException("This appointment will start in 1 day!");
         for(Car c : appointment.getCar())
             c.getAppointment().remove(appointment);

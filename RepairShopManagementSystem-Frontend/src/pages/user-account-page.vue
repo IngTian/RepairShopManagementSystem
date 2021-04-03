@@ -85,7 +85,7 @@
       <div class="section" style="margin-bottom: 150px" v-if="this.userRole === 'customer'">
         <section-title title="Appointments" sub-title="see booked appointments"></section-title>
         <appointment-table v-bind:appointments="getAppointments" :customer-info="this.userInfo"
-                           @payment-made="makePaymentClicked"></appointment-table>
+                           @payment-made="makePaymentClicked" @delete-made="deletePaymentClicked"></appointment-table>
       </div>
     </div>
   </div>
@@ -220,6 +220,31 @@ export default {
         console.error(e.toString());
       });
 
+    },
+    deletePaymentClicked: function (event) {
+      let appointmentChosen = Object;
+      let appointments = this.getAppointments;
+      let index = 0;
+      for (index = 0; index < appointments.length; index++)
+        if (appointments[index].appointmentId === event) {
+          appointmentChosen = appointments[index];
+          break;
+        }
+
+      AXIOS.post("/appointment/delete", {}, {
+        params: {
+          id: appointmentChosen.appointmentId
+        }
+      }).then(resp => {
+        if (resp.data.hasError)
+          throw new Error(resp.data.error);
+
+        appointments.splice(index, 1);
+        localStorage.setItem('userInformation', JSON.stringify(this.userInfo))
+      }).catch(e => {
+        console.error(e.toString());
+        this.$alert(e.toString());
+      })
     }
   },
   mounted() {
