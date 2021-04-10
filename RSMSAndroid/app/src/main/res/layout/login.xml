@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/welcome"
+        android:id="@+id/welcome2"
         android:layout_width="177dp"
         android:layout_height="45dp"
         android:shadowColor="#714242"
@@ -36,7 +36,7 @@
         app:layout_constraintVertical_bias="0.339" />
 
     <EditText
-        android:id="@+id/editTextPassword"
+        android:id="@+id/createTextPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -50,13 +50,13 @@
         app:layout_constraintVertical_bias="0.616" />
 
     <EditText
-        android:id="@+id/editTextAccountName"
+        android:id="@+id/createTextAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Account Name"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/editTextPassword"
+        app:layout_constraintBottom_toTopOf="@+id/createTextPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +64,7 @@
         app:layout_constraintVertical_bias="0.944" />
 
     <Button
-        android:id="@+id/buttonLogin"
+        android:id="@+id/buttonLogin1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Login"
@@ -72,14 +72,14 @@
         app:iconTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.317"
+        app:layout_constraintHorizontal_bias="0.312"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.746"
         app:strokeColor="@color/purple_200" />
 
     <Button
-        android:id="@+id/buttonSignUp"
+        android:id="@+id/buttonSignUp2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
