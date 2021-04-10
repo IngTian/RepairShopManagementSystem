@@ -94,6 +94,18 @@ public class ScheduleService {
     public List<Shift> getAllShifts() {
         return toList(shiftRepository.findAll());
     }
+    @Transactional
+    public List<Shift> getAvailableShifts(){
+    	List<Shift> shifts=toList(shiftRepository.findAll());
+    	List<Shift> result=new ArrayList<>();
+    	for(Shift s:shifts) {
+    		if(s.getAppointment()==null) {
+    			result.add(s);
+    		}
+    	}
+    	return result;
+    	
+    }
 
     @Transactional
     public List<Shift> getAllShiftsByAssistant(Assistant assistant) {

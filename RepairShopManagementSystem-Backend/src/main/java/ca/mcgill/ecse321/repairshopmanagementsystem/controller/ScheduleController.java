@@ -76,6 +76,11 @@ public class ScheduleController {
         List<Shift> shiftList = scheduleService.getAllShifts();
         return convertToDtoListForShift(shiftList);
     }
+    @GetMapping(value = "shifts/getAvailable")
+    public List<ShiftDto> getAllAvailableShifts() {
+        List<Shift> shiftList = scheduleService.getAvailableShifts();
+        return convertToDtoListForShift(shiftList);
+    }
 
     @GetMapping(value = "shifts/assistant")
     public List<ShiftDto> getAllShiftsForAnAssistant(@RequestParam String username) {
