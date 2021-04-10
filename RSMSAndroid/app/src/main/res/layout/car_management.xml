@@ -29,10 +29,9 @@
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/CarManagementTitle"
-        app:layout_constraintVertical_bias="0.046" />
+        app:layout_constraintVertical_bias="0.044" />
 
     <EditText
         android:id="@+id/CarPlateNo"
@@ -48,7 +47,7 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Title2"
-        app:layout_constraintVertical_bias="0.084" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/CarModel"
@@ -64,7 +63,7 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/CarPlateNo"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.434" />
 
     <EditText
         android:id="@+id/CarYear"
@@ -79,8 +78,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CarModel"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/CarModel" />
 
     <EditText
         android:id="@+id/CarManufacturer"
@@ -95,19 +93,7 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/CarYear"
-        app:layout_constraintVertical_bias="0.228" />
-
-    <Button
-        android:id="@+id/AddCarButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/UpdateCarButton"
-        app:layout_constraintHorizontal_bias="0.275"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CarManufacturer"
-        app:layout_constraintVertical_bias="0.309" />
+        app:layout_constraintVertical_bias="0.18" />
 
     <Button
         android:id="@+id/UpdateCarButton"
@@ -118,6 +104,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/CarManufacturer"
-        app:layout_constraintVertical_bias="0.309" />
+        app:layout_constraintVertical_bias="0.451" />
+
+    <Button
+        android:id="@+id/AddCarButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/UpdateCarButton"
+        app:layout_constraintHorizontal_bias="0.273"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CarManufacturer"
+        app:layout_constraintVertical_bias="0.451" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
