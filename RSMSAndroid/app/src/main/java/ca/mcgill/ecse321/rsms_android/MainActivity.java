@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.rsms_android;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -12,24 +13,24 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.login);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+      Button loginButton=(Button) findViewById(R.id.buttonLogin1);
+     loginButton.setOnClickListener(new View.OnClickListener(){
+
+         @Override
+         public void onClick(View v) {
+             Intent homepage=new Intent(getApplicationContext(),homepageActivity.class);
+         }
+     });
+
     }
 
     @Override
