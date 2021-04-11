@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
          @Override
          public void onClick(View v) {
              Intent homepage=new Intent(getApplicationContext(),homepageActivity.class);
+             startActivity(homepage);
          }
      });
 
