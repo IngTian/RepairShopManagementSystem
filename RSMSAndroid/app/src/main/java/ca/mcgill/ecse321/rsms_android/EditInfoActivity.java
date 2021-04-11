@@ -15,7 +15,7 @@ public class EditInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_info);
+        setContentView(R.layout.update_user_info);
 
     }
 }

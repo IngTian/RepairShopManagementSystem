@@ -21,16 +21,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
-      Button loginButton=(Button) findViewById(R.id.buttonLogin1);
-     loginButton.setOnClickListener(new View.OnClickListener(){
+        Button loginButton = (Button) findViewById(R.id.buttonLogin1);
+        loginButton.setOnClickListener(new View.OnClickListener(){
 
          @Override
          public void onClick(View v) {
-             Intent homepage=new Intent(getApplicationContext(),homepageActivity.class);
+             Intent homepage = new Intent(getApplicationContext(), homepageActivity.class);
              startActivity(homepage);
          }
-     });
+        });
 
     }
 

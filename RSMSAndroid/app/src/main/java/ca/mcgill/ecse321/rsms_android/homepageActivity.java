@@ -18,23 +18,23 @@ public class homepageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customer_home_page);
-        Button viewCarButton=(Button) findViewById(R.id.viewCars);
-       viewCarButton.setOnClickListener(new View.OnClickListener(){
+        Button viewCarButton = (Button) findViewById(R.id.viewCars);
+        viewCarButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                Intent carMA=new Intent(getApplicationContext(),CarMActivity.class);
+                Intent carMA = new Intent(getApplicationContext(), CarMActivity.class);
                 startActivity(carMA);
             }
         });
 
 
-        Button changeInfoButton=(Button) findViewById(R.id.changeInfoButton);
+        Button changeInfoButton = (Button) findViewById(R.id.changeInfoButton);
         changeInfoButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                Intent InfoManagement=new Intent(getApplicationContext(),EditInfoActivity.class);
+                Intent InfoManagement = new Intent(getApplicationContext(), EditInfoActivity.class);
                 startActivity(InfoManagement);
             }
         });
