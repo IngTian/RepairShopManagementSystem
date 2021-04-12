@@ -38,7 +38,5 @@ public class HttpUtils {
         client.post(url, params, responseHandler);
     }
 
-    private static String getAbsoluteUrl(String relativeUrl) {
-        return baseUrl + relativeUrl;
-    }
+    private static String getAbsoluteUrl(String relativeUrl) {return baseUrl + relativeUrl;}
 }
