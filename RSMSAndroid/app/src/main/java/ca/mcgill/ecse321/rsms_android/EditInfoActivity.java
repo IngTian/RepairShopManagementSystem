@@ -16,6 +16,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 
 public class EditInfoActivity extends AppCompatActivity {
+    Intent intent=getIntent();
+    String CurrUName=intent.getStringExtra("ca.mcgill.ecse321.rsms_android.NOWUNAME");
+    String CurrPassword=intent.getStringExtra("ca.mcgill.ecse321.rsms_android.NOWPASSWORD");
     Button updButton;
     String newUName;
     String newPassword;

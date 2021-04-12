@@ -18,6 +18,9 @@ public class homepageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customer_home_page);
+        Intent intent=getIntent();
+        String CurrUName=intent.getStringExtra("ca.mcgill.ecse321.rsms_android.CURRUNAME");
+        String CurrPassword=intent.getStringExtra("ca.mcgill.ecse321.rsms_android.CURRPASSWORD");
         Button viewCarButton = (Button) findViewById(R.id.viewCars);
         viewCarButton.setOnClickListener(new View.OnClickListener(){
 
@@ -35,6 +38,8 @@ public class homepageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent InfoManagement = new Intent(getApplicationContext(), EditInfoActivity.class);
+                InfoManagement.putExtra("ca.mcgill.ecse321.rsms.android.NOWUNAME",CurrUName);
+                InfoManagement.putExtra("ca.mcgill.ecse321.rsms_android.NOWPASSWORD",CurrPassword);
                 startActivity(InfoManagement);
             }
         });

@@ -1,7 +1,9 @@
 package ca.mcgill.ecse321.rsms_android;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.content.res.Resources;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -15,18 +17,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+import cz.msebera.android.httpclient.client.cache.Resource;
 
+public class MainActivity extends AppCompatActivity {
+    String UName;
+    String Password;
+
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         Button loginButton = (Button) findViewById(R.id.buttonLogin1);
+        Resources res=getResources();
+        UName=res.getString(R.id.accountUName);
+        Password=res.getString(R.id.accountPassword);
         loginButton.setOnClickListener(new View.OnClickListener(){
-
          @Override
          public void onClick(View v) {
              Intent homepage = new Intent(getApplicationContext(), homepageActivity.class);
+             homepage.putExtra("ca.mcgill.ecse321.rsms.android.CURRUNAME",UName);
+             homepage.putExtra("ca.mcgill.ecse321.rsms_android.CURRPASSWORD",Password);
              startActivity(homepage);
          }
         });
