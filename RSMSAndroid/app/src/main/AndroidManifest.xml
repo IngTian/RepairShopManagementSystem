@@ -11,10 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RSMSAndroid">
-        <activity android:name=".ShowShifts"></activity>
+        <activity android:name=".AppointmentViewAndPayActivity"></activity>
+        <activity android:name=".ShowShifts" />
         <activity android:name=".MakeAppointmentSelectDate" />
         <activity android:name=".MakeAppointmentActivity" />
-        <activity android:name=".ViewAppointmentActivity" />
         <activity
             android:name=".EditInfoActivity"
             android:label="@string/title_activity_edit_info"

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/payButton3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="162dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="7dp"
+        android:text="Pay"
+        app:layout_constraintBottom_toTopOf="@+id/payButton5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payButton4" />
+
+    <Button
+        android:id="@+id/payButton5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="162dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="7dp"
+        android:text="Pay"
+        app:layout_constraintBottom_toTopOf="@+id/payButton2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payButton3" />
+
+    <Button
+        android:id="@+id/payButton4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="162dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="7dp"
+        android:text="Pay"
+        app:layout_constraintBottom_toTopOf="@+id/payButton3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payButton" />
+
+    <TextView
+        android:id="@+id/PAYYYYYY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="170dp"
+        android:layout_marginTop="166dp"
+        android:layout_marginEnd="184dp"
+        android:layout_marginBottom="546dp"
+        android:text="PAYYYYYYYY"
+        android:textColor="#E91E63"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.456"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.655" />
+
+    <Button
+        android:id="@+id/payButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="162dp"
+        android:layout_marginTop="65dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="7dp"
+        android:text="Pay"
+        app:layout_constraintBottom_toTopOf="@+id/payButton4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/PAYYYYYY" />
+
+    <Button
+        android:id="@+id/payButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="7dp"
+        android:text="Pay"
+        app:layout_constraintBottom_toTopOf="@+id/payButton6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payButton5" />
+
+    <Button
+        android:id="@+id/payButton6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="143dp"
+        android:text="Pay"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payButton2" />
+</androidx.constraintlayout.widget.ConstraintLayout>

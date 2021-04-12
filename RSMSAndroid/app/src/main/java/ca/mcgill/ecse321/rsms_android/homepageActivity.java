@@ -44,7 +44,7 @@ public class homepageActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent viewAppointment=new Intent(getApplicationContext(),ViewAppointmentActivity.class);
+                Intent viewAppointment=new Intent(getApplicationContext(), AppointmentViewAndPayActivity.class);
                 startActivity(viewAppointment);
             }
         });
