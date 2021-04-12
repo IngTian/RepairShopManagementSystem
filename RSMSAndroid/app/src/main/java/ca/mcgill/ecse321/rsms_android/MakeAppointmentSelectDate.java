@@ -42,7 +42,7 @@ public class MakeAppointmentSelectDate extends AppCompatActivity {
     }
 
     private void showShifts() {
-        Intent intent = new Intent(this,ShowShifts.class);
+        Intent intent = new Intent(getApplicationContext(),ShowShifts.class);
         intent.putExtra("date", date);
         startActivity(intent);
     }

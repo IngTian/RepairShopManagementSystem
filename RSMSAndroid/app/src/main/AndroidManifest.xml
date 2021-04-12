@@ -11,9 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RSMSAndroid">
-        <activity android:name=".AppointmentPaymentActivity"></activity>
-        <activity android:name=".AppointmentViewAndPayActivity" />
+        <activity android:name=".SelectServiceAndCar"></activity>
         <activity android:name=".ShowShifts" />
+        <activity android:name=".AppointmentPaymentActivity" />
+        <activity android:name=".AppointmentViewAndPayActivity" />
         <activity android:name=".MakeAppointmentSelectDate" />
         <activity android:name=".MakeAppointmentActivity" />
         <activity
