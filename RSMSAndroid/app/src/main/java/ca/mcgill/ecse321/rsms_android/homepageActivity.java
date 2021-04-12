@@ -58,5 +58,15 @@ public class homepageActivity extends AppCompatActivity {
                 startActivity(makeAppointment);
             }
         });
+
+        Button logOutButton=(Button) findViewById(R.id.logOutButton);
+        logOutButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent logout=new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(logout);
+            }
+        });
     }
 }
