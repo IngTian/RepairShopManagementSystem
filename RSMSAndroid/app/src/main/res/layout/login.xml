@@ -36,7 +36,7 @@
         app:layout_constraintVertical_bias="0.339" />
 
     <EditText
-        android:id="@+id/createTextPassword"
+        android:id="@+id/accountPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -50,13 +50,13 @@
         app:layout_constraintVertical_bias="0.616" />
 
     <EditText
-        android:id="@+id/createTextAddress"
+        android:id="@+id/accountUName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Account Name"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/createTextPassword"
+        app:layout_constraintBottom_toTopOf="@+id/accountPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
