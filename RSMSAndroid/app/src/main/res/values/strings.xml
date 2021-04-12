@@ -39,8 +39,8 @@
 
     <string-array name="statuses">
         <item>paid</item>
-        <item>not paid</item>
-        <item>not paid</item>
+        <item> </item>
+        <item> </item>
     </string-array>
 
 </resources>
