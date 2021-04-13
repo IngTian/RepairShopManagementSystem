@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.rsms_android;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -73,12 +75,10 @@ public class EditInfoActivity extends AppCompatActivity {
         error="";
         final TextView tv=(TextView)findViewById(R.id.updateChangeButton);
         HttpUtils.post("customers/update_info",new RequestParams(),new JsonHttpResponseHandler(){
-            @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response){
                 refreshErrorMessage();
                 tv.setText("");
             }
-            @Override
             public void onFailure(int statusCode,Header[] headers,Throwable throwable,JSONObject errorResponse){
                 try{
                     error+=errorResponse.get("message").toString();
@@ -88,5 +88,20 @@ public class EditInfoActivity extends AppCompatActivity {
                 refreshErrorMessage();
             }
         });
+    }
+    private void refreshErrorMessage(){
+        if(error==null||error.length()==0){}
+        else{
+            AlertDialog ad;
+            AlertDialog.Builder build=new AlertDialog.Builder(EditInfoActivity.this);
+            build.setTitle("Oops, an error occurs");
+            build.setMessage(error);
+            build.setPositiveButton("OK",new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {finish();}
+            });
+            ad=build.create();
+            ad.show();
+        }
     }
 }
