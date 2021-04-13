@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
              String accpassword=accountPassword.getText().toString();
              RequestParams rp=new RequestParams();
              rp.add("username",username);
-             HttpUtils.get("/customers/get_by_username",rp,new JsonHttpResponseHandler(){
+             HttpUtils.get("/users/customers/get_by_username",rp,new JsonHttpResponseHandler(){
 
                  @Override
                  public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
