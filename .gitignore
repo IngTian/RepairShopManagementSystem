@@ -7,4 +7,6 @@
 /captures
 .externalNativeBuild
 .cxx
+/RepairShopManagementSystem-Backend
+/RepairShopManagementSystem-Frontend
 local.properties
