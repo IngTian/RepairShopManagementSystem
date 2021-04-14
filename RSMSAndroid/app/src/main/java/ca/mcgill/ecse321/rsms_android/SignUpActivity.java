@@ -73,7 +73,7 @@ public class SignUpActivity extends AppCompatActivity {
                 rp.add("email",email);
                 TextView notification=(TextView) findViewById(R.id.pleaseSignUp);
 
-                HttpUtils.get("/users/customers/get_by_username",rp,new JsonHttpResponseHandler(){
+                HttpUtils.post("/users/customers/create_to_most_recent_system_android",rp,new JsonHttpResponseHandler(){
 
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
