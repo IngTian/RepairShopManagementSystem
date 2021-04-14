@@ -38,11 +38,10 @@ public class ShowShifts extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_shifts);
-        final TextView errorMe=findViewById(R.id.errorM);
         myListView = findViewById(R.id.shiftsListView);
         RequestParams rp=new RequestParams();
         rp.add("dates", dateRequired);
-        HttpUtils.get("schedules/shifts/get_for_dates",rp,new JsonHttpResponseHandler(){
+        HttpUtils.get("/schedules/shifts/get_for_dates",rp,new JsonHttpResponseHandler(){
 
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -55,11 +54,11 @@ public class ShowShifts extends AppCompatActivity {
                     }
                     else{
                         error="no shifts for this date!";
-                        errorMe.setText(error);
+
                     }
                 } catch (Exception e) {
                     error = e.getMessage();
-                    errorMe.setText(error);
+
                 }
             }
 
@@ -69,7 +68,7 @@ public class ShowShifts extends AppCompatActivity {
                     error=errorResponse.get("message").toString();}
                 catch(Exception e){
                     error=e.getMessage();
-                    errorMe.setText(error);
+
                 }
                 Intent pageBack=new Intent(getApplicationContext(),MakeAppointmentSelectDate.class);
                 startActivity(pageBack);

@@ -13,9 +13,6 @@
         tools:layout_editor_absoluteY="186dp"
         android:id="@+id/shiftsListView">
 
-        <TextView
-            android:id="@+id/errorM"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
     </ListView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
