@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -47,6 +48,17 @@ public class MainActivity extends AppCompatActivity {
              String accPassword = accountPassword.getText().toString();
              RequestParams rp = new RequestParams();
              rp.add("username",username);
+
+             RadioButton checkid=(RadioButton)findViewById(R.id.radioButton);
+             if(checkid.isChecked()){
+                 Intent assistant= new Intent(getApplicationContext(), ShiftAssistantActivity.class);
+                 startActivity(assistant);
+
+
+             }
+             else{
+
+
              HttpUtils.get("/users/customers/get_by_username",rp,new JsonHttpResponseHandler(){
 
                  @Override
@@ -86,7 +98,10 @@ public class MainActivity extends AppCompatActivity {
                      }
 
                  }
-             });
+             });}
+
+
+
 
          }
         });
