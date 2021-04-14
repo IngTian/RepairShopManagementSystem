@@ -5,7 +5,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 public class HttpUtils {
-    public static final String DEFAULT_BASE_URL = "https://rsms-backend-5232.herokuapp.com";
+    public static final String DEFAULT_BASE_URL = "http://192.168.0.100:8080";
 
     private static String baseUrl;
     private static AsyncHttpClient client = new AsyncHttpClient();
@@ -24,14 +24,15 @@ public class HttpUtils {
 
     public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         client.get(getAbsoluteUrl(url), params, responseHandler);
+
     }
-    public static void get(String url, RequestParams params,RequestParams params2 ,AsyncHttpResponseHandler responseHandler) {
-        client.get(getAbsoluteUrl(url), params, responseHandler);
-    }
+
 
     public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         client.post(getAbsoluteUrl(url), params, responseHandler);
     }
+
+
 
     public static void getByUrl(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         client.get(url, params, responseHandler);

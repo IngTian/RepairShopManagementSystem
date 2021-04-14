@@ -84,8 +84,7 @@ public class MainActivity extends AppCompatActivity {
                          error=e.getMessage();
                          errorMe.setText(error);
                      }
-                     Intent fortest=new Intent(getApplicationContext(),EditInfoActivity.class);
-                     startActivity(fortest);
+
                  }
              });
 
@@ -97,6 +96,20 @@ public class MainActivity extends AppCompatActivity {
 
          }
         });
+       Button signupButton= (Button) findViewById(R.id.buttonSignUp2);
+       signupButton.setOnClickListener(new View.OnClickListener(){
+
+           @Override
+           public void onClick(View v) {
+
+               Intent signupPage=new Intent(getApplicationContext(), SignUpActivity.class);
+               startActivity(signupPage);
+           }
+
+
+
+
+       });
 
     }
 
