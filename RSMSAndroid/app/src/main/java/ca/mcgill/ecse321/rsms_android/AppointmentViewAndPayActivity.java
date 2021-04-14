@@ -29,7 +29,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class AppointmentViewAndPayActivity extends AppCompatActivity {
 
-    String appRequired = "";
+    String name = "";
     ListView myListView;
     List<String> appointments;
     List<String> plateNos;
@@ -48,9 +48,9 @@ public class AppointmentViewAndPayActivity extends AppCompatActivity {
         RequestParams rp = new RequestParams();
         Intent intent = getIntent();
 
-        appRequired = intent.getStringExtra("appointment");
-        rp.add("appointments", appRequired);
-        HttpUtils.get("/appointment/find_appointments_of_customer", rp, new JsonHttpResponseHandler(){
+        name = intent.getStringExtra("currentUsername");
+        rp.add("name", name);
+        HttpUtils.post("/appointment/find_appointments_of_customer", rp, new JsonHttpResponseHandler(){
 
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -58,8 +58,9 @@ public class AppointmentViewAndPayActivity extends AppCompatActivity {
                 super.onSuccess(statusCode, headers, response);
 
                 try {
-                    if(response!=null) {
-                        appointments.addAll(getValuesForGivenKey(response, "appointment"));
+                    if(response != null) {
+
+                        appointments.addAll(getValuesForGivenKey(response, "appointmentId"));
                         plateNos.addAll(getValuesForGivenKey(response, "plateNo"));
                         times.addAll(getValuesForGivenKey(response, "time"));
                         prices.addAll(getValuesForGivenKey(response, "price"));
