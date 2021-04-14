@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import cz.msebera.android.httpclient.Header;
 
 public class CarMActivity extends AppCompatActivity {
@@ -57,16 +59,16 @@ String error;
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         try {
-                            if(response==null)
-                                error="Invalid form";
-                            else{
+                           String errowr=response.toString();
+                           if(errowr.contains("true")){
+                             String[]errorMessage= errowr.split(":");
+                             error=errorMessage[2];
+
+
+                            }
+                           else{
                             error = "Successful";}
                             notification.setText(error);
-                            String temp = "";
-                            CarPlateNo.setText(temp);
-                            CarModel.setText(temp);
-                            CarYear.setText(temp);
-                            CarManufacturer.setText(temp);
 
 
                         } catch (Exception e) {
@@ -113,14 +115,16 @@ String error;
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         try {
+                            String errowr=response.toString();
+                            if(errowr.contains("true")){
+                                String[]errorMessage= errowr.split(":");
+                                error=errorMessage[2];
 
-                            error = "Successful";
+
+                            }
+                            else{
+                                error = "Successful";}
                             notification.setText(error);
-                            String temp = "";
-                            CarPlateNo.setText(temp);
-                            CarModel.setText(temp);
-                            CarYear.setText(temp);
-                            CarManufacturer.setText(temp);
 
 
                         } catch (Exception e) {

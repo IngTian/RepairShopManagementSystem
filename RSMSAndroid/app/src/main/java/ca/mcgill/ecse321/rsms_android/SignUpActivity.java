@@ -77,17 +77,25 @@ public class SignUpActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        try{
-                            error="Successful";
+                        try {
+                            String errowr=response.toString();
+                            if(errowr.contains("true")){
+                                String[]errorMessage= errowr.split(":");
+                                error=errorMessage[2];
+
+
+                            }
+                            else{
+                                error = "Successful";}
                             notification.setText(error);
 
 
-                        }
-                        catch(Exception e){
-                            error=e.getMessage();
+                        } catch (Exception e) {
+                            error = e.getMessage();
                             notification.setText(error);
                         }
                     }
+
 
 
 
