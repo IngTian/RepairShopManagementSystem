@@ -5,13 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.content.res.Resources;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
 
@@ -23,12 +20,11 @@ import android.widget.TextView;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.client.cache.Resource;
 
 public class MainActivity extends AppCompatActivity {
     String UName;
     String Password;
-    String error="";
+    String error = "";
 
     @SuppressLint("ResourceType")
     @Override
@@ -37,19 +33,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.login);
         Button loginButton = (Button) findViewById(R.id.buttonLogin1);
         Resources res=getResources();
-        UName=res.getString(R.id.accountUName);
-        Password=res.getString(R.id.accountPassword);
+        UName = res.getString(R.id.accountUName);
+        Password = res.getString(R.id.accountPassword);
         loginButton.setOnClickListener(new View.OnClickListener(){
          @Override
          public void onClick(View v) {
 
-             Intent homepage = new Intent(getApplicationContext(), homepageActivity.class);
-             final TextView accountName=(TextView) findViewById(R.id.accountUName);
-             final TextView accountPassword=(TextView) findViewById(R.id.accountPassword);
-             final TextView errorMe=(TextView) findViewById(R.id.errorMessage);
+             Intent homepage = new Intent(getApplicationContext(), HomePageActivity.class);
+             final TextView accountName = (TextView) findViewById(R.id.accountUName);
+             final TextView accountPassword = (TextView) findViewById(R.id.accountPassword);
+             final TextView errorMe = (TextView) findViewById(R.id.errorMessage);
              String username=accountName.getText().toString();
-             String accpassword=accountPassword.getText().toString();
-             RequestParams rp=new RequestParams();
+             String accPassword = accountPassword.getText().toString();
+             RequestParams rp = new RequestParams();
              rp.add("username",username);
              HttpUtils.get("/users/customers/get_by_username",rp,new JsonHttpResponseHandler(){
 
@@ -57,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                  public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                      try{
                          String password=response.getString("password");
-                         if(accpassword.equals(password)){
+                         if(accPassword.equals(password)){
                              startActivity(homepage);
                              homepage.putExtra("ca.mcgill.ecse321.rsms.android.CURRUNAME",UName);
                              homepage.putExtra("ca.mcgill.ecse321.rsms_android.CURRPASSWORD",Password);
@@ -69,51 +65,39 @@ public class MainActivity extends AppCompatActivity {
 
                      }
                      catch(Exception e){
-                         error=e.getMessage();
+                         error = e.getMessage();
                          errorMe.setText(error);
                      }
-                     }
+                 }
 
 
 
                  @Override
                  public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                      try{
-                     error=errorResponse.get("message").toString();}
+                     error = errorResponse.get("message").toString();}
                      catch(Exception e){
-                         error=e.getMessage();
+                         error = e.getMessage();
                          errorMe.setText(error);
                      }
 
                  }
              });
 
-
-
-
-
-
-
          }
         });
-       Button signupButton= (Button) findViewById(R.id.buttonSignUp2);
-       signupButton.setOnClickListener(new View.OnClickListener(){
+       Button signUpButton = (Button) findViewById(R.id.buttonSignUp2);
+        signUpButton.setOnClickListener(new View.OnClickListener(){
 
            @Override
            public void onClick(View v) {
 
-               Intent signupPage=new Intent(getApplicationContext(), SignUpActivity.class);
-               startActivity(signupPage);
+               Intent signUpPage = new Intent(getApplicationContext(), SignUpActivity.class);
+               startActivity(signUpPage);
            }
-
-
-
-
        });
 
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

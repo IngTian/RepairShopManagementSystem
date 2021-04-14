@@ -41,7 +41,7 @@ public class AppointmentViewAndPayActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent showPaymentActivity = new Intent(getApplicationContext(), AppointmentPaymentActivity.class);
                 showPaymentActivity.putExtra("ca.mcgill.ecse321.rsms_android.PRICE", prices[position]);
-                showPaymentActivity.putExtra("ca.mcgill.ecse321.rsms_android.STATUS", statuses[position]);
+                showPaymentActivity.putExtra("ca.mcgill.ecse321.rsms_android.STATUS", statuses[position].toString());
                 startActivity(showPaymentActivity);
             }
         });

@@ -6,14 +6,11 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
 import android.widget.AdapterView;
@@ -60,7 +57,7 @@ public class EditInfoActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Intent homePageActivity=new Intent(getApplicationContext(),homepageActivity.class);
+                Intent homePageActivity=new Intent(getApplicationContext(), HomePageActivity.class);
                 homePageActivity.putExtra("ca.mcgill.ecse321.rsms_android.UPDUNAME",newUName);
                 homePageActivity.putExtra("ca.mcgill.ecse321.rsms_android.UPDPASSWORD",newPassword);
                 homePageActivity.putExtra("ca.mcgill.ecse321.rsms_android.UPDNAME",newName);
