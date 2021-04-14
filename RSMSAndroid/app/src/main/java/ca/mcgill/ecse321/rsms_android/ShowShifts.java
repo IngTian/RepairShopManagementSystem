@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -27,11 +28,11 @@ import java.util.stream.IntStream;
 import cz.msebera.android.httpclient.Header;
 
 public class ShowShifts extends AppCompatActivity {
-    String dateRequired;
+    String dateRequired = "";
     ListView myListView;
-    List<String> shiftId;
-    List<String> timeStart;
-    List<String> timeEnd;
+    List<String> shiftId = new ArrayList<String>();
+    List<String> timeStart = new ArrayList<String>();
+    List<String> timeEnd = new ArrayList<String>();
     String error;
 
     @Override
@@ -50,9 +51,20 @@ public class ShowShifts extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 try {
                     if(response!=null) {
-                        shiftId = getValuesForGivenKey(response, "shiftId");
-                        timeStart = getValuesForGivenKey(response, "startTime");
-                        timeEnd = getValuesForGivenKey(response, "endTime");
+                        shiftId.addAll(getValuesForGivenKey(response, "shiftId"));
+                        timeStart.addAll(getValuesForGivenKey(response, "startTime"));
+                        timeEnd.addAll(getValuesForGivenKey(response, "endTime"));
+                        ShiftAdapter shiftAdapter = new ShiftAdapter(getBaseContext(), shiftId, timeStart, timeEnd, dateRequired);
+                        myListView.setAdapter(shiftAdapter);
+
+                        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Intent selectServiceAndCar = new Intent(getApplicationContext(), SelectServiceAndCar.class);
+                                selectServiceAndCar.putExtra("shiftId", shiftId.get(position));
+                                startActivity(selectServiceAndCar);
+                            }
+                        });
                     }
                     else{
                         error="no shifts for this date!";
@@ -77,17 +89,6 @@ public class ShowShifts extends AppCompatActivity {
             }
         });
 
-        ShiftAdapter shiftAdapter = new ShiftAdapter(this, shiftId, timeStart, timeEnd, dateRequired);
-        myListView.setAdapter(shiftAdapter);
-
-        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent selectServiceAndCar = new Intent(getApplicationContext(), SelectServiceAndCar.class);
-                selectServiceAndCar.putExtra("shiftId", shiftId.get(position));
-                startActivity(selectServiceAndCar);
-            }
-        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

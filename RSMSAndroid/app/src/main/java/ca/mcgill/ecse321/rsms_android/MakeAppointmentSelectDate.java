@@ -27,8 +27,12 @@ public class MakeAppointmentSelectDate extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 // display the selected date by using a toast
+                String month_string = (month+1)+"";
                 Toast.makeText(getApplicationContext(), dayOfMonth + "/" + (month+1) + "/" + year, Toast.LENGTH_LONG).show();
-                date = year+ "-" + (month+1) + "-" + dayOfMonth;
+                if(month<10){
+                    month_string = "0"+(month+1);
+                }
+                date = year+ "-" + month_string + "-" + dayOfMonth + ",";
             }
         });
 
