@@ -127,6 +127,14 @@ public class AccountController {
         Customer customer = accountService.createCustomer(a.getUsername(), a.getPassword(), a.getName(), systemService.getMostRecentSystem(), a.getPhoneNo(), a.getHomeAddress(), a.getEmail());
         return convertToDto(customer);
     }
+    
+    @PostMapping(value = "customers/create_to_most_recent_system_android")
+    public CustomerDto createCustomerToMostRecentSystem(@RequestParam String username,@RequestParam String password,@RequestParam String name,@RequestParam String phoneNo,@RequestParam String homeAddress,@RequestParam String email) {
+        if (!accountService.getUserType(username).equals(""))
+            throw new IllegalArgumentException("The username entered has already been used.");
+        Customer customer = accountService.createCustomer(username, password, name, systemService.getMostRecentSystem(), phoneNo, homeAddress, email);
+        return convertToDto(customer);
+    }
 
     /*
     ----------------------------------------------------------------------------
