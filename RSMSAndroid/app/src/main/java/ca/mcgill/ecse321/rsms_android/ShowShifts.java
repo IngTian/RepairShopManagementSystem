@@ -40,6 +40,8 @@ public class ShowShifts extends AppCompatActivity {
         setContentView(R.layout.activity_show_shifts);
         myListView = findViewById(R.id.shiftsListView);
         RequestParams rp=new RequestParams();
+        Intent intent = getIntent();
+        dateRequired = intent.getStringExtra("date");
         rp.add("dates", dateRequired);
         HttpUtils.get("/schedules/shifts/get_for_dates",rp,new JsonHttpResponseHandler(){
 

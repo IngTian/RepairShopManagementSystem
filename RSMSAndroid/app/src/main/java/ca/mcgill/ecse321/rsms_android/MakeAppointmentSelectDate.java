@@ -15,7 +15,7 @@ public class MakeAppointmentSelectDate extends AppCompatActivity {
 
     private CalendarView simpleCalendarView;
     private Button button;
-    Date date;
+    String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +27,8 @@ public class MakeAppointmentSelectDate extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 // display the selected date by using a toast
-                Toast.makeText(getApplicationContext(), dayOfMonth + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
-                date = new Date( year + month + dayOfMonth);
+                Toast.makeText(getApplicationContext(), dayOfMonth + "/" + (month+1) + "/" + year, Toast.LENGTH_LONG).show();
+                date = year+ "-" + (month+1) + "-" + dayOfMonth;
             }
         });
 
