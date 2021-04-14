@@ -6,10 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -95,7 +93,7 @@ public class SelectServiceAndCar extends AppCompatActivity {
             }
         });
 
-        Intent homepage = new Intent(getApplicationContext(),homepageActivity.class);
+        Intent homepage = new Intent(getApplicationContext(), HomePageActivity.class);
         homepage.putExtra("ca.mcgill.ecse321.rsms.android.CURRUNAME",UName);
         homepage.putExtra("ca.mcgill.ecse321.rsms_android.CURRPASSWORD",Password);
 
