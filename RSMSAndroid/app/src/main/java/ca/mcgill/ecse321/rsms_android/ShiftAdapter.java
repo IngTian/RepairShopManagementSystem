@@ -5,31 +5,36 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.List;
 
 public class ShiftAdapter extends BaseAdapter {
 
     LayoutInflater mInflater;
-    String[] shift_id;
-    String[] shift_time;
-    String[] shift_date;
+    String dateRequired;
+    ListView myListView;
+    List<String> shiftId;
+    List<String> timeStart;
+    List<String> timeEnd;
 
-    public ShiftAdapter(Context c, String[] shiftId,
-                              String[] time, String[] date){
-        this.shift_id = shiftId;
-        this.shift_time = time;
-        this.shift_date = date;
+    public ShiftAdapter(Context c,List<String>  shiftId, List<String> timeStart,List<String> timeEnd,String  dateRequired){
+        this.shiftId = shiftId;
+        this.timeStart = timeStart;
+        this.timeEnd = timeEnd;
+        this.dateRequired = dateRequired;
         mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return shift_id.length;
+        return shiftId.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return shift_id[i];
+        return shiftId.get(i);
     }
 
     @Override
@@ -44,13 +49,14 @@ public class ShiftAdapter extends BaseAdapter {
         TextView timeTextView = (TextView) view.findViewById(R.id.time);
         TextView dateTextView = (TextView) view.findViewById(R.id.date);
 
-        String shiftId = shift_id[i];
-        String time = shift_time[i];
-        String date = shift_date[i];
+        String shiftId_show = shiftId.get(i);
+        String timeStart_show = timeStart.get(i);
+        String timeEnd_show = timeEnd.get(i);
+        String date_show = dateRequired;
 
-        shiftIdTextView.setText(shiftId);
-        timeTextView.setText(time);
-        dateTextView.setText(date);
+        shiftIdTextView.setText(shiftId_show);
+        timeTextView.setText(timeStart_show + "--"+timeEnd_show);
+        dateTextView.setText(date_show);
 
         return view;
     }

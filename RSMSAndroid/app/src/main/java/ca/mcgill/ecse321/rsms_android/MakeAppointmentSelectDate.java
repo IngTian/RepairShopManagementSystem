@@ -21,7 +21,7 @@ public class MakeAppointmentSelectDate extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.make_appointment_select_date);
-        simpleCalendarView = (CalendarView)findViewById(R.id.calendarView); // get the reference of CalendarView
+        simpleCalendarView = findViewById(R.id.calendarView); // get the reference of CalendarView
         // perform setOnDateChangeListener event on CalendarView
         simpleCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
