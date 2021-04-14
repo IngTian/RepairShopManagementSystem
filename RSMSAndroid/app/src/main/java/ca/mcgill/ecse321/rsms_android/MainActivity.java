@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
                              startActivity(homepage);
                              homepage.putExtra("ca.mcgill.ecse321.rsms.android.CURRUNAME",UName);
                              homepage.putExtra("ca.mcgill.ecse321.rsms_android.CURRPASSWORD",Password);
+                             Intent carPage= new Intent(getApplicationContext(), CarMActivity.class);
+                             carPage.putExtra("currentName",UName);
                          }
                          else{
                              error="incorrect password";
