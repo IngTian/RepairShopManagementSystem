@@ -29,7 +29,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         setContentView(R.layout.sign_up);
 
-        Button loginButton= (Button) findViewById(R.id.buttonSignUp2);
+        Button loginButton= (Button) findViewById(R.id.buttonLogin);
         loginButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -45,8 +45,8 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
 
-        Button signupButton= (Button) findViewById(R.id.buttonSignUp2);
-        signupButton.setOnClickListener(new View.OnClickListener(){
+        Button signUpButton= (Button) findViewById(R.id.buttonSignUp);
+        signUpButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
