@@ -112,6 +112,13 @@ public class AccountController {
         accountService.updateCustomer(newCustomer, newEmail, newAddress, newPhoneNo);
         return convertToDto(newCustomer);
     }
+    
+    @PutMapping(value = "customers/update_info_android")
+    public CustomerDto updateCustomerInfo(@RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newName, @RequestParam String newPhoneNo, @RequestParam String newAddress, @RequestParam String newEmail, @RequestParam String username) {
+        Customer newCustomer = (Customer) accountService.updateUserInformation(accountService.getCustomer(username), newUsername, newPassword, newName);
+        accountService.updateCustomer(newCustomer, newEmail, newAddress, newPhoneNo);
+        return convertToDto(newCustomer);
+    }
 
     @PostMapping(value = "customers/create_to_most_recent_system")
     public CustomerDto createCustomerToMostRecentSystem(@RequestBody CustomerDto a) {
@@ -132,10 +139,22 @@ public class AccountController {
         Car c = accountService.createCar(car.getPlateNo(), car.getModel(), car.getYear(), car.getManufacturer(), accountService.getCustomer(username));
         return convertToDto(c);
     }
+    
+    @PostMapping(value="cars/create_android")
+    public CarDto createCarForACustomer(@RequestParam String username, @RequestParam String plateNo, @RequestParam String model, @RequestParam String manufacturer, @RequestParam String year) {
+        Car c = accountService.createCar(plateNo, model, year, manufacturer, accountService.getCustomer(username));
+        return convertToDto(c);
+    }
 
     @PutMapping(value = "cars/update")
     public CarDto updateCarInfo(@RequestParam String newUsername, @RequestParam String newModel, @RequestParam String newYear, @RequestParam String newManufacturer, @RequestBody CarDto car) {
         Car c = accountService.updateCar(accountService.getCar(car.getPlateNo()), newModel, newYear, newManufacturer, accountService.getCustomer(newUsername));
+        return convertToDto(c);
+    }
+    
+    @PutMapping(value = "cars/update_android")
+    public CarDto updateCarInfo(@RequestParam String newUsername, @RequestParam String newModel, @RequestParam String newYear, @RequestParam String newManufacturer, @RequestParam String plateNo) {
+        Car c = accountService.updateCar(accountService.getCar(plateNo), newModel, newYear, newManufacturer, accountService.getCustomer(newUsername));
         return convertToDto(c);
     }
 
