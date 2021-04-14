@@ -53,12 +53,14 @@ public class MainActivity extends AppCompatActivity {
                  public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                      try{
                          String password=response.getString("password");
+
+
                          if(accPassword.equals(password)){
+                             homepage.putExtra("currentName",username);
                              startActivity(homepage);
                              homepage.putExtra("ca.mcgill.ecse321.rsms.android.CURRUNAME",UName);
                              homepage.putExtra("ca.mcgill.ecse321.rsms_android.CURRPASSWORD",Password);
-                             Intent carPage= new Intent(getApplicationContext(), CarMActivity.class);
-                             carPage.putExtra("currentName",UName);
+
                          }
                          else{
                              error="incorrect password";

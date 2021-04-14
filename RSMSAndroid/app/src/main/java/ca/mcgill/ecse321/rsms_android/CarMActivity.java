@@ -20,8 +20,7 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 public class CarMActivity extends AppCompatActivity {
-    Intent intent=this.getIntent();
-String name=intent.getStringExtra("currentName");
+
 String plateNo;
 String model;
 String year;
@@ -31,6 +30,8 @@ String error;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.car_management);
+        Intent  carPage=getIntent();
+        String name= carPage.getStringExtra("currentUsername");
         final TextView CarPlateNo=(TextView) findViewById(R.id.CarPlateNo);
         final TextView CarYear=(TextView) findViewById(R.id.CarYear);
         final TextView CarModel=(TextView) findViewById(R.id.CarModel);
@@ -56,8 +57,10 @@ String error;
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         try {
-
-                            error = "Successful";
+                            if(response==null)
+                                error="Invalid form";
+                            else{
+                            error = "Successful";}
                             notification.setText(error);
                             String temp = "";
                             CarPlateNo.setText(temp);
@@ -80,7 +83,7 @@ String error;
                         } catch (Exception e) {
                             error = e.getMessage();
                             notification.setText(error);
-                            notification.setText(error);
+
                         }
 
                     }
@@ -101,11 +104,11 @@ String error;
                 manufacturer = CarManufacturer.getText().toString();
                 RequestParams rp = new RequestParams();
                 rp.add("newUsername", name);
-                rp.add("newPlateNo", plateNo);
+                rp.add("plateNo", plateNo);
                 rp.add("newModel", model);
                 rp.add("newYear", year);
                 rp.add("newManufacturer", manufacturer);
-                HttpUtils.post("/users/cars/update_android", rp, new JsonHttpResponseHandler() {
+                HttpUtils.put("/users/cars/update_android", rp, new JsonHttpResponseHandler() {
 
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

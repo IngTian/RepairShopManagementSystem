@@ -15,9 +15,14 @@ import android.widget.Button;
 public class HomePageActivity extends AppCompatActivity {
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customer_home_page);
+
+        Intent intent2=getIntent();
+
+        String username=intent2.getStringExtra("currentName");
         Intent intent=getIntent();
         String CurrUName=intent.getStringExtra("ca.mcgill.ecse321.rsms_android.CURRUNAME");
         String CurrPassword=intent.getStringExtra("ca.mcgill.ecse321.rsms_android.CURRPASSWORD");
@@ -27,6 +32,8 @@ public class HomePageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent carMA = new Intent(getApplicationContext(), CarMActivity.class);
+
+                carMA.putExtra("currentUsername",username);
                 startActivity(carMA);
             }
         });
