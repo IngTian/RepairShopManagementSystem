@@ -45,7 +45,8 @@ public class HomePageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent InfoManagement = new Intent(getApplicationContext(), EditInfoActivity.class);
-                InfoManagement.putExtra("ca.mcgill.ecse321.rsms.android.NOWUNAME",CurrUName);
+                System.out.println(username);
+                InfoManagement.putExtra("ca.mcgill.ecse321.rsms.android.NOWUNAME",username);
                 InfoManagement.putExtra("ca.mcgill.ecse321.rsms_android.NOWPASSWORD",CurrPassword);
                 startActivity(InfoManagement);
             }
