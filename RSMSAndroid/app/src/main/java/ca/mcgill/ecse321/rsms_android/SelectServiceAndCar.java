@@ -5,9 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -16,7 +20,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -29,21 +35,61 @@ public class SelectServiceAndCar extends AppCompatActivity {
     private ImageButton button_car_inspection;
     private Button button_confirm;
 
-    Date date;
+    String date;
     String UName;
     String Password;
-    String plateNo;
     String serviceType = "";
     String error;
-    Time startTime;
-    Time endTime;
-    Integer weight;
+    String startTime;
+    String endTime;
+    String weight;
+    String plateNo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_service_and_car);
+
         button_confirm = findViewById(R.id.button);
-        button_confirm.setOnClickListener(v -> make_appointment());
+        button_confirm.setOnClickListener(v -> {
+            final TextView plateNoView = (TextView) findViewById(R.id.plateNo);
+            final TextView weightView= (TextView) findViewById(R.id.weight);
+            TextView errorView = (TextView) findViewById(R.id.error);
+            plateNo=plateNoView.getText().toString();
+            weight = weightView.getText().toString();
+            UName = getIntent().getStringExtra("username");
+            date = getIntent().getStringExtra("date");
+            startTime = getIntent().getStringExtra("timeStart");
+            endTime = getIntent().getStringExtra("timeEnd");
+            RequestParams rp=new RequestParams();
+            rp.add("serviceType",serviceType);
+            rp.add("username",UName);
+            rp.add("plateNo",plateNo);
+            rp.add("date", date);
+            rp.add("startTime", startTime.substring(0,5));
+            rp.add("endTime", endTime.substring(0,5));
+            rp.add("weight", weight);
+
+            HttpUtils.post("/appointment/make_appointment" , rp, new JsonHttpResponseHandler(){
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    System.out.println(response.toString());
+                    refreshErrorMessage();
+                    ((TextView) findViewById(R.id.error)).setText(response.toString());
+                    back_to_homepage();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    try {
+                        error += errorResponse.get("message").toString();
+                    } catch (JSONException e) {
+                        error += e.getMessage();
+                    }
+                    refreshErrorMessage();
+                }
+            });
+        });
 
         button_wash = findViewById(R.id.imageButton);
         button_wash.setOnClickListener(v -> wash());
@@ -62,6 +108,7 @@ public class SelectServiceAndCar extends AppCompatActivity {
 
         button_car_inspection = findViewById(R.id.imageButton6);
         button_car_inspection.setOnClickListener(v -> car_inspection());
+
     }
 
     private void make_appointment(){
@@ -69,10 +116,10 @@ public class SelectServiceAndCar extends AppCompatActivity {
         rp.add("serviceType",serviceType);
         rp.add("username",UName);
         rp.add("plateNo",plateNo);
-        rp.add("date", String.valueOf(date));
-        rp.add("startTime", String.valueOf(startTime));
-        rp.add("endTime", String.valueOf(endTime));
-        rp.add("weight", String.valueOf(weight));
+        rp.add("date", date);
+        rp.add("startTime", startTime);
+        rp.add("endTime", endTime);
+        rp.add("weight", weight);
 
         HttpUtils.post("/appointment/make_appointment" , rp, new JsonHttpResponseHandler(){
 
@@ -80,6 +127,7 @@ public class SelectServiceAndCar extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 refreshErrorMessage();
                 ((TextView) findViewById(R.id.error)).setText("");
+                back_to_homepage();
             }
 
             @Override
@@ -92,12 +140,6 @@ public class SelectServiceAndCar extends AppCompatActivity {
                 refreshErrorMessage();
             }
         });
-
-        Intent homepage = new Intent(getApplicationContext(), HomePageActivity.class);
-        homepage.putExtra("ca.mcgill.ecse321.rsms.android.CURRUNAME",UName);
-        homepage.putExtra("ca.mcgill.ecse321.rsms_android.CURRPASSWORD",Password);
-
-        startActivity(homepage);
     }
     private void wash(){
         serviceType = "car wash";
@@ -128,4 +170,12 @@ public class SelectServiceAndCar extends AppCompatActivity {
             tvError.setVisibility(View.VISIBLE);
         }
     }
+    private void back_to_homepage(){
+        Intent homepage = new Intent(getApplicationContext(), HomePageActivity.class);
+        homepage.putExtra("ca.mcgill.ecse321.rsms.android.CURRUNAME",UName);
+        homepage.putExtra("ca.mcgill.ecse321.rsms_android.CURRPASSWORD",Password);
+
+        startActivity(homepage);
+    }
+
 }

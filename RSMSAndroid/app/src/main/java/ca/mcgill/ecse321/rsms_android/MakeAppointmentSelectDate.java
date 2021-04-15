@@ -28,11 +28,14 @@ public class MakeAppointmentSelectDate extends AppCompatActivity {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 // display the selected date by using a toast
                 String month_string = (month+1)+"";
+                String day_string =  dayOfMonth+"";
                 Toast.makeText(getApplicationContext(), dayOfMonth + "/" + (month+1) + "/" + year, Toast.LENGTH_LONG).show();
                 if(month<10){
                     month_string = "0"+(month+1);
+                }if(dayOfMonth<10){
+                    day_string = "0"+dayOfMonth;
                 }
-                date = year+ "-" + month_string + "-" + dayOfMonth + ",";
+                date = year+ "-" + month_string + "-" + day_string;
             }
         });
 
@@ -48,6 +51,7 @@ public class MakeAppointmentSelectDate extends AppCompatActivity {
     private void showShifts() {
         Intent intent = new Intent(getApplicationContext(),ShowShifts.class);
         intent.putExtra("date", date);
+        intent.putExtra("username", getIntent().getStringExtra("username"));
         startActivity(intent);
     }
 }

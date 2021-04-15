@@ -61,7 +61,10 @@ public class ShowShifts extends AppCompatActivity {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 Intent selectServiceAndCar = new Intent(getApplicationContext(), SelectServiceAndCar.class);
-                                selectServiceAndCar.putExtra("shiftId", shiftId.get(position));
+                                selectServiceAndCar.putExtra("timeStart", timeStart.get(position));
+                                selectServiceAndCar.putExtra("timeEnd", timeEnd.get(position));
+                                selectServiceAndCar.putExtra("date", dateRequired);
+                                selectServiceAndCar.putExtra("username", getIntent().getStringExtra("username"));
                                 startActivity(selectServiceAndCar);
                             }
                         });
