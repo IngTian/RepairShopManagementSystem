@@ -28,9 +28,6 @@ import cz.msebera.android.httpclient.entity.mime.Header;
 
 
     public class EditInfoActivity extends AppCompatActivity {
-        Intent intent = getIntent();
-        String CurrUName = intent.getStringExtra("ca.mcgill.ecse321.rsms_android.NOWUNAME");
-        String CurrPassword = intent.getStringExtra("ca.mcgill.ecse321.rsms_android.NOWPASSWORD");
         Button updButton, backButton;
         String newUName, newPassword, newName, newPhone, newAddress, newEmail, error;
 
@@ -59,18 +56,24 @@ import cz.msebera.android.httpclient.entity.mime.Header;
                 @Override
                 public void onClick(View view) {
                     //to update user info here
-                    updateUserInfo(view);
+                    TextView tv=(TextView)findViewById(R.id.errors);
+                    String error="";
+                    RequestParams rp=new RequestParams();
+                    rp.add("username",newUName);
+                    rp.add("password",newPassword);
+                    rp.add("name",newName);
+                    rp.add("phoneNo",newPhone);
+                    rp.add("homeAddress",newAddress);
+                    rp.add("email",newEmail);
+                    HttpUtils.post("/users/",rp,new JsonHttpResponseHandler(){
+                    });
                 }
             });
             backButton.setOnClickListener(new AdapterView.OnClickListener(){
 
                 @Override
                 public void onClick(View view) {
-
                     Intent homePageActivity=new Intent(getApplicationContext(),HomePageActivity.class);
-
-                    Intent HomePageActivity = new Intent(getApplicationContext(), HomePageActivity.class);
-
                     homePageActivity.putExtra("ca.mcgill.ecse321.rsms_android.UPDUNAME",newUName);
                     homePageActivity.putExtra("ca.mcgill.ecse321.rsms_android.UPDPASSWORD",newPassword);
                     homePageActivity.putExtra("ca.mcgill.ecse321.rsms_android.UPDNAME",newName);
@@ -81,50 +84,4 @@ import cz.msebera.android.httpclient.entity.mime.Header;
                 }
             });
         }
-        public void updateUserInfo(View v){
-            error="";
-
-            final TextView tv=(TextView)findViewById(R.id.updateChangeButton);
-            RequestParams rp=new RequestParams();
-            rp.add("username",newUName);
-            rp.add("password",newPassword);
-            rp.add("name",newName);
-            rp.add("phone",newPhone);
-            rp.add("address",newAddress);
-            rp.add("email",newEmail);
-            HttpUtils.put("customers/update_info",rp,new JsonHttpResponseHandler(){
-
-
-
-
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response){
-                        refreshErrorMessage();
-                        tv.setText("");
-                    }
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse){
-                        try{
-                            error += errorResponse.get("message").toString();
-                        }catch(JSONException e){
-                            error += e.getMessage();
-                        }
-                        refreshErrorMessage();
-                    }
-                });
-            }
-            private void refreshErrorMessage() {
-                if (error == null || error.length() == 0) {
-                } else {
-                    AlertDialog ad;
-                    AlertDialog.Builder build = new AlertDialog.Builder(EditInfoActivity.this);
-                    build.setTitle("Oops, an error occurs");
-                    build.setMessage(error);
-                    build.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            finish();
-                        }
-                    });
-                    ad = build.create();
-                    ad.show();
-                }
-            }}
+    }

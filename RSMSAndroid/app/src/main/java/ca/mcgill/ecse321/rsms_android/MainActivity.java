@@ -53,41 +53,29 @@ public class MainActivity extends AppCompatActivity {
              if(checkid.isChecked()){
                  Intent assistant= new Intent(getApplicationContext(), ShiftAssistantActivity.class);
                  startActivity(assistant);
-
-
              }
              else{
-
-
              HttpUtils.get("/users/customers/get_by_username",rp,new JsonHttpResponseHandler(){
-
                  @Override
                  public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                      try{
                          String password=response.getString("password");
-
-
                          if(accPassword.equals(password)){
                              homepage.putExtra("currentName",username);
                              startActivity(homepage);
                              homepage.putExtra("ca.mcgill.ecse321.rsms.android.CURRUNAME",UName);
                              homepage.putExtra("ca.mcgill.ecse321.rsms_android.CURRPASSWORD",Password);
-
                          }
                          else{
                              error="incorrect password";
                              errorMe.setText(error);
                          }
-
                      }
                      catch(Exception e){
                          error = e.getMessage();
                          errorMe.setText(error);
                      }
                  }
-
-
-
                  @Override
                  public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                      try{
@@ -99,10 +87,6 @@ public class MainActivity extends AppCompatActivity {
 
                  }
              });}
-
-
-
-
          }
         });
        Button signUpButton = (Button) findViewById(R.id.buttonSignUp2);
