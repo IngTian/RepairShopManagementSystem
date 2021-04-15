@@ -31,7 +31,7 @@ public class AppointmentViewAndPayActivity extends AppCompatActivity {
 
     String name = "";
     ListView myListView;
-    List<String> appointments = new ArrayList<String>();
+    List<String> types = new ArrayList<String>();
     List<String> plateNos = new ArrayList<String>();
     List<String> times = new ArrayList<String>();
     List<String> prices = new ArrayList<String>();
@@ -50,7 +50,7 @@ public class AppointmentViewAndPayActivity extends AppCompatActivity {
 
         name = intent.getStringExtra("currentUsername");
         rp.add("username", name);
-        HttpUtils.get("/appointment/find_appointments_of_customer", rp, new JsonHttpResponseHandler(){
+        HttpUtils.post("/appointment/find_appointments_of_customer", rp, new JsonHttpResponseHandler(){
 
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -58,14 +58,31 @@ public class AppointmentViewAndPayActivity extends AppCompatActivity {
 
                 try {
                     if(response != null) {
+                        List<JSONObject> services = getValuesForGivenKeyJSON(response, "service");
 
-                        appointments.addAll(getValuesForGivenKey(response, "appointmentId"));
+                        for(int i = 0; i < services.size(); i++){
+                            types.add(services.get(i).optString("serviceType"));
+                        }
+
+
                         plateNos.addAll(getValuesForGivenKey(response, "plateNo"));
-                        times.addAll(getValuesForGivenKey(response, "time"));
+
+                        List<JSONObject> shifts = getValuesForGivenKeyJSON(response, "shift");
+                        String date = "";
+                        String startTime = "";
+                        String endTime = "";
+
+                        for(int i = 0; i < services.size(); i++){
+                            date = shifts.get(i).optString("date");
+                            startTime = shifts.get(i).optString("startTime");
+                            endTime = shifts.get(i).optString("endTime");
+                            times.add(date + "/" + startTime + "--" + endTime);
+                        }
+
                         prices.addAll(getValuesForGivenKey(response, "price"));
                         statuses.addAll(getValuesForGivenKey(response, "status"));
 
-                        AppointmentAdapter appointmentAdapter = new AppointmentAdapter(getBaseContext(), appointments,
+                        AppointmentAdapter appointmentAdapter = new AppointmentAdapter(getBaseContext(), types,
                                 plateNos, times, prices, statuses);
                         myListView.setAdapter(appointmentAdapter);
 
@@ -73,7 +90,7 @@ public class AppointmentViewAndPayActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 Intent showPaymentActivity = new Intent(getApplicationContext(), AppointmentPaymentActivity.class);
-                                showPaymentActivity.putExtra("ca.mcgill.ecse321.rsms_android.PRICE", prices.get(position));
+                                showPaymentActivity.putExtra("ca.mcgill.ecse321.rsms_android.TYPE", types.get(position));
                                 showPaymentActivity.putExtra("ca.mcgill.ecse321.rsms_android.STATUS", statuses.get(position));
                                 startActivity(showPaymentActivity);
                             }
@@ -117,4 +134,33 @@ public class AppointmentViewAndPayActivity extends AppCompatActivity {
                 })
                 .collect(Collectors.toList());
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public List<JSONObject> getValuesForGivenKeyJSON(JSONArray jsonArray, String key) throws JSONException {
+        return IntStream.range(0, jsonArray.length())
+                .mapToObj(index -> {
+                    try {
+                        return ((JSONObject) jsonArray.get(index)).optJSONObject(key);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public List<JSONArray> getValuesForGivenKeyJSONArray(JSONArray jsonArray, String key) throws JSONException {
+        return IntStream.range(0, jsonArray.length())
+                .mapToObj(index -> {
+                    try {
+                        return ((JSONObject) jsonArray.get(index)).optJSONArray(key);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                })
+                .collect(Collectors.toList());
+    }
+
 }
