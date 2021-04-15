@@ -31,11 +31,11 @@ public class AppointmentViewAndPayActivity extends AppCompatActivity {
 
     String name = "";
     ListView myListView;
-    List<String> appointments;
-    List<String> plateNos;
-    List<String> times;
-    List<String> prices;
-    List<String> statuses;
+    List<String> appointments = new ArrayList<String>();
+    List<String> plateNos = new ArrayList<String>();
+    List<String> times = new ArrayList<String>();
+    List<String> prices = new ArrayList<String>();
+    List<String> statuses = new ArrayList<String>();
     String error;
 
     @Override
@@ -49,13 +49,12 @@ public class AppointmentViewAndPayActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         name = intent.getStringExtra("currentUsername");
-        rp.add("name", name);
-        HttpUtils.post("/appointment/find_appointments_of_customer", rp, new JsonHttpResponseHandler(){
+        rp.add("username", name);
+        HttpUtils.get("/appointment/find_appointments_of_customer", rp, new JsonHttpResponseHandler(){
 
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
 
                 try {
                     if(response != null) {
@@ -91,7 +90,6 @@ public class AppointmentViewAndPayActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
 
                 try{
                     error = errorResponse.get("message").toString();}
