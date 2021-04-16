@@ -27,12 +27,12 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 
 public class SelectServiceAndCar extends AppCompatActivity {
-    private ImageButton button_wash;
-    private ImageButton button_maintenance;
-    private ImageButton button_road_assistance;
-    private ImageButton button_tire_change;
-    private ImageButton button_towing;
-    private ImageButton button_car_inspection;
+    private Button button_wash;
+    private Button button_maintenance;
+    private Button button_road_assistance;
+    private Button button_tire_change;
+    private Button button_towing;
+    private Button button_car_inspection;
     private Button button_confirm;
 
     String date;
@@ -91,22 +91,22 @@ public class SelectServiceAndCar extends AppCompatActivity {
             });
         });
 
-        button_wash = findViewById(R.id.imageButton);
+        button_wash = findViewById(R.id.Button);
         button_wash.setOnClickListener(v -> wash());
 
-        button_maintenance = findViewById(R.id.imageButton2);
+        button_maintenance = findViewById(R.id.Button2);
         button_maintenance.setOnClickListener(v -> maintenance());
 
-        button_road_assistance = findViewById(R.id.imageButton3);
+        button_road_assistance = findViewById(R.id.Button3);
         button_road_assistance.setOnClickListener(v -> road_assistance());
 
-        button_tire_change = findViewById(R.id.imageButton4);
+        button_tire_change = findViewById(R.id.Button4);
         button_tire_change.setOnClickListener(v -> tire_change());
 
-        button_towing = findViewById(R.id.imageButton5);
+        button_towing = findViewById(R.id.Button5);
         button_towing.setOnClickListener(v -> towing());
 
-        button_car_inspection = findViewById(R.id.imageButton6);
+        button_car_inspection = findViewById(R.id.Button6);
         button_car_inspection.setOnClickListener(v -> car_inspection());
 
     }
