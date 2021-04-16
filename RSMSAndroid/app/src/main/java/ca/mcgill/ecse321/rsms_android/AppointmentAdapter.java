@@ -7,17 +7,19 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class AppointmentAdapter extends BaseAdapter {
 
     LayoutInflater mInflater;
-    String[] appointments;
-    String[] plateNos;
-    String[] times;
-    String[] prices;
-    String[] statuses;
+    List<String> appointments;
+    List<String> plateNos;
+    List<String> times;
+    List<String> prices;
+    List<String> statuses;
 
-    public AppointmentAdapter(Context c,  String[] appointments, String[] plateNos,
-                              String[] times, String[] prices, String[] statuses){
+    public AppointmentAdapter(Context c, List<String> appointments, List<String> plateNos,
+                              List<String> times, List<String> prices, List<String> statuses){
         this.appointments = appointments;
         this.plateNos = plateNos;
         this.times = times;
@@ -28,12 +30,12 @@ public class AppointmentAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return appointments.length;
+        return appointments.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return appointments[i];
+        return appointments.get(i);
     }
 
     @Override
@@ -50,11 +52,11 @@ public class AppointmentAdapter extends BaseAdapter {
         TextView priceTextView = (TextView) view.findViewById(R.id.priceTextView);
         TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
 
-        String appointment = appointments[i];
-        String plateNo = plateNos[i];
-        String time = times[i];
-        String price = prices[i];
-        String status = statuses[i];
+        String appointment = appointments.get(i);
+        String plateNo = plateNos.get(i);
+        String time = times.get(i);
+        String price = prices.get(i);
+        String status = statuses.get(i);
 
         appointmentTextView.setText(appointment);
         plateNoTextView.setText(plateNo);
